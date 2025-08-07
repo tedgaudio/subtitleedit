@@ -29,6 +29,21 @@ namespace Nikse.SubtitleEdit.Core.Common
         public string Actor { get; set; }
         public string Region { get; set; }
 
+        /// <summary>
+        /// Emotion/feeling of the subtitle (e.g., "angry", "happy", "sad")
+        /// </summary>
+        public string Emotion { get; set; }
+
+        /// <summary>
+        /// Priority level for translation/review (1-5, where 1 is highest priority)
+        /// </summary>
+        public int Priority { get; set; }
+
+        /// <summary>
+        /// Additional notes for the subtitle
+        /// </summary>
+        public string Notes { get; set; }
+
         public string MarginL { get; set; }
         public string MarginR { get; set; }
         public string MarginV { get; set; }
@@ -77,6 +92,9 @@ namespace Nikse.SubtitleEdit.Core.Common
             IsComment = paragraph.IsComment;
             Actor = paragraph.Actor;
             Region = paragraph.Region;
+            Emotion = paragraph.Emotion;
+            Priority = paragraph.Priority;
+            Notes = paragraph.Notes;
             MarginL = paragraph.MarginL;
             MarginR = paragraph.MarginR;
             MarginV = paragraph.MarginV;

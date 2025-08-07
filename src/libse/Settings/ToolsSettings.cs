@@ -155,6 +155,9 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public bool ListViewShowColumnGap { get; set; }
         public bool ListViewShowColumnActor { get; set; }
         public bool ListViewShowColumnRegion { get; set; }
+        public bool ListViewShowColumnEmotion { get; set; }
+        public bool ListViewShowColumnPriority { get; set; }
+        public bool ListViewShowColumnNotes { get; set; }
         public bool ListViewMultipleReplaceShowColumnRuleInfo { get; set; }
         public bool SplitAdvanced { get; set; }
         public string SplitOutputFolder { get; set; }

@@ -82,6 +82,7 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public int MergeLinesShorterThan { get; set; }
         public int SubtitleMinimumDisplayMilliseconds { get; set; }
         public int SubtitleMaximumDisplayMilliseconds { get; set; }
+        public bool AllowSubtitleOverlap { get; set; }
         public int MinimumMillisecondsBetweenLines { get; set; }
         public int SetStartEndHumanDelay { get; set; }
         public bool AutoWrapLineWhileTyping { get; set; }

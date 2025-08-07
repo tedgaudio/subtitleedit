@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 {
@@ -56,7 +57,29 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             var sb = new StringBuilder();
             foreach (var p in subtitle.Paragraphs)
             {
-                sb.AppendFormat(paragraphWriteFormat, p.Number, p.StartTime, p.EndTime, p.Text, Environment.NewLine);
+                var text = p.Text;
+                
+                // Add new fields as comments
+                var additionalInfo = new List<string>();
+                if (!string.IsNullOrEmpty(p.Emotion))
+                {
+                    additionalInfo.Add($"emotion:{p.Emotion}");
+                }
+                if (p.Priority > 0)
+                {
+                    additionalInfo.Add($"priority:{p.Priority}");
+                }
+                if (!string.IsNullOrEmpty(p.Notes))
+                {
+                    additionalInfo.Add($"notes:{p.Notes}");
+                }
+                
+                if (additionalInfo.Count > 0)
+                {
+                    text += Environment.NewLine + "<!-- " + string.Join(" | ", additionalInfo) + " -->";
+                }
+                
+                sb.AppendFormat(paragraphWriteFormat, p.Number, p.StartTime, p.EndTime, text, Environment.NewLine);
             }
             return sb.ToString().Trim() + Environment.NewLine + Environment.NewLine;
         }
@@ -132,6 +155,10 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     p.StartTime.Milliseconds = FramesToMillisecondsMax999(p.StartTime.Milliseconds);
                     p.EndTime.Milliseconds = FramesToMillisecondsMax999(p.EndTime.Milliseconds);
                 }
+                
+                // Parse new fields from text
+                ParseNewFieldsFromText(p);
+                
                 p.Text = p.Text.TrimEnd();
             }
 
@@ -257,6 +284,47 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                         _expecting = ExpectingLine.Number;
                     }
                     break;
+            }
+        }
+
+        private static void ParseNewFieldsFromText(Paragraph p)
+        {
+            var lines = p.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            if (lines.Length > 1)
+            {
+                var lastLine = lines[lines.Length - 1];
+                if (lastLine.Contains("<!--") && lastLine.Contains("-->"))
+                {
+                    // Extract new fields from comment
+                    var commentStart = lastLine.IndexOf("<!--");
+                    var commentEnd = lastLine.IndexOf("-->");
+                    if (commentStart >= 0 && commentEnd > commentStart)
+                    {
+                        var comment = lastLine.Substring(commentStart + 4, commentEnd - commentStart - 4).Trim();
+                        var parts = comment.Split(new[] { " | " }, StringSplitOptions.None);
+                        foreach (var part in parts)
+                        {
+                            if (part.StartsWith("emotion:"))
+                            {
+                                p.Emotion = part.Substring("emotion:".Length);
+                            }
+                            else if (part.StartsWith("priority:"))
+                            {
+                                if (int.TryParse(part.Substring("priority:".Length), out int priority))
+                                {
+                                    p.Priority = priority;
+                                }
+                            }
+                            else if (part.StartsWith("notes:"))
+                            {
+                                p.Notes = part.Substring("notes:".Length);
+                            }
+                        }
+                        
+                        // Remove the comment line from text
+                        p.Text = string.Join(Environment.NewLine, lines.Take(lines.Length - 1));
+                    }
+                }
             }
         }
 

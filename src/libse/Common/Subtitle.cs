@@ -530,7 +530,7 @@ namespace Nikse.SubtitleEdit.Core.Common
             }
 
             // handle overlap with next
-            if (newEndTimeInMs > nextStartTimeInMs - Configuration.Settings.General.MinimumMillisecondsBetweenLines)
+            if (newEndTimeInMs > nextStartTimeInMs - Configuration.Settings.General.MinimumMillisecondsBetweenLines && !Configuration.Settings.General.AllowSubtitleOverlap)
             {
                 newEndTimeInMs = nextStartTimeInMs - Configuration.Settings.General.MinimumMillisecondsBetweenLines;
             }

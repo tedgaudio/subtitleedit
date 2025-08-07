@@ -228,6 +228,7 @@ namespace Nikse.SubtitleEdit.Forms.Options
             numericUpDownMaxCharsSec.Value = (decimal)gs.SubtitleMaximumCharactersPerSeconds;
             numericUpDownMaxWordsMin.Value = (decimal)gs.SubtitleMaximumWordsPerMinute;
             checkBoxAutoWrapWhileTyping.Checked = gs.AutoWrapLineWhileTyping;
+            checkBoxAllowSubtitleOverlap.Checked = gs.AllowSubtitleOverlap;
             textBoxShowLineBreaksAs.Text = gs.ListViewLineSeparatorString;
 
             numericUpDownDurationMin.Value = gs.SubtitleMinimumDisplayMilliseconds;
@@ -1799,6 +1800,29 @@ namespace Nikse.SubtitleEdit.Forms.Options
             AddNode(listViewAndTextBoxNode, string.Format(language.SetActorX, "8"), nameof(Configuration.Settings.Shortcuts.MainListViewSetActor8), true);
             AddNode(listViewAndTextBoxNode, string.Format(language.SetActorX, "9"), nameof(Configuration.Settings.Shortcuts.MainListViewSetActor9), true);
             AddNode(listViewAndTextBoxNode, string.Format(language.SetActorX, "10"), nameof(Configuration.Settings.Shortcuts.MainListViewSetActor10), true);
+            AddNode(listViewAndTextBoxNode, "Set new emotion", nameof(Configuration.Settings.Shortcuts.MainListViewSetNewEmotion));
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "1"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion1), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "2"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion2), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "3"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion3), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "4"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion4), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "5"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion5), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "6"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion6), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "7"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion7), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "8"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion8), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "9"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion9), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set emotion {0}", "10"), nameof(Configuration.Settings.Shortcuts.MainListViewSetEmotion10), true);
+            AddNode(listViewAndTextBoxNode, "Set new priority", nameof(Configuration.Settings.Shortcuts.MainListViewSetNewPriority));
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "1"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority1), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "2"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority2), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "3"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority3), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "4"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority4), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "5"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority5), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "6"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority6), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "7"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority7), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "8"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority8), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "9"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority9), true);
+            AddNode(listViewAndTextBoxNode, string.Format("Set priority {0}", "10"), nameof(Configuration.Settings.Shortcuts.MainListViewSetPriority10), true);
+            AddNode(listViewAndTextBoxNode, "Set new notes", nameof(Configuration.Settings.Shortcuts.MainListViewSetNewNotes));
             _shortcuts.Nodes.Add(listViewAndTextBoxNode);
 
             var listViewNode = new ShortcutNode(language.ListView);
@@ -2210,6 +2234,7 @@ namespace Nikse.SubtitleEdit.Forms.Options
             gs.StartInSourceView = checkBoxStartInSourceView.Checked;
             gs.RemoveBlankLinesWhenOpening = checkBoxRemoveBlankLinesWhenOpening.Checked;
             gs.ListViewLineSeparatorString = textBoxShowLineBreaksAs.Text;
+            gs.AllowSubtitleOverlap = checkBoxAllowSubtitleOverlap.Checked;
             if (string.IsNullOrWhiteSpace(gs.ListViewLineSeparatorString))
             {
                 gs.ListViewLineSeparatorString = "<br />";

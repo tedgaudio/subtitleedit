@@ -10212,6 +10212,42 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
+        private void SetEmotion(string emotion)
+        {
+            if (!string.IsNullOrEmpty(emotion))
+            {
+                MakeHistoryForUndo("Set emotion: " + emotion);
+
+                foreach (int index in SubtitleListview1.SelectedIndices)
+                {
+                    _subtitle.Paragraphs[index].Emotion = emotion;
+                    SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+                }
+            }
+        }
+
+        private void SetPriority(int priority)
+        {
+            MakeHistoryForUndo("Set priority: " + priority);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].Priority = priority;
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+            }
+        }
+
+        private void SetNotes(string notes)
+        {
+            MakeHistoryForUndo("Set notes: " + notes);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].Notes = notes;
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+            }
+        }
+
         private void SetLayer(object sender, EventArgs e)
         {
             string layer = (sender as ToolStripItem).Text;
@@ -10350,6 +10386,62 @@ namespace Nikse.SubtitleEdit.Forms
                         foreach (int index in SubtitleListview1.SelectedIndices)
                         {
                             _subtitle.Paragraphs[index].Actor = actor;
+                            SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetNewEmotion(object sender, EventArgs e)
+        {
+            using (var form = new TextPrompt("New emotion", "Emotion", string.Empty))
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    string emotion = form.InputText;
+                    if (!string.IsNullOrEmpty(emotion))
+                    {
+                        foreach (int index in SubtitleListview1.SelectedIndices)
+                        {
+                            _subtitle.Paragraphs[index].Emotion = emotion;
+                            SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetNewPriority(object sender, EventArgs e)
+        {
+            using (var form = new TextPrompt("New priority", "Priority (1-5)", string.Empty))
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    if (int.TryParse(form.InputText, out int priority) && priority >= 1 && priority <= 5)
+                    {
+                        foreach (int index in SubtitleListview1.SelectedIndices)
+                        {
+                            _subtitle.Paragraphs[index].Priority = priority;
+                            SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetNewNotes(object sender, EventArgs e)
+        {
+            using (var form = new TextPrompt("New notes", "Notes", string.Empty))
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    string notes = form.InputText;
+                    if (!string.IsNullOrEmpty(notes))
+                    {
+                        foreach (int index in SubtitleListview1.SelectedIndices)
+                        {
+                            _subtitle.Paragraphs[index].Notes = notes;
                             SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
                         }
                     }
@@ -13552,7 +13644,7 @@ namespace Nikse.SubtitleEdit.Forms
             if (_subtitle.Paragraphs.Count > 0 && _subtitleListViewIndex >= 0 && startTime != null)
             {
                 var prevParagraph = _subtitle.GetParagraphOrDefault(index - 1);
-                if (prevParagraph != null && !prevParagraph.EndTime.IsMaxTime && prevParagraph.EndTime.TotalMilliseconds > startTime.TotalMilliseconds && Configuration.Settings.Tools.ListViewSyntaxColorOverlap)
+                if (prevParagraph != null && !prevParagraph.EndTime.IsMaxTime && prevParagraph.EndTime.TotalMilliseconds > startTime.TotalMilliseconds && Configuration.Settings.Tools.ListViewSyntaxColorOverlap && !Configuration.Settings.General.AllowSubtitleOverlap)
                 {
                     startTimeWarning = string.Format(_languageGeneral.OverlapPreviousLineX, prevParagraph.EndTime.TotalSeconds - startTime.TotalSeconds);
                 }
@@ -13563,7 +13655,7 @@ namespace Nikse.SubtitleEdit.Forms
                     double durationMilliSeconds = GetDurationInMilliseconds();
                     if (startTime.TotalMilliseconds + durationMilliSeconds > nextParagraph.StartTime.TotalMilliseconds &&
                         Configuration.Settings.Tools.ListViewSyntaxColorOverlap &&
-                        !startTime.IsMaxTime)
+                        !startTime.IsMaxTime && !Configuration.Settings.General.AllowSubtitleOverlap)
                     {
                         durationWarning = string.Format(_languageGeneral.OverlapX, ((startTime.TotalMilliseconds + durationMilliSeconds) - nextParagraph.StartTime.TotalMilliseconds) / TimeCode.BaseUnit);
                     }
@@ -13571,7 +13663,7 @@ namespace Nikse.SubtitleEdit.Forms
                     if (startTimeWarning.Length == 0 &&
                         startTime.TotalMilliseconds > nextParagraph.StartTime.TotalMilliseconds &&
                         Configuration.Settings.Tools.ListViewSyntaxColorOverlap &&
-                        !startTime.IsMaxTime)
+                        !startTime.IsMaxTime && !Configuration.Settings.General.AllowSubtitleOverlap)
                     {
                         double di = (startTime.TotalMilliseconds - nextParagraph.StartTime.TotalMilliseconds) / TimeCode.BaseUnit;
                         startTimeWarning = string.Format(_languageGeneral.OverlapNextX, di);
@@ -17674,6 +17766,21 @@ namespace Nikse.SubtitleEdit.Forms
 
                 e.SuppressKeyPress = true;
             }
+            else if (_shortcuts.MainListViewSetNewEmotion == e.KeyData)
+            {
+                SetNewEmotion(null, null);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetNewPriority == e.KeyData)
+            {
+                SetNewPriority(null, null);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetNewNotes == e.KeyData)
+            {
+                SetNewNotes(null, null);
+                e.SuppressKeyPress = true;
+            }
             else if (_shortcuts.MainListViewSetActor1 == e.KeyData)
             {
                 SetActorVoice(0);
@@ -17712,6 +17819,116 @@ namespace Nikse.SubtitleEdit.Forms
             else if (_shortcuts.MainListViewSetActor8 == e.KeyData)
             {
                 SetActorVoice(7);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetActor9 == e.KeyData)
+            {
+                SetActorVoice(8);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetActor10 == e.KeyData)
+            {
+                SetActorVoice(9);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion1 == e.KeyData)
+            {
+                SetEmotionVoice(0);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion2 == e.KeyData)
+            {
+                SetEmotionVoice(1);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion3 == e.KeyData)
+            {
+                SetEmotionVoice(2);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion4 == e.KeyData)
+            {
+                SetEmotionVoice(3);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion5 == e.KeyData)
+            {
+                SetEmotionVoice(4);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion6 == e.KeyData)
+            {
+                SetEmotionVoice(5);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion7 == e.KeyData)
+            {
+                SetEmotionVoice(6);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion8 == e.KeyData)
+            {
+                SetEmotionVoice(7);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion9 == e.KeyData)
+            {
+                SetEmotionVoice(8);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetEmotion10 == e.KeyData)
+            {
+                SetEmotionVoice(9);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority1 == e.KeyData)
+            {
+                SetPriorityVoice(0);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority2 == e.KeyData)
+            {
+                SetPriorityVoice(1);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority3 == e.KeyData)
+            {
+                SetPriorityVoice(2);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority4 == e.KeyData)
+            {
+                SetPriorityVoice(3);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority5 == e.KeyData)
+            {
+                SetPriorityVoice(4);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority6 == e.KeyData)
+            {
+                SetPriorityVoice(5);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority7 == e.KeyData)
+            {
+                SetPriorityVoice(6);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority8 == e.KeyData)
+            {
+                SetPriorityVoice(7);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority9 == e.KeyData)
+            {
+                SetPriorityVoice(8);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetPriority10 == e.KeyData)
+            {
+                SetPriorityVoice(9);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainGeneralToggleMode == e.KeyData && Configuration.Settings.General.ShowVideoControls)
@@ -19515,6 +19732,44 @@ namespace Nikse.SubtitleEdit.Forms
                 {
                     WebVTTSetVoice(voices[index]);
                 }
+            }
+        }
+
+        private void SetEmotionVoice(int index)
+        {
+            var emotions = new List<string>();
+            foreach (var p in _subtitle.Paragraphs)
+            {
+                if (!string.IsNullOrEmpty(p.Emotion) && !emotions.Contains(p.Emotion))
+                {
+                    emotions.Add(p.Emotion);
+                }
+
+                emotions.Sort();
+            }
+
+            if (index >= 0 && index < emotions.Count)
+            {
+                SetEmotion(emotions[index]);
+            }
+        }
+
+        private void SetPriorityVoice(int index)
+        {
+            var priorities = new List<int>();
+            foreach (var p in _subtitle.Paragraphs)
+            {
+                if (p.Priority > 0 && !priorities.Contains(p.Priority))
+                {
+                    priorities.Add(p.Priority);
+                }
+
+                priorities.Sort();
+            }
+
+            if (index >= 0 && index < priorities.Count)
+            {
+                SetPriority(priorities[index]);
             }
         }
 

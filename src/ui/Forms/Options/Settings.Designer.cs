@@ -261,6 +261,7 @@ namespace Nikse.SubtitleEdit.Forms.Options
             this.numericUpDownWaveformBorderHitMs = new Nikse.SubtitleEdit.Controls.NikseUpDown();
             this.labelWaveformBorderHitMs1 = new System.Windows.Forms.Label();
             this.checkBoxAllowOverlap = new System.Windows.Forms.CheckBox();
+            this.checkBoxAllowSubtitleOverlap = new System.Windows.Forms.CheckBox();
             this.checkBoxReverseMouseWheelScrollDirection = new System.Windows.Forms.CheckBox();
             this.panelWaveformTextColor = new System.Windows.Forms.Panel();
             this.buttonWaveformTextColor = new System.Windows.Forms.Button();
@@ -881,6 +882,7 @@ namespace Nikse.SubtitleEdit.Forms.Options
             this.groupBoxGeneralRules.Controls.Add(this.numericUpDownMaxCharsSec);
             this.groupBoxGeneralRules.Controls.Add(this.labelMinGapMs);
             this.groupBoxGeneralRules.Controls.Add(this.numericUpDownSubtitleLineMaximumLength);
+            this.groupBoxGeneralRules.Controls.Add(this.checkBoxAllowSubtitleOverlap);
             this.groupBoxGeneralRules.Location = new System.Drawing.Point(6, 23);
             this.groupBoxGeneralRules.Name = "groupBoxGeneralRules";
             this.groupBoxGeneralRules.Size = new System.Drawing.Size(384, 380);
@@ -4075,6 +4077,17 @@ namespace Nikse.SubtitleEdit.Forms.Options
             this.checkBoxAllowOverlap.TabIndex = 21;
             this.checkBoxAllowOverlap.Text = "Allow overlap (when dragging/resizing)";
             this.checkBoxAllowOverlap.UseVisualStyleBackColor = true;
+            
+            // 
+            // checkBoxAllowSubtitleOverlap
+            // 
+            this.checkBoxAllowSubtitleOverlap.AutoSize = true;
+            this.checkBoxAllowSubtitleOverlap.Location = new System.Drawing.Point(262, 73);
+            this.checkBoxAllowSubtitleOverlap.Name = "checkBoxAllowSubtitleOverlap";
+            this.checkBoxAllowSubtitleOverlap.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxAllowSubtitleOverlap.TabIndex = 22;
+            this.checkBoxAllowSubtitleOverlap.Text = "Allow subtitle overlap";
+            this.checkBoxAllowSubtitleOverlap.UseVisualStyleBackColor = true;
             // 
             // checkBoxReverseMouseWheelScrollDirection
             // 
@@ -7299,6 +7312,7 @@ namespace Nikse.SubtitleEdit.Forms.Options
         private Nikse.SubtitleEdit.Controls.NikseTextBox textBoxCustomSearchUrl3;
         private Nikse.SubtitleEdit.Controls.NikseComboBox comboBoxCustomSearch3;
         private System.Windows.Forms.CheckBox checkBoxAllowOverlap;
+        private System.Windows.Forms.CheckBox checkBoxAllowSubtitleOverlap;
         private System.Windows.Forms.Label labelWaveformBorderHitMs2;
         private Nikse.SubtitleEdit.Controls.NikseUpDown numericUpDownWaveformBorderHitMs;
         private System.Windows.Forms.Label labelWaveformBorderHitMs1;

@@ -121,7 +121,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
             var distance = rightParagraph.StartTime.TotalMilliseconds - leftParagraph.EndTime.TotalMilliseconds;
 
             // Check if there is an overlap
-            if (distance < 0)
+            if (distance < 0 && !Configuration.Settings.General.AllowSubtitleOverlap)
             {
                 // If an overlap threshold is set, don't connect if threshold exceeded
                 if (Configuration.Settings.BeautifyTimeCodes.OverlapThreshold > 0 && Math.Abs(distance) >= Configuration.Settings.BeautifyTimeCodes.OverlapThreshold)
@@ -508,7 +508,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
             var distance = rightParagraph.StartTime.TotalMilliseconds - leftParagraph.EndTime.TotalMilliseconds;
 
             // Check if there is an overlap
-            if (distance < 0)
+            if (distance < 0 && !Configuration.Settings.General.AllowSubtitleOverlap)
             {
                 // If an overlap threshold is set, don't chain if threshold exceeded
                 if (Configuration.Settings.BeautifyTimeCodes.OverlapThreshold > 0 && Math.Abs(distance) >= Configuration.Settings.BeautifyTimeCodes.OverlapThreshold)
@@ -961,7 +961,7 @@ namespace Nikse.SubtitleEdit.Core.Forms
                         var distance = nextParagraph.StartTime.TotalMilliseconds - paragraph.EndTime.TotalMilliseconds;
 
                         // If an overlap threshold is set, don't fix if threshold exceeded
-                        if (distance < 0 && Configuration.Settings.BeautifyTimeCodes.OverlapThreshold > 0 && Math.Abs(distance) >= Configuration.Settings.BeautifyTimeCodes.OverlapThreshold)
+                        if (distance < 0 && Configuration.Settings.BeautifyTimeCodes.OverlapThreshold > 0 && Math.Abs(distance) >= Configuration.Settings.BeautifyTimeCodes.OverlapThreshold && !Configuration.Settings.General.AllowSubtitleOverlap)
                         {
                             newCueFrame = bestCueFrame;
                         }

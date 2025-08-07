@@ -1277,7 +1277,7 @@ namespace Nikse.SubtitleEdit.Forms
                 int firstSelectedIndex = subtitleListView1.SelectedItems[0].Index;
 
                 Paragraph prevParagraph = FixedSubtitle.GetParagraphOrDefault(firstSelectedIndex - 1);
-                if (prevParagraph != null && prevParagraph.EndTime.TotalMilliseconds > startTime.TotalMilliseconds)
+                if (prevParagraph != null && prevParagraph.EndTime.TotalMilliseconds > startTime.TotalMilliseconds && !Configuration.Settings.General.AllowSubtitleOverlap)
                 {
                     labelStartTimeWarning.Text = string.Format(_languageGeneral.OverlapPreviousLineX, (prevParagraph.EndTime.TotalMilliseconds - startTime.TotalMilliseconds) / TimeCode.BaseUnit);
                 }
@@ -1286,13 +1286,13 @@ namespace Nikse.SubtitleEdit.Forms
                 if (nextParagraph != null)
                 {
                     double durationMilliseconds = (double)numericUpDownDuration.Value * TimeCode.BaseUnit;
-                    if (startTime.TotalMilliseconds + durationMilliseconds > nextParagraph.StartTime.TotalMilliseconds)
+                    if (startTime.TotalMilliseconds + durationMilliseconds > nextParagraph.StartTime.TotalMilliseconds && !Configuration.Settings.General.AllowSubtitleOverlap)
                     {
                         labelDurationWarning.Text = string.Format(_languageGeneral.OverlapNextX, ((startTime.TotalMilliseconds + durationMilliseconds) - nextParagraph.StartTime.TotalMilliseconds) / TimeCode.BaseUnit);
                     }
 
                     if (labelStartTimeWarning.Text.Length == 0 &&
-                        startTime.TotalMilliseconds > nextParagraph.StartTime.TotalMilliseconds)
+                        startTime.TotalMilliseconds > nextParagraph.StartTime.TotalMilliseconds && !Configuration.Settings.General.AllowSubtitleOverlap)
                     {
                         double di = (startTime.TotalMilliseconds - nextParagraph.StartTime.TotalMilliseconds) / TimeCode.BaseUnit;
                         labelStartTimeWarning.Text = string.Format(_languageGeneral.OverlapNextX, di);

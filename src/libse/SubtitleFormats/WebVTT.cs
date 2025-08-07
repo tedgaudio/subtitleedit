@@ -87,7 +87,29 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     }
                 }
 
-                sb.AppendLine(string.Format(paragraphWriteFormat, start, end, positionInfo, FormatText(p), style, Environment.NewLine));
+                var text = FormatText(p);
+                
+                // Add new fields as comments
+                var additionalInfo = new List<string>();
+                if (!string.IsNullOrEmpty(p.Emotion))
+                {
+                    additionalInfo.Add($"emotion:{p.Emotion}");
+                }
+                if (p.Priority > 0)
+                {
+                    additionalInfo.Add($"priority:{p.Priority}");
+                }
+                if (!string.IsNullOrEmpty(p.Notes))
+                {
+                    additionalInfo.Add($"notes:{p.Notes}");
+                }
+                
+                if (additionalInfo.Count > 0)
+                {
+                    text += Environment.NewLine + "<!-- " + string.Join(" | ", additionalInfo) + " -->";
+                }
+
+                sb.AppendLine(string.Format(paragraphWriteFormat, start, end, positionInfo, text, style, Environment.NewLine));
             }
 
             return sb.ToString().Trim();
@@ -348,6 +370,9 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 //  paragraph.Text = ColorWebVttToHtml(paragraph.Text);
                 paragraph.Text = EscapeDecodeText(paragraph.Text);
                 paragraph.Text = RemoveWeirdRepeatingHeader(paragraph.Text);
+                
+                // Parse new fields from text
+                ParseNewFieldsFromText(paragraph);
             }
 
             if (Configuration.Settings.SubtitleSettings.WebVttMergeLinesWithSameText)
@@ -365,6 +390,47 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     .ToString()
                     .Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine)
                     .Trim();
+            }
+        }
+
+        private static void ParseNewFieldsFromText(Paragraph p)
+        {
+            var lines = p.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            if (lines.Length > 1)
+            {
+                var lastLine = lines[lines.Length - 1];
+                if (lastLine.Contains("<!--") && lastLine.Contains("-->"))
+                {
+                    // Extract new fields from comment
+                    var commentStart = lastLine.IndexOf("<!--");
+                    var commentEnd = lastLine.IndexOf("-->");
+                    if (commentStart >= 0 && commentEnd > commentStart)
+                    {
+                        var comment = lastLine.Substring(commentStart + 4, commentEnd - commentStart - 4).Trim();
+                        var parts = comment.Split(new[] { " | " }, StringSplitOptions.None);
+                        foreach (var part in parts)
+                        {
+                            if (part.StartsWith("emotion:"))
+                            {
+                                p.Emotion = part.Substring("emotion:".Length);
+                            }
+                            else if (part.StartsWith("priority:"))
+                            {
+                                if (int.TryParse(part.Substring("priority:".Length), out int priority))
+                                {
+                                    p.Priority = priority;
+                                }
+                            }
+                            else if (part.StartsWith("notes:"))
+                            {
+                                p.Notes = part.Substring("notes:".Length);
+                            }
+                        }
+                        
+                        // Remove the comment line from text
+                        p.Text = string.Join(Environment.NewLine, lines.Take(lines.Length - 1));
+                    }
+                }
             }
         }
 

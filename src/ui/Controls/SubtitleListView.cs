@@ -24,6 +24,9 @@ namespace Nikse.SubtitleEdit.Controls
             Gap,
             Actor,
             Region,
+            Emotion,
+            Priority,
+            Notes,
             Text,
             TextOriginal,
             Extra,
@@ -49,6 +52,9 @@ namespace Nikse.SubtitleEdit.Controls
         public int ColumnIndexGap { get; private set; }
         public int ColumnIndexActor { get; private set; }
         public int ColumnIndexRegion { get; private set; }
+        public int ColumnIndexEmotion { get; private set; }
+        public int ColumnIndexPriority { get; private set; }
+        public int ColumnIndexNotes { get; private set; }
         public int ColumnIndexText { get; private set; }
         public int ColumnIndexTextOriginal { get; private set; }
         public int ColumnIndexExtra { get; private set; }
@@ -333,6 +339,15 @@ namespace Nikse.SubtitleEdit.Controls
                     case SubtitleColumn.Region:
                         Columns.Add(new ColumnHeader { Width = 60 });
                         break;
+                    case SubtitleColumn.Emotion:
+                        Columns.Add(new ColumnHeader { Width = 60 });
+                        break;
+                    case SubtitleColumn.Priority:
+                        Columns.Add(new ColumnHeader { Width = 60 });
+                        break;
+                    case SubtitleColumn.Notes:
+                        Columns.Add(new ColumnHeader { Width = 60 });
+                        break;
                     case SubtitleColumn.Text:
                         Columns.Add(new ColumnHeader { Width = 300 });
                         break;
@@ -416,6 +431,9 @@ namespace Nikse.SubtitleEdit.Controls
             ColumnIndexGap = GetColumnIndex(SubtitleColumn.Gap);
             ColumnIndexActor = GetColumnIndex(SubtitleColumn.Actor);
             ColumnIndexRegion = GetColumnIndex(SubtitleColumn.Region);
+            ColumnIndexEmotion = GetColumnIndex(SubtitleColumn.Emotion);
+            ColumnIndexPriority = GetColumnIndex(SubtitleColumn.Priority);
+            ColumnIndexNotes = GetColumnIndex(SubtitleColumn.Notes);
             ColumnIndexText = GetColumnIndex(SubtitleColumn.Text);
             ColumnIndexTextOriginal = GetColumnIndex(SubtitleColumn.TextOriginal);
             ColumnIndexExtra = GetColumnIndex(SubtitleColumn.Extra);
@@ -1201,7 +1219,85 @@ namespace Nikse.SubtitleEdit.Controls
                     Columns.Add(ch);
                 }
                 UpdateColumnIndexes();
-                SetColumnWidthRetry(ColumnIndexRegion, 80);
+                SetColumnWidthRetry(ColumnIndexRegion, 60);
+                AutoSizeAllColumns(null);
+            }
+        }
+
+        public void ShowEmotionColumn(string title)
+        {
+            if (GetColumnIndex(SubtitleColumn.Emotion) == -1)
+            {
+                var ch = new ColumnHeader { Text = title };
+                if (ColumnIndexRegion >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexRegion + 1, SubtitleColumn.Emotion);
+                    Columns.Insert(ColumnIndexRegion + 1, ch);
+                }
+                else if (ColumnIndexActor >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexActor + 1, SubtitleColumn.Emotion);
+                    Columns.Insert(ColumnIndexActor + 1, ch);
+                }
+                else
+                {
+                    SubtitleColumns.Add(SubtitleColumn.Emotion);
+                    Columns.Add(ch);
+                }
+                UpdateColumnIndexes();
+                SetColumnWidthRetry(ColumnIndexEmotion, 60);
+                AutoSizeAllColumns(null);
+            }
+        }
+
+        public void ShowPriorityColumn(string title)
+        {
+            if (GetColumnIndex(SubtitleColumn.Priority) == -1)
+            {
+                var ch = new ColumnHeader { Text = title };
+                if (ColumnIndexEmotion >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexEmotion + 1, SubtitleColumn.Priority);
+                    Columns.Insert(ColumnIndexEmotion + 1, ch);
+                }
+                else if (ColumnIndexRegion >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexRegion + 1, SubtitleColumn.Priority);
+                    Columns.Insert(ColumnIndexRegion + 1, ch);
+                }
+                else
+                {
+                    SubtitleColumns.Add(SubtitleColumn.Priority);
+                    Columns.Add(ch);
+                }
+                UpdateColumnIndexes();
+                SetColumnWidthRetry(ColumnIndexPriority, 50);
+                AutoSizeAllColumns(null);
+            }
+        }
+
+        public void ShowNotesColumn(string title)
+        {
+            if (GetColumnIndex(SubtitleColumn.Notes) == -1)
+            {
+                var ch = new ColumnHeader { Text = title };
+                if (ColumnIndexPriority >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexPriority + 1, SubtitleColumn.Notes);
+                    Columns.Insert(ColumnIndexPriority + 1, ch);
+                }
+                else if (ColumnIndexEmotion >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexEmotion + 1, SubtitleColumn.Notes);
+                    Columns.Insert(ColumnIndexEmotion + 1, ch);
+                }
+                else
+                {
+                    SubtitleColumns.Add(SubtitleColumn.Notes);
+                    Columns.Add(ch);
+                }
+                UpdateColumnIndexes();
+                SetColumnWidthRetry(ColumnIndexNotes, 100);
                 AutoSizeAllColumns(null);
             }
         }
@@ -1650,6 +1746,15 @@ namespace Nikse.SubtitleEdit.Controls
                         break;
                     case SubtitleColumn.Region:
                         item.SubItems.Add(paragraph.Region);
+                        break;
+                    case SubtitleColumn.Emotion:
+                        item.SubItems.Add(paragraph.Emotion);
+                        break;
+                    case SubtitleColumn.Priority:
+                        item.SubItems.Add(paragraph.Priority > 0 ? paragraph.Priority.ToString() : string.Empty);
+                        break;
+                    case SubtitleColumn.Notes:
+                        item.SubItems.Add(paragraph.Notes);
                         break;
                     case SubtitleColumn.Text:
                         item.SubItems.Add(paragraph.Text.Replace(Environment.NewLine, _lineSeparatorString));

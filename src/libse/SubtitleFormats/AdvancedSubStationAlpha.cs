@@ -243,6 +243,27 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
                 }
 
                 var text = p.Text.Replace(Environment.NewLine, "\\N");
+                
+                // Add new fields as comments or special tags
+                var additionalInfo = new List<string>();
+                if (!string.IsNullOrEmpty(p.Emotion))
+                {
+                    additionalInfo.Add($"emotion:{p.Emotion}");
+                }
+                if (p.Priority > 0)
+                {
+                    additionalInfo.Add($"priority:{p.Priority}");
+                }
+                if (!string.IsNullOrEmpty(p.Notes))
+                {
+                    additionalInfo.Add($"notes:{p.Notes}");
+                }
+                
+                if (additionalInfo.Count > 0)
+                {
+                    text += "\\N{\\an8\\fs10\\c&H808080&}" + string.Join(" | ", additionalInfo);
+                }
+                
                 if (p.IsComment)
                 {
                     sb.AppendFormat(commentWriteFormat, start, end, FormatText(text), style, actor, marginL, marginR, marginV, effect, p.Layer).AppendLine();
@@ -1761,6 +1782,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
 
                             p.Layer = layer;
                             p.IsComment = s.StartsWith("comment:", StringComparison.Ordinal);
+                            
+                            // Parse new fields from text
+                            ParseNewFieldsFromText(p, text);
+                            
                             subtitle.Paragraphs.Add(p);
                         }
                         catch
@@ -2796,6 +2821,46 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
             var styles = GetSsaStylesFromHeader(header).Where(p => p.Name != style.Name).ToList();
             styles.Add(style);
             return GetHeaderAndStylesFromAdvancedSubStationAlpha(header, styles);
+        }
+
+        private static void ParseNewFieldsFromText(Paragraph p, string text)
+        {
+            // Look for new fields in the text
+            var lines = text.Split(new[] { "\\N" }, StringSplitOptions.None);
+            if (lines.Length > 1)
+            {
+                var lastLine = lines[lines.Length - 1];
+                if (lastLine.Contains("emotion:") || lastLine.Contains("priority:") || lastLine.Contains("notes:"))
+                {
+                    // Extract new fields from the last line
+                    var parts = lastLine.Split(new[] { " | " }, StringSplitOptions.None);
+                    foreach (var part in parts)
+                    {
+                        if (part.StartsWith("emotion:"))
+                        {
+                            p.Emotion = part.Substring("emotion:".Length);
+                        }
+                        else if (part.StartsWith("priority:"))
+                        {
+                            if (int.TryParse(part.Substring("priority:".Length), out int priority))
+                            {
+                                p.Priority = priority;
+                            }
+                        }
+                        else if (part.StartsWith("notes:"))
+                        {
+                            p.Notes = part.Substring("notes:".Length);
+                        }
+                    }
+                    
+                    // Remove the last line from text since it contains metadata
+                    var textLines = text.Split(new[] { "\\N" }, StringSplitOptions.None);
+                    if (textLines.Length > 1)
+                    {
+                        p.Text = string.Join("\\N", textLines.Take(textLines.Length - 1));
+                    }
+                }
+            }
         }
     }
 }

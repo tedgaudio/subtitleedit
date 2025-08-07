@@ -96,7 +96,7 @@ namespace Nikse.SubtitleEdit.Core.Forms.FixCommonErrors
                 }
 
                 double diff = prev.EndTime.TotalMilliseconds - p.StartTime.TotalMilliseconds;
-                if (!prev.StartTime.IsMaxTime && !p.StartTime.IsMaxTime && diff >= 0 && !(canBeEqual && Math.Abs(diff) < 0.001))
+                if (!prev.StartTime.IsMaxTime && !p.StartTime.IsMaxTime && diff >= 0 && !(canBeEqual && Math.Abs(diff) < 0.001) && !Configuration.Settings.General.AllowSubtitleOverlap)
                 {
                     int diffHalf = (int)(diff / 2);
                     if (!Configuration.Settings.Tools.FixCommonErrorsFixOverlapAllowEqualEndStart && Math.Abs(p.StartTime.TotalMilliseconds - prev.EndTime.TotalMilliseconds) < 0.001 &&

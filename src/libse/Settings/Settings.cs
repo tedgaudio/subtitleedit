@@ -2695,6 +2695,24 @@ namespace Nikse.SubtitleEdit.Core.Settings
                 settings.Tools.ListViewShowColumnRegion = Convert.ToBoolean(subNode.InnerText, CultureInfo.InvariantCulture);
             }
 
+            subNode = node.SelectSingleNode("ListViewShowColumnEmotion");
+            if (subNode != null)
+            {
+                settings.Tools.ListViewShowColumnEmotion = Convert.ToBoolean(subNode.InnerText, CultureInfo.InvariantCulture);
+            }
+
+            subNode = node.SelectSingleNode("ListViewShowColumnPriority");
+            if (subNode != null)
+            {
+                settings.Tools.ListViewShowColumnPriority = Convert.ToBoolean(subNode.InnerText, CultureInfo.InvariantCulture);
+            }
+
+            subNode = node.SelectSingleNode("ListViewShowColumnNotes");
+            if (subNode != null)
+            {
+                settings.Tools.ListViewShowColumnNotes = Convert.ToBoolean(subNode.InnerText, CultureInfo.InvariantCulture);
+            }
+
             subNode = node.SelectSingleNode("ListViewMultipleReplaceShowColumnRuleInfo");
             if (subNode != null)
             {
@@ -7795,6 +7813,144 @@ namespace Nikse.SubtitleEdit.Core.Settings
                     shortcuts.MainListViewSetActor10 = subNode.InnerText;
                 }
 
+                subNode = node.SelectSingleNode("MainListViewSetNewEmotion");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetNewEmotion = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion1");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion1 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion2");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion2 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion3");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion3 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion4");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion4 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion5");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion5 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion6");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion6 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion7");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion7 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion8");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion8 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion9");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion9 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetEmotion10");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetEmotion10 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetNewPriority");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetNewPriority = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority1");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority1 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority2");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority2 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority3");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority3 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority4");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority4 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority5");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority5 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority6");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority6 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority7");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority7 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority8");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority8 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority9");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority9 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetPriority10");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetPriority10 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetNewNotes");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetNewNotes = subNode.InnerText;
+                }
+
                 subNode = node.SelectSingleNode("MainListViewColorChoose");
                 if (subNode != null)
                 {
@@ -9288,6 +9444,9 @@ namespace Nikse.SubtitleEdit.Core.Settings
                 xmlWriter.WriteElementString("ListViewShowColumnGap", settings.Tools.ListViewShowColumnGap.ToString(CultureInfo.InvariantCulture));
                 xmlWriter.WriteElementString("ListViewShowColumnActor", settings.Tools.ListViewShowColumnActor.ToString(CultureInfo.InvariantCulture));
                 xmlWriter.WriteElementString("ListViewShowColumnRegion", settings.Tools.ListViewShowColumnRegion.ToString(CultureInfo.InvariantCulture));
+                xmlWriter.WriteElementString("ListViewShowColumnEmotion", settings.Tools.ListViewShowColumnEmotion.ToString(CultureInfo.InvariantCulture));
+                xmlWriter.WriteElementString("ListViewShowColumnPriority", settings.Tools.ListViewShowColumnPriority.ToString(CultureInfo.InvariantCulture));
+                xmlWriter.WriteElementString("ListViewShowColumnNotes", settings.Tools.ListViewShowColumnNotes.ToString(CultureInfo.InvariantCulture));
                 xmlWriter.WriteElementString("ListViewMultipleReplaceShowColumnRuleInfo", settings.Tools.ListViewMultipleReplaceShowColumnRuleInfo.ToString(CultureInfo.InvariantCulture));
                 xmlWriter.WriteElementString("SplitAdvanced", settings.Tools.SplitAdvanced.ToString(CultureInfo.InvariantCulture));
                 xmlWriter.WriteElementString("SplitOutputFolder", settings.Tools.SplitOutputFolder);
@@ -10333,6 +10492,29 @@ namespace Nikse.SubtitleEdit.Core.Settings
             textWriter.WriteElementString("MainListViewSetActor8", shortcuts.MainListViewSetActor8);
             textWriter.WriteElementString("MainListViewSetActor9", shortcuts.MainListViewSetActor9);
             textWriter.WriteElementString("MainListViewSetActor10", shortcuts.MainListViewSetActor10);
+            textWriter.WriteElementString("MainListViewSetNewEmotion", shortcuts.MainListViewSetNewEmotion);
+            textWriter.WriteElementString("MainListViewSetEmotion1", shortcuts.MainListViewSetEmotion1);
+            textWriter.WriteElementString("MainListViewSetEmotion2", shortcuts.MainListViewSetEmotion2);
+            textWriter.WriteElementString("MainListViewSetEmotion3", shortcuts.MainListViewSetEmotion3);
+            textWriter.WriteElementString("MainListViewSetEmotion4", shortcuts.MainListViewSetEmotion4);
+            textWriter.WriteElementString("MainListViewSetEmotion5", shortcuts.MainListViewSetEmotion5);
+            textWriter.WriteElementString("MainListViewSetEmotion6", shortcuts.MainListViewSetEmotion6);
+            textWriter.WriteElementString("MainListViewSetEmotion7", shortcuts.MainListViewSetEmotion7);
+            textWriter.WriteElementString("MainListViewSetEmotion8", shortcuts.MainListViewSetEmotion8);
+            textWriter.WriteElementString("MainListViewSetEmotion9", shortcuts.MainListViewSetEmotion9);
+            textWriter.WriteElementString("MainListViewSetEmotion10", shortcuts.MainListViewSetEmotion10);
+            textWriter.WriteElementString("MainListViewSetNewPriority", shortcuts.MainListViewSetNewPriority);
+            textWriter.WriteElementString("MainListViewSetPriority1", shortcuts.MainListViewSetPriority1);
+            textWriter.WriteElementString("MainListViewSetPriority2", shortcuts.MainListViewSetPriority2);
+            textWriter.WriteElementString("MainListViewSetPriority3", shortcuts.MainListViewSetPriority3);
+            textWriter.WriteElementString("MainListViewSetPriority4", shortcuts.MainListViewSetPriority4);
+            textWriter.WriteElementString("MainListViewSetPriority5", shortcuts.MainListViewSetPriority5);
+            textWriter.WriteElementString("MainListViewSetPriority6", shortcuts.MainListViewSetPriority6);
+            textWriter.WriteElementString("MainListViewSetPriority7", shortcuts.MainListViewSetPriority7);
+            textWriter.WriteElementString("MainListViewSetPriority8", shortcuts.MainListViewSetPriority8);
+            textWriter.WriteElementString("MainListViewSetPriority9", shortcuts.MainListViewSetPriority9);
+            textWriter.WriteElementString("MainListViewSetPriority10", shortcuts.MainListViewSetPriority10);
+            textWriter.WriteElementString("MainListViewSetNewNotes", shortcuts.MainListViewSetNewNotes);
             textWriter.WriteElementString("MainListViewColorChoose", shortcuts.MainListViewColorChoose);
             textWriter.WriteElementString("MainRemoveFormatting", shortcuts.MainRemoveFormatting);
             textWriter.WriteElementString("MainListViewCopyText", shortcuts.MainListViewCopyText);

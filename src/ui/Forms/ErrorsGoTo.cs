@@ -91,7 +91,7 @@ namespace Nikse.SubtitleEdit.Forms
                 if (i > 0 && i < paragraphs.Count)
                 {
                     var prev = paragraphs[i - 1];
-                    if (paragraph.StartTime.TotalMilliseconds < prev.EndTime.TotalMilliseconds && !prev.EndTime.IsMaxTime)
+                    if (paragraph.StartTime.TotalMilliseconds < prev.EndTime.TotalMilliseconds && !prev.EndTime.IsMaxTime && !Configuration.Settings.General.AllowSubtitleOverlap)
                     {
                         errors.Add("Overlap with prev");
                     }
@@ -101,7 +101,7 @@ namespace Nikse.SubtitleEdit.Forms
                 {
                     var next = paragraphs[i + 1];
                     var gapMilliseconds = (int)Math.Round(next.StartTime.TotalMilliseconds - paragraph.EndTime.TotalMilliseconds);
-                    if (gapMilliseconds < 0)
+                    if (gapMilliseconds < 0 && !Configuration.Settings.General.AllowSubtitleOverlap)
                     {
                         errors.Add("Overlap with next");
                     }
