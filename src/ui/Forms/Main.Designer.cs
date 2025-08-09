@@ -565,6 +565,18 @@ namespace Nikse.SubtitleEdit.Forms
             this.labelStartTime = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.labelDuration = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.labelAutoDuration = new Nikse.SubtitleEdit.Controls.NikseLabel();
+            this.labelEditActor = new Nikse.SubtitleEdit.Controls.NikseLabel();
+            this.comboBoxEditActor = new System.Windows.Forms.ComboBox();
+            this.labelEditOnOffScreen = new Nikse.SubtitleEdit.Controls.NikseLabel();
+            this.comboBoxEditOnOffScreen = new System.Windows.Forms.ComboBox();
+            this.labelEditDiegetic = new Nikse.SubtitleEdit.Controls.NikseLabel();
+            this.comboBoxEditDiegetic = new System.Windows.Forms.ComboBox();
+            this.labelEditDFX = new Nikse.SubtitleEdit.Controls.NikseLabel();
+            this.textBoxEditDFX = new System.Windows.Forms.TextBox();
+            this.labelEditDialogueReverb = new Nikse.SubtitleEdit.Controls.NikseLabel();
+            this.comboBoxEditDialogueReverb = new System.Windows.Forms.ComboBox();
+            this.labelEditNotes = new Nikse.SubtitleEdit.Controls.NikseLabel();
+            this.textBoxEditNotes = new System.Windows.Forms.TextBox();
             this.pictureBoxRecord = new System.Windows.Forms.PictureBox();
             this.textBoxSource = new Nikse.SubtitleEdit.Controls.NikseTextBox();
             this.contextMenuStripTextBoxSourceView = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -4855,6 +4867,18 @@ namespace Nikse.SubtitleEdit.Forms
             // 
             this.groupBoxEdit.Controls.Add(this.numericUpDownLayer);
             this.groupBoxEdit.Controls.Add(this.labelLayer);
+            this.groupBoxEdit.Controls.Add(this.labelEditActor);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditActor);
+            this.groupBoxEdit.Controls.Add(this.labelEditOnOffScreen);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditOnOffScreen);
+            this.groupBoxEdit.Controls.Add(this.labelEditDiegetic);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditDiegetic);
+            this.groupBoxEdit.Controls.Add(this.labelEditDFX);
+            this.groupBoxEdit.Controls.Add(this.textBoxEditDFX);
+            this.groupBoxEdit.Controls.Add(this.labelEditDialogueReverb);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditDialogueReverb);
+            this.groupBoxEdit.Controls.Add(this.labelEditNotes);
+            this.groupBoxEdit.Controls.Add(this.textBoxEditNotes);
             this.groupBoxEdit.Controls.Add(this.panelBookmark);
             this.groupBoxEdit.Controls.Add(this.textBoxListViewText);
             this.groupBoxEdit.Controls.Add(this.labelOriginalSingleLinePixels);
@@ -4883,6 +4907,14 @@ namespace Nikse.SubtitleEdit.Forms
             this.groupBoxEdit.Controls.Add(this.labelDuration);
             this.groupBoxEdit.Controls.Add(this.labelAutoDuration);
             this.groupBoxEdit.Controls.Add(this.pictureBoxRecord);
+            this.groupBoxEdit.Controls.Add(this.labelEditActor);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditActor);
+            this.groupBoxEdit.Controls.Add(this.labelEditOnOffScreen);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditOnOffScreen);
+            this.groupBoxEdit.Controls.Add(this.labelEditDiegetic);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditDiegetic);
+            this.groupBoxEdit.Controls.Add(this.labelEditDFX);
+            this.groupBoxEdit.Controls.Add(this.textBoxEditDFX);
             this.groupBoxEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxEdit.Location = new System.Drawing.Point(0, 0);
             this.groupBoxEdit.Name = "groupBoxEdit";
@@ -4936,6 +4968,139 @@ namespace Nikse.SubtitleEdit.Forms
             this.labelLayer.Size = new System.Drawing.Size(33, 13);
             this.labelLayer.TabIndex = 45;
             this.labelLayer.Text = "Layer";
+            // 
+            // labelEditActor
+            // 
+            this.labelEditActor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelEditActor.AutoSize = true;
+            this.labelEditActor.Location = new System.Drawing.Point(645, 11);
+            this.labelEditActor.Name = "labelEditActor";
+            this.labelEditActor.Size = new System.Drawing.Size(32, 13);
+            this.labelEditActor.TabIndex = 46;
+            this.labelEditActor.Text = "Actor";
+            // 
+            // comboBoxEditActor
+            // 
+            this.comboBoxEditActor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxEditActor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.comboBoxEditActor.FormattingEnabled = true;
+            this.comboBoxEditActor.Location = new System.Drawing.Point(645, 26);
+            this.comboBoxEditActor.Name = "comboBoxEditActor";
+            this.comboBoxEditActor.Size = new System.Drawing.Size(90, 21);
+            this.comboBoxEditActor.TabIndex = 47;
+            this.comboBoxEditActor.TextChanged += new System.EventHandler(this.ComboBoxEditActor_TextChanged);
+            // 
+            // labelEditOnOffScreen
+            // 
+            this.labelEditOnOffScreen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelEditOnOffScreen.AutoSize = true;
+            this.labelEditOnOffScreen.Location = new System.Drawing.Point(545, 11);
+            this.labelEditOnOffScreen.Name = "labelEditOnOffScreen";
+            this.labelEditOnOffScreen.Size = new System.Drawing.Size(75, 13);
+            this.labelEditOnOffScreen.TabIndex = 48;
+            this.labelEditOnOffScreen.Text = "On/Off Screen";
+            // 
+            // comboBoxEditOnOffScreen
+            // 
+            this.comboBoxEditOnOffScreen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxEditOnOffScreen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxEditOnOffScreen.FormattingEnabled = true;
+            this.comboBoxEditOnOffScreen.Items.AddRange(new object[] {
+            "On Screen",
+            "Off Screen"});
+            this.comboBoxEditOnOffScreen.Location = new System.Drawing.Point(545, 26);
+            this.comboBoxEditOnOffScreen.Name = "comboBoxEditOnOffScreen";
+            this.comboBoxEditOnOffScreen.Size = new System.Drawing.Size(90, 21);
+            this.comboBoxEditOnOffScreen.TabIndex = 49;
+            this.comboBoxEditOnOffScreen.SelectedIndexChanged += new System.EventHandler(this.ComboBoxEditOnOffScreen_SelectedIndexChanged);
+            // 
+            // labelEditDiegetic
+            // 
+            this.labelEditDiegetic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelEditDiegetic.AutoSize = true;
+            this.labelEditDiegetic.Location = new System.Drawing.Point(545, 55);
+            this.labelEditDiegetic.Name = "labelEditDiegetic";
+            this.labelEditDiegetic.Size = new System.Drawing.Size(50, 13);
+            this.labelEditDiegetic.TabIndex = 50;
+            this.labelEditDiegetic.Text = "Diegetic";
+            // 
+            // comboBoxEditDiegetic
+            // 
+            this.comboBoxEditDiegetic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxEditDiegetic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxEditDiegetic.FormattingEnabled = true;
+            this.comboBoxEditDiegetic.Items.AddRange(new object[] {
+            "Diegetic",
+            "Non-diegetic"});
+            this.comboBoxEditDiegetic.Location = new System.Drawing.Point(545, 70);
+            this.comboBoxEditDiegetic.Name = "comboBoxEditDiegetic";
+            this.comboBoxEditDiegetic.Size = new System.Drawing.Size(90, 21);
+            this.comboBoxEditDiegetic.TabIndex = 51;
+            this.comboBoxEditDiegetic.SelectedIndexChanged += new System.EventHandler(this.ComboBoxEditDiegetic_SelectedIndexChanged);
+            // 
+            // labelEditDFX
+            // 
+            this.labelEditDFX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelEditDFX.AutoSize = true;
+            this.labelEditDFX.Location = new System.Drawing.Point(545, 99);
+            this.labelEditDFX.Name = "labelEditDFX";
+            this.labelEditDFX.Size = new System.Drawing.Size(26, 13);
+            this.labelEditDFX.TabIndex = 52;
+            this.labelEditDFX.Text = "DFX";
+            // 
+            // textBoxEditDFX
+            // 
+            this.textBoxEditDFX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxEditDFX.Location = new System.Drawing.Point(545, 114);
+            this.textBoxEditDFX.Name = "textBoxEditDFX";
+            this.textBoxEditDFX.Size = new System.Drawing.Size(180, 20);
+            this.textBoxEditDFX.TabIndex = 53;
+            this.textBoxEditDFX.TextChanged += new System.EventHandler(this.TextBoxEditDFX_TextChanged);
+            // 
+            // labelEditDialogueReverb
+            // 
+            this.labelEditDialogueReverb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelEditDialogueReverb.AutoSize = true;
+            this.labelEditDialogueReverb.Location = new System.Drawing.Point(645, 55);
+            this.labelEditDialogueReverb.Name = "labelEditDialogueReverb";
+            this.labelEditDialogueReverb.Size = new System.Drawing.Size(84, 13);
+            this.labelEditDialogueReverb.TabIndex = 54;
+            this.labelEditDialogueReverb.Text = "Dialogue Reverb";
+            // 
+            // comboBoxEditDialogueReverb
+            // 
+            this.comboBoxEditDialogueReverb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxEditDialogueReverb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxEditDialogueReverb.FormattingEnabled = true;
+            this.comboBoxEditDialogueReverb.Items.AddRange(new object[] {
+            "None",
+            "Low",
+            "Mid",
+            "High"});
+            this.comboBoxEditDialogueReverb.Location = new System.Drawing.Point(645, 70);
+            this.comboBoxEditDialogueReverb.Name = "comboBoxEditDialogueReverb";
+            this.comboBoxEditDialogueReverb.Size = new System.Drawing.Size(90, 21);
+            this.comboBoxEditDialogueReverb.TabIndex = 55;
+            this.comboBoxEditDialogueReverb.SelectedIndexChanged += new System.EventHandler(this.ComboBoxEditDialogueReverb_SelectedIndexChanged);
+            // 
+            // labelEditNotes
+            // 
+            this.labelEditNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelEditNotes.AutoSize = true;
+            this.labelEditNotes.Location = new System.Drawing.Point(545, 142);
+            this.labelEditNotes.Name = "labelEditNotes";
+            this.labelEditNotes.Size = new System.Drawing.Size(35, 13);
+            this.labelEditNotes.TabIndex = 56;
+            this.labelEditNotes.Text = "Notes";
+            // 
+            // textBoxEditNotes
+            // 
+            this.textBoxEditNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxEditNotes.Location = new System.Drawing.Point(545, 157);
+            this.textBoxEditNotes.Name = "textBoxEditNotes";
+            this.textBoxEditNotes.Size = new System.Drawing.Size(180, 60);
+            this.textBoxEditNotes.TabIndex = 57;
+            this.textBoxEditNotes.TextChanged += new System.EventHandler(this.TextBoxEditNotes_TextChanged);
             // 
             // panelBookmark
             // 
@@ -5551,7 +5716,7 @@ namespace Nikse.SubtitleEdit.Forms
             // buttonAutoBreak
             // 
             this.buttonAutoBreak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAutoBreak.Location = new System.Drawing.Point(620, 55);
+            this.buttonAutoBreak.Location = new System.Drawing.Point(420, 55);
             this.buttonAutoBreak.Name = "buttonAutoBreak";
             this.buttonAutoBreak.Size = new System.Drawing.Size(114, 23);
             this.buttonAutoBreak.TabIndex = 7;
@@ -5592,7 +5757,7 @@ namespace Nikse.SubtitleEdit.Forms
             // buttonUnBreak
             // 
             this.buttonUnBreak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonUnBreak.Location = new System.Drawing.Point(620, 26);
+            this.buttonUnBreak.Location = new System.Drawing.Point(420, 26);
             this.buttonUnBreak.Name = "buttonUnBreak";
             this.buttonUnBreak.Size = new System.Drawing.Size(114, 23);
             this.buttonUnBreak.TabIndex = 6;
@@ -6616,5 +6781,19 @@ namespace Nikse.SubtitleEdit.Forms
         private ToolStripMenuItem generaeTransparentVideoWithSubtitleToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItemConvertActors;
         private ToolStripMenuItem toolStripMenuItemCombineWaveformAndSpectrogram;
+        
+        // Custom fields for editing panel
+        private Nikse.SubtitleEdit.Controls.NikseLabel labelEditActor;
+        private System.Windows.Forms.ComboBox comboBoxEditActor;
+        private Nikse.SubtitleEdit.Controls.NikseLabel labelEditOnOffScreen;
+        private System.Windows.Forms.ComboBox comboBoxEditOnOffScreen;
+        private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDiegetic;
+        private System.Windows.Forms.ComboBox comboBoxEditDiegetic;
+        private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDFX;
+        private System.Windows.Forms.TextBox textBoxEditDFX;
+        private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDialogueReverb;
+        private System.Windows.Forms.ComboBox comboBoxEditDialogueReverb;
+        private Nikse.SubtitleEdit.Controls.NikseLabel labelEditNotes;
+        private System.Windows.Forms.TextBox textBoxEditNotes;
     }
 }

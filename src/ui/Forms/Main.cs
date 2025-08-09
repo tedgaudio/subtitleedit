@@ -392,6 +392,20 @@ namespace Nikse.SubtitleEdit.Forms
                 labelTextOriginalLineTotal.Visible = false;
                 labelNextWord.Visible = false;
 
+                // 커스텀 필드들 초기에는 숨김 (포맷에 따라 ShowSource에서 제어됨)
+                labelEditActor.Visible = false;
+                comboBoxEditActor.Visible = false;
+                labelEditOnOffScreen.Visible = false;
+                comboBoxEditOnOffScreen.Visible = false;
+                labelEditDiegetic.Visible = false;
+                comboBoxEditDiegetic.Visible = false;
+                labelEditDFX.Visible = false;
+                textBoxEditDFX.Visible = false;
+                labelEditDialogueReverb.Visible = false;
+                comboBoxEditDialogueReverb.Visible = false;
+                labelEditNotes.Visible = false;
+                textBoxEditNotes.Visible = false;
+
                 _contextMenuStripPlayRate = new ContextMenuStrip();
                 SetLanguage(Configuration.Settings.General.Language);
                 toolStripStatusNetworking.Visible = false;
@@ -9497,44 +9511,44 @@ namespace Nikse.SubtitleEdit.Forms
                 // Only handle styles for non-JSON formats
                 if (formatType != typeof(Json) && formatType != typeof(JsonType8))
                 {
-                    toolStripMenuItemWebVTT.Visible = false;
-                    var styles = AdvancedSubStationAlpha.GetStylesFromHeader(_subtitle.Header);
-                    if (styles.Count == 0)
-                    {
-                        styles = AdvancedSubStationAlpha.GetStylesFromHeader(AdvancedSubStationAlpha.DefaultHeader);
-                    }
+                toolStripMenuItemWebVTT.Visible = false;
+                var styles = AdvancedSubStationAlpha.GetStylesFromHeader(_subtitle.Header);
+                if (styles.Count == 0)
+                {
+                    styles = AdvancedSubStationAlpha.GetStylesFromHeader(AdvancedSubStationAlpha.DefaultHeader);
+                }
 
-                    setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
-                    foreach (var style in styles)
+                setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                foreach (var style in styles)
+                {
+                    setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Add(style, null, SetStyle);
+                    if (SubtitleListview1.SelectedItems.Count == 1 && SubtitleListview1.SelectedItems.Count > 0 &&
+                        _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index)?.Extra == style)
                     {
-                        setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Add(style, null, SetStyle);
-                        if (SubtitleListview1.SelectedItems.Count == 1 && SubtitleListview1.SelectedItems.Count > 0 &&
-                            _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index)?.Extra == style)
-                        {
-                            ((ToolStripMenuItem)setStylesForSelectedLinesToolStripMenuItem.DropDownItems[setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1]).Checked = true;
-                        }
+                        ((ToolStripMenuItem)setStylesForSelectedLinesToolStripMenuItem.DropDownItems[setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1]).Checked = true;
                     }
+                }
 
-                    toolStripMenuItemAssStyles.Visible = true;
-                    if (styles.Count > 1)
-                    {
-                        setStylesForSelectedLinesToolStripMenuItem.Visible = true;
-                        UiUtil.FixFonts(setStylesForSelectedLinesToolStripMenuItem);
-                    }
-                    else
-                    {
-                        setStylesForSelectedLinesToolStripMenuItem.Visible = false;
-                    }
+                toolStripMenuItemAssStyles.Visible = true;
+                if (styles.Count > 1)
+                {
+                    setStylesForSelectedLinesToolStripMenuItem.Visible = true;
+                    UiUtil.FixFonts(setStylesForSelectedLinesToolStripMenuItem);
+                }
+                else
+                {
+                    setStylesForSelectedLinesToolStripMenuItem.Visible = false;
+                }
 
-                    if (formatType == typeof(AdvancedSubStationAlpha))
-                    {
-                        toolStripMenuItemAssStyles.Text = _language.Menu.ContextMenu.AdvancedSubStationAlphaStyles;
-                        setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
-                    }
-                    else
-                    {
-                        toolStripMenuItemAssStyles.Text = _language.Menu.ContextMenu.SubStationAlphaStyles;
-                        setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
+                if (formatType == typeof(AdvancedSubStationAlpha))
+                {
+                    toolStripMenuItemAssStyles.Text = _language.Menu.ContextMenu.AdvancedSubStationAlphaStyles;
+                    setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
+                }
+                else
+                {
+                    toolStripMenuItemAssStyles.Text = _language.Menu.ContextMenu.SubStationAlphaStyles;
+                    setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
                     }
                 }
                 else
@@ -10584,9 +10598,21 @@ namespace Nikse.SubtitleEdit.Forms
                     foreach (int index in selectedIndices)
                     {
                         _subtitle.Paragraphs[index].Layer = form.Layer;
+                        _subtitle.Paragraphs[index].Actor = form.Actor;
+                        _subtitle.Paragraphs[index].OnOff_Screen = form.OnOffScreen;
+                        _subtitle.Paragraphs[index].Diegetic = form.Diegetic;
+                        _subtitle.Paragraphs[index].DFX = form.DFX;
+                        _subtitle.Paragraphs[index].DialogueReverb = form.DialogueReverb;
+                        _subtitle.Paragraphs[index].Notes = form.Notes;
+                        
+                        // ListView 업데이트
+                        UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
                     }
 
                     numericUpDownLayer.Value = form.Layer;
+                    
+                    // 현재 선택된 항목의 편집 컨트롤들도 업데이트
+                    //UpdateEditingControlsFromSelection();
                 }
             }
         }
@@ -11550,6 +11576,7 @@ namespace Nikse.SubtitleEdit.Forms
 
             _listViewTextUndoIndex = -1;
             SubtitleListView1SelectedIndexChange();
+            UpdateEditingControlsFromSelection();
             if (_findHelper != null && !_findHelper.InProgress)
             {
                 _findHelper.StartLineIndex = _subtitleListViewIndex;
@@ -14179,6 +14206,10 @@ namespace Nikse.SubtitleEdit.Forms
 
             var format = GetCurrentSubtitleFormat();
             bool isAssa = format.GetType() == typeof(AdvancedSubStationAlpha);
+            bool showCustomFields = format.GetType() == typeof(WebVTT) || format.GetType() == typeof(SubRip) || 
+                                   format.GetType() == typeof(AdvancedSubStationAlpha) || format.GetType() == typeof(SubStationAlpha) ||
+                                   format.GetType() == typeof(Json) || format.GetType() == typeof(JsonType8);
+            
             numericUpDownLayer.Visible = isAssa;
             labelLayer.Visible = isAssa;
             if (isAssa)
@@ -14189,6 +14220,20 @@ namespace Nikse.SubtitleEdit.Forms
                 numericUpDownLayer.Value = p.Layer;
                 numericUpDownLayer.ValueChanged += NumericUpDownLayer_ValueChanged;
             }
+
+            // 커스텀 필드들 visibility 제어
+            labelEditActor.Visible = showCustomFields;
+            comboBoxEditActor.Visible = showCustomFields;
+            labelEditOnOffScreen.Visible = showCustomFields;
+            comboBoxEditOnOffScreen.Visible = showCustomFields;
+            labelEditDiegetic.Visible = showCustomFields;
+            comboBoxEditDiegetic.Visible = showCustomFields;
+            labelEditDFX.Visible = showCustomFields;
+            textBoxEditDFX.Visible = showCustomFields;
+            labelEditDialogueReverb.Visible = showCustomFields;
+            comboBoxEditDialogueReverb.Visible = showCustomFields;
+            labelEditNotes.Visible = showCustomFields;
+            textBoxEditNotes.Visible = showCustomFields;
 
             timeUpDownStartTime.MaskedTextBox.TextChanged -= MaskedTextBoxTextChanged;
             timeUpDownStartTime.TimeCode = p.StartTime;
@@ -24205,10 +24250,10 @@ namespace Nikse.SubtitleEdit.Forms
             buttonSplitLine.Visible = false;
 
             textBoxListViewText.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
-            textBoxListViewText.Width = (groupBoxEdit.Width - (textBoxListViewText.Left + 10)) / 2;
+            textBoxListViewText.Width = 150; // Reduced width to make room for custom fields
             textBoxListViewTextOriginal.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
             textBoxListViewTextOriginal.Left = textBoxListViewText.Left + textBoxListViewText.Width + 3;
-            textBoxListViewTextOriginal.Width = textBoxListViewText.Width;
+            textBoxListViewTextOriginal.Width = 150; // Match main text box width
             textBoxListViewTextOriginal.Visible = true;
             textBoxListViewTextOriginal.Enabled = Configuration.Settings.General.AllowEditOfOriginalSubtitle;
             labelOriginalText.Text = _languageGeneral.OriginalText;
@@ -25560,6 +25605,8 @@ namespace Nikse.SubtitleEdit.Forms
                 DarkTheme.SetDarkTheme(textBoxListViewTextOriginal);
             }
         }
+
+
 
         private void FixRightToLeftDependingOnLanguage()
         {
@@ -29679,10 +29726,10 @@ namespace Nikse.SubtitleEdit.Forms
                         buttonSplitLine.Visible = false;
 
                         textBoxListViewText.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
-                        textBoxListViewText.Width = (groupBoxEdit.Width - (textBoxListViewText.Left + 10)) / 2;
+                        textBoxListViewText.Width = 150; // Reduced width to make room for custom fields
                         textBoxListViewTextOriginal.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
                         textBoxListViewTextOriginal.Left = textBoxListViewText.Left + textBoxListViewText.Width + 3;
-                        textBoxListViewTextOriginal.Width = textBoxListViewText.Width;
+                        textBoxListViewTextOriginal.Width = 150; // Match main text box width
                         textBoxListViewTextOriginal.Visible = true;
                         labelOriginalText.Text = _languageGeneral.OriginalText;
                         labelOriginalText.Visible = true;
@@ -31101,8 +31148,8 @@ namespace Nikse.SubtitleEdit.Forms
             labelOriginalSingleLine.Visible = false;
             labelOriginalSingleLinePixels.Visible = false;
             labelTextOriginalLineTotal.Visible = false;
-            textBoxListViewText.Width = (groupBoxEdit.Width - (textBoxListViewText.Left + 8 + buttonUnBreak.Width));
-            textBoxListViewText.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+            textBoxListViewText.Width = 150; // Reduced width to make room for custom fields
+            textBoxListViewText.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
             labelTextLineTotal.Left = 236;
             labelTextOriginalLineTotal.Left = 236;
 
@@ -37996,6 +38043,166 @@ namespace Nikse.SubtitleEdit.Forms
                 }
             }
             SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+        }
+
+        private void ComboBoxEditActor_TextChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                if (paragraph != null)
+                {
+                    paragraph.Actor = comboBoxEditActor.Text;
+                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                }
+            }
+        }
+
+        private void ComboBoxEditOnOffScreen_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                if (paragraph != null)
+                {
+                    paragraph.OnOff_Screen = comboBoxEditOnOffScreen.Text;
+                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                }
+            }
+        }
+
+        private void ComboBoxEditDiegetic_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                if (paragraph != null)
+                {
+                    paragraph.Diegetic = comboBoxEditDiegetic.Text;
+                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                }
+            }
+        }
+
+        private void TextBoxEditDFX_TextChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                if (paragraph != null)
+                {
+                    paragraph.DFX = textBoxEditDFX.Text;
+                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                }
+            }
+        }
+
+        private void ComboBoxEditDialogueReverb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                if (paragraph != null)
+                {
+                    paragraph.DialogueReverb = comboBoxEditDialogueReverb.Text;
+                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                }
+            }
+        }
+
+        private void TextBoxEditNotes_TextChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                if (paragraph != null)
+                {
+                    paragraph.Notes = textBoxEditNotes.Text;
+                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                }
+            }
+        }
+
+        private void UpdateListViewItemColumns(int index, Paragraph paragraph)
+        {
+            if (index >= 0 && index < SubtitleListview1.Items.Count)
+            {
+                var item = SubtitleListview1.Items[index];
+                
+                // Actor column update
+                if (SubtitleListview1.ColumnIndexActor >= 0 && SubtitleListview1.ColumnIndexActor < item.SubItems.Count)
+                {
+                    item.SubItems[SubtitleListview1.ColumnIndexActor].Text = paragraph.Actor ?? string.Empty;
+                }
+                
+                // OnOffScreen column update
+                if (SubtitleListview1.ColumnIndexOnOffScreen >= 0 && SubtitleListview1.ColumnIndexOnOffScreen < item.SubItems.Count)
+                {
+                    item.SubItems[SubtitleListview1.ColumnIndexOnOffScreen].Text = paragraph.OnOff_Screen ?? string.Empty;
+                }
+                
+                // Diegetic column update
+                if (SubtitleListview1.ColumnIndexDiegetic >= 0 && SubtitleListview1.ColumnIndexDiegetic < item.SubItems.Count)
+                {
+                    item.SubItems[SubtitleListview1.ColumnIndexDiegetic].Text = paragraph.Diegetic ?? string.Empty;
+                }
+                
+                // DFX column update
+                if (SubtitleListview1.ColumnIndexDFX >= 0 && SubtitleListview1.ColumnIndexDFX < item.SubItems.Count)
+                {
+                    item.SubItems[SubtitleListview1.ColumnIndexDFX].Text = paragraph.DFX ?? string.Empty;
+                }
+                
+                // DialogueReverb column update
+                if (SubtitleListview1.ColumnIndexDialogueReverb >= 0 && SubtitleListview1.ColumnIndexDialogueReverb < item.SubItems.Count)
+                {
+                    item.SubItems[SubtitleListview1.ColumnIndexDialogueReverb].Text = paragraph.DialogueReverb ?? string.Empty;
+                }
+                
+                // Notes column update
+                if (SubtitleListview1.ColumnIndexNotes >= 0 && SubtitleListview1.ColumnIndexNotes < item.SubItems.Count)
+                {
+                    item.SubItems[SubtitleListview1.ColumnIndexNotes].Text = paragraph.Notes ?? string.Empty;
+                }
+            }
+        }
+
+        private void UpdateEditingControlsFromSelection()
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                if (paragraph != null)
+                {
+                    // Update Actor
+                    comboBoxEditActor.Text = paragraph.Actor ?? string.Empty;
+                    
+                    // Update OnOffScreen
+                    comboBoxEditOnOffScreen.Text = paragraph.OnOff_Screen ?? string.Empty;
+                    
+                    // Update Diegetic
+                    comboBoxEditDiegetic.Text = paragraph.Diegetic ?? string.Empty;
+                    
+                    // Update DFX
+                    textBoxEditDFX.Text = paragraph.DFX ?? string.Empty;
+                    
+                    // Update DialogueReverb
+                    comboBoxEditDialogueReverb.Text = paragraph.DialogueReverb ?? string.Empty;
+                    
+                    // Update Notes
+                    textBoxEditNotes.Text = paragraph.Notes ?? string.Empty;
+                }
+            }
+            else
+            {
+                // Clear controls when no selection or multiple selection
+                comboBoxEditActor.Text = string.Empty;
+                comboBoxEditOnOffScreen.Text = string.Empty;
+                comboBoxEditDiegetic.Text = string.Empty;
+                textBoxEditDFX.Text = string.Empty;
+                comboBoxEditDialogueReverb.Text = string.Empty;
+                textBoxEditNotes.Text = string.Empty;
+            }
         }
     }
 }

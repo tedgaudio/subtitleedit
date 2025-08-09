@@ -565,6 +565,8 @@ namespace Nikse.SubtitleEdit.Core.Settings
             ListViewShowColumnStartTime = true;
             ListViewShowColumnEndTime = true;
             ListViewShowColumnDuration = true;
+            ListViewShowColumnOnOffScreen = true;
+            ListViewShowColumnDiegetic = true;
             ListViewShowColumnDialogueReverb = true;
             ListViewShowColumnDFX = true;
             SplitAdvanced = false;

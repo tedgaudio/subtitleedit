@@ -357,6 +357,11 @@ namespace Nikse.SubtitleEdit.Controls
             ColumnIndexGap = -1;
             ColumnIndexActor = -1;
             ColumnIndexRegion = -1;
+            ColumnIndexOnOffScreen = -1;
+            ColumnIndexDiegetic = -1;
+            ColumnIndexDFX = -1;
+            ColumnIndexDialogueReverb = -1;
+            ColumnIndexNotes = -1;
             ColumnIndexText = -1;
             ColumnIndexTextOriginal = -1;
             ColumnIndexExtra = -1;
