@@ -4982,6 +4982,7 @@ namespace Nikse.SubtitleEdit.Forms
             // comboBoxEditActor
             // 
             this.comboBoxEditActor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxEditActor.BackColor = System.Drawing.SystemColors.Window;
             this.comboBoxEditActor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
             this.comboBoxEditActor.FormattingEnabled = true;
             this.comboBoxEditActor.Location = new System.Drawing.Point(645, 26);
@@ -5003,6 +5004,7 @@ namespace Nikse.SubtitleEdit.Forms
             // comboBoxEditOnOffScreen
             // 
             this.comboBoxEditOnOffScreen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxEditOnOffScreen.BackColor = System.Drawing.SystemColors.Window;
             this.comboBoxEditOnOffScreen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxEditOnOffScreen.FormattingEnabled = true;
             this.comboBoxEditOnOffScreen.Items.AddRange(new object[] {
@@ -5053,7 +5055,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.textBoxEditDFX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxEditDFX.Location = new System.Drawing.Point(545, 114);
             this.textBoxEditDFX.Name = "textBoxEditDFX";
-            this.textBoxEditDFX.Size = new System.Drawing.Size(180, 20);
+            this.textBoxEditDFX.Size = new System.Drawing.Size(190, 20);
             this.textBoxEditDFX.TabIndex = 53;
             this.textBoxEditDFX.TextChanged += new System.EventHandler(this.TextBoxEditDFX_TextChanged);
             // 
@@ -5097,9 +5099,13 @@ namespace Nikse.SubtitleEdit.Forms
             // 
             this.textBoxEditNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxEditNotes.Location = new System.Drawing.Point(545, 157);
+            this.textBoxEditNotes.MaxLength = 32767;
+            this.textBoxEditNotes.Multiline = true;
             this.textBoxEditNotes.Name = "textBoxEditNotes";
-            this.textBoxEditNotes.Size = new System.Drawing.Size(180, 60);
+            this.textBoxEditNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxEditNotes.Size = new System.Drawing.Size(190, 100);
             this.textBoxEditNotes.TabIndex = 57;
+            this.textBoxEditNotes.WordWrap = true;
             this.textBoxEditNotes.TextChanged += new System.EventHandler(this.TextBoxEditNotes_TextChanged);
             // 
             // panelBookmark

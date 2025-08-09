@@ -38177,17 +38177,41 @@ namespace Nikse.SubtitleEdit.Forms
                     // Update Actor
                     comboBoxEditActor.Text = paragraph.Actor ?? string.Empty;
                     
-                    // Update OnOffScreen
-                    comboBoxEditOnOffScreen.Text = paragraph.OnOff_Screen ?? string.Empty;
+                    // Update OnOffScreen - use SelectedIndex to handle empty values properly
+                    if (string.IsNullOrEmpty(paragraph.OnOff_Screen))
+                    {
+                        comboBoxEditOnOffScreen.SelectedIndex = -1;
+                    }
+                    else
+                    {
+                        var index = comboBoxEditOnOffScreen.Items.IndexOf(paragraph.OnOff_Screen);
+                        comboBoxEditOnOffScreen.SelectedIndex = index >= 0 ? index : -1;
+                    }
                     
-                    // Update Diegetic
-                    comboBoxEditDiegetic.Text = paragraph.Diegetic ?? string.Empty;
+                    // Update Diegetic - use SelectedIndex to handle empty values properly
+                    if (string.IsNullOrEmpty(paragraph.Diegetic))
+                    {
+                        comboBoxEditDiegetic.SelectedIndex = -1;
+                    }
+                    else
+                    {
+                        var index = comboBoxEditDiegetic.Items.IndexOf(paragraph.Diegetic);
+                        comboBoxEditDiegetic.SelectedIndex = index >= 0 ? index : -1;
+                    }
                     
                     // Update DFX
                     textBoxEditDFX.Text = paragraph.DFX ?? string.Empty;
                     
-                    // Update DialogueReverb
-                    comboBoxEditDialogueReverb.Text = paragraph.DialogueReverb ?? string.Empty;
+                    // Update DialogueReverb - use SelectedIndex to handle empty values properly
+                    if (string.IsNullOrEmpty(paragraph.DialogueReverb))
+                    {
+                        comboBoxEditDialogueReverb.SelectedIndex = -1;
+                    }
+                    else
+                    {
+                        var index = comboBoxEditDialogueReverb.Items.IndexOf(paragraph.DialogueReverb);
+                        comboBoxEditDialogueReverb.SelectedIndex = index >= 0 ? index : -1;
+                    }
                     
                     // Update Notes
                     textBoxEditNotes.Text = paragraph.Notes ?? string.Empty;
@@ -38197,10 +38221,10 @@ namespace Nikse.SubtitleEdit.Forms
             {
                 // Clear controls when no selection or multiple selection
                 comboBoxEditActor.Text = string.Empty;
-                comboBoxEditOnOffScreen.Text = string.Empty;
-                comboBoxEditDiegetic.Text = string.Empty;
+                comboBoxEditOnOffScreen.SelectedIndex = -1;
+                comboBoxEditDiegetic.SelectedIndex = -1;
                 textBoxEditDFX.Text = string.Empty;
-                comboBoxEditDialogueReverb.Text = string.Empty;
+                comboBoxEditDialogueReverb.SelectedIndex = -1;
                 textBoxEditNotes.Text = string.Empty;
             }
         }
