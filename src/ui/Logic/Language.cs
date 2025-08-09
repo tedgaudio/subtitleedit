@@ -179,6 +179,8 @@ namespace Nikse.SubtitleEdit.Logic
                 OnOffScreen = "On/Off Screen",
                 Diegetic = "Diegetic",
                 Notes = "Notes",
+                DialogueReverb = "Dialogue Reverb",
+                DFX = "DFX",
                 Gap = "Gap",
                 Region = "Region",
                 Layer = "Layer",

@@ -288,6 +288,8 @@ namespace Nikse.SubtitleEdit.Forms
             this.setOnOffScreenForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetDiegeticForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNotesForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setDialogueReverbForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setDFXForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSetLayer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAssaTools = new System.Windows.Forms.ToolStripMenuItem();
             this.applyCustomStylesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -2716,6 +2718,8 @@ namespace Nikse.SubtitleEdit.Forms
             this.setOnOffScreenForSelectedLinesToolStripMenuItem,
             this.SetDiegeticForSelectedLinesToolStripMenuItem,
             this.setNotesForSelectedLinesToolStripMenuItem,
+            this.setDialogueReverbForSelectedLinesToolStripMenuItem,
+            this.setDFXForSelectedLinesToolStripMenuItem,
             this.toolStripMenuItemSetLayer,
             this.toolStripMenuItemAssaTools,
             this.toolStripMenuItemAssStyles,
@@ -2790,6 +2794,18 @@ namespace Nikse.SubtitleEdit.Forms
             this.setNotesForSelectedLinesToolStripMenuItem.Name = "setNotesForSelectedLinesToolStripMenuItem";
             this.setNotesForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.setNotesForSelectedLinesToolStripMenuItem.Text = "Set notes";
+            // 
+            // setDialogueReverbForSelectedLinesToolStripMenuItem
+            // 
+            this.setDialogueReverbForSelectedLinesToolStripMenuItem.Name = "setDialogueReverbForSelectedLinesToolStripMenuItem";
+            this.setDialogueReverbForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.setDialogueReverbForSelectedLinesToolStripMenuItem.Text = "Set dialogue reverb";
+            // 
+            // setDFXForSelectedLinesToolStripMenuItem
+            // 
+            this.setDFXForSelectedLinesToolStripMenuItem.Name = "setDFXForSelectedLinesToolStripMenuItem";
+            this.setDFXForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.setDFXForSelectedLinesToolStripMenuItem.Text = "Set DFX";
             // 
             // toolStripMenuItemSetLayer
             // 
@@ -6457,6 +6473,8 @@ namespace Nikse.SubtitleEdit.Forms
         private System.Windows.Forms.ToolStripMenuItem setOnOffScreenForSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SetDiegeticForSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setNotesForSelectedLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setDialogueReverbForSelectedLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setDFXForSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSetRegion;
         private System.Windows.Forms.ToolStripMenuItem insertSubtitleHereToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem actorToolStripMenuItem;

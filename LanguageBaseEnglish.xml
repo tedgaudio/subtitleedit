@@ -42,6 +42,8 @@
     <OnOffScreen>On/Off Screen</OnOffScreen>
     <Diegetic>Diegetic</Diegetic>
     <Notes>Notes</Notes>
+    <DialogueReverb>Dialogue Reverb</DialogueReverb>
+    <DFX>DFX</DFX>
     <Layer>Layer</Layer>
     <NumberSymbol>#</NumberSymbol>
     <Number>Number</Number>

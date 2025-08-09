@@ -158,6 +158,8 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public bool ListViewShowColumnOnOffScreen { get; set; }
         public bool ListViewShowColumnDiegetic { get; set; }
         public bool ListViewShowColumnNotes { get; set; }
+        public bool ListViewShowColumnDialogueReverb { get; set; }
+        public bool ListViewShowColumnDFX { get; set; }
         public bool ListViewMultipleReplaceShowColumnRuleInfo { get; set; }
         public bool SplitAdvanced { get; set; }
         public string SplitOutputFolder { get; set; }
@@ -563,6 +565,8 @@ namespace Nikse.SubtitleEdit.Core.Settings
             ListViewShowColumnStartTime = true;
             ListViewShowColumnEndTime = true;
             ListViewShowColumnDuration = true;
+            ListViewShowColumnDialogueReverb = true;
+            ListViewShowColumnDFX = true;
             SplitAdvanced = false;
             SplitNumberOfParts = 3;
             SplitVia = "Lines";

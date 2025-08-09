@@ -103,6 +103,16 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 {
                     additionalInfo.Add($"notes:{p.Notes}");
                 }
+
+                if (!string.IsNullOrEmpty(p.DialogueReverb))
+                {
+                    additionalInfo.Add($"dialoguereverb:{p.DialogueReverb}");
+                }
+
+                if (!string.IsNullOrEmpty(p.DFX))
+                {
+                    additionalInfo.Add($"dfx:{p.DFX}");
+                }
                 
                 if (additionalInfo.Count > 0)
                 {
@@ -421,6 +431,14 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                             else if (part.StartsWith("notes:"))
                             {
                                 p.Notes = part.Substring("notes:".Length);
+                            }
+                            else if (part.StartsWith("dialoguereverb:"))
+                            {
+                                p.DialogueReverb = part.Substring("dialoguereverb:".Length);
+                            }
+                            else if (part.StartsWith("dfx:"))
+                            {
+                                p.DFX = part.Substring("dfx:".Length);
                             }
                         }
                         

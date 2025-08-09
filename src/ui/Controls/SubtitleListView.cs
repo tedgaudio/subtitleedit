@@ -27,6 +27,8 @@ namespace Nikse.SubtitleEdit.Controls
             OnOffScreen,
             Diegetic,
             Notes,
+            DialogueReverb,
+            DFX,
             Text,
             TextOriginal,
             Extra,
@@ -55,6 +57,8 @@ namespace Nikse.SubtitleEdit.Controls
         public int ColumnIndexOnOffScreen { get; private set; }
         public int ColumnIndexDiegetic { get; private set; }
         public int ColumnIndexNotes { get; private set; }
+        public int ColumnIndexDialogueReverb { get; private set; }
+        public int ColumnIndexDFX { get; private set; }
         public int ColumnIndexText { get; private set; }
         public int ColumnIndexTextOriginal { get; private set; }
         public int ColumnIndexExtra { get; private set; }
@@ -170,6 +174,18 @@ namespace Nikse.SubtitleEdit.Controls
                 Columns[idx].Text = general.Notes;
             }
 
+            idx = GetColumnIndex(SubtitleColumn.DialogueReverb);
+            if (idx >= 0)
+            {
+                Columns[idx].Text = general.DialogueReverb;
+            }
+
+            idx = GetColumnIndex(SubtitleColumn.DFX);
+            if (idx >= 0)
+            {
+                Columns[idx].Text = general.DFX;
+            }
+
             idx = GetColumnIndex(SubtitleColumn.Text);
             if (idx >= 0)
             {
@@ -272,6 +288,18 @@ namespace Nikse.SubtitleEdit.Controls
                 if (idx >= 0 && _settings.General.ListViewNotesWidth > 1)
                 {
                     Columns[idx].Width = _settings.General.ListViewNotesWidth;
+                }
+
+                idx = GetColumnIndex(SubtitleColumn.DialogueReverb);
+                if (idx >= 0 && _settings.General.ListViewDialogueReverbWidth > 1)
+                {
+                    Columns[idx].Width = _settings.General.ListViewDialogueReverbWidth;
+                }
+
+                idx = GetColumnIndex(SubtitleColumn.DFX);
+                if (idx >= 0 && _settings.General.ListViewDFXWidth > 1)
+                {
+                    Columns[idx].Width = _settings.General.ListViewDFXWidth;
                 }
 
                 idx = GetColumnIndex(SubtitleColumn.Text);
@@ -384,6 +412,12 @@ namespace Nikse.SubtitleEdit.Controls
                     case SubtitleColumn.Notes:
                         Columns.Add(new ColumnHeader { Width = 60 });
                         break;
+                    case SubtitleColumn.DialogueReverb:
+                        Columns.Add(new ColumnHeader { Width = 80 });
+                        break;
+                    case SubtitleColumn.DFX:
+                        Columns.Add(new ColumnHeader { Width = 100 });
+                        break;
                     case SubtitleColumn.Text:
                         Columns.Add(new ColumnHeader { Width = 300 });
                         break;
@@ -470,6 +504,8 @@ namespace Nikse.SubtitleEdit.Controls
             ColumnIndexOnOffScreen = GetColumnIndex(SubtitleColumn.OnOffScreen);
             ColumnIndexDiegetic = GetColumnIndex(SubtitleColumn.Diegetic);
             ColumnIndexNotes = GetColumnIndex(SubtitleColumn.Notes);
+            ColumnIndexDialogueReverb = GetColumnIndex(SubtitleColumn.DialogueReverb);
+            ColumnIndexDFX = GetColumnIndex(SubtitleColumn.DFX);
             ColumnIndexText = GetColumnIndex(SubtitleColumn.Text);
             ColumnIndexTextOriginal = GetColumnIndex(SubtitleColumn.TextOriginal);
             ColumnIndexExtra = GetColumnIndex(SubtitleColumn.Extra);
@@ -1350,6 +1386,58 @@ namespace Nikse.SubtitleEdit.Controls
             }
         }
 
+        public void ShowDialogueReverbColumn(string title)
+        {
+            if (GetColumnIndex(SubtitleColumn.DialogueReverb) == -1)
+            {
+                var ch = new ColumnHeader { Text = title };
+                if (ColumnIndexNotes >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexNotes + 1, SubtitleColumn.DialogueReverb);
+                    Columns.Insert(ColumnIndexNotes + 1, ch);
+                }
+                else if (ColumnIndexDiegetic >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexDiegetic + 1, SubtitleColumn.DialogueReverb);
+                    Columns.Insert(ColumnIndexDiegetic + 1, ch);
+                }
+                else
+                {
+                    SubtitleColumns.Add(SubtitleColumn.DialogueReverb);
+                    Columns.Add(ch);
+                }
+                UpdateColumnIndexes();
+                SetColumnWidthRetry(ColumnIndexDialogueReverb, 80);
+                AutoSizeAllColumns(null);
+            }
+        }
+
+        public void ShowDFXColumn(string title)
+        {
+            if (GetColumnIndex(SubtitleColumn.DFX) == -1)
+            {
+                var ch = new ColumnHeader { Text = title };
+                if (ColumnIndexDialogueReverb >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexDialogueReverb + 1, SubtitleColumn.DFX);
+                    Columns.Insert(ColumnIndexDialogueReverb + 1, ch);
+                }
+                else if (ColumnIndexNotes >= 0)
+                {
+                    SubtitleColumns.Insert(ColumnIndexNotes + 1, SubtitleColumn.DFX);
+                    Columns.Insert(ColumnIndexNotes + 1, ch);
+                }
+                else
+                {
+                    SubtitleColumns.Add(SubtitleColumn.DFX);
+                    Columns.Add(ch);
+                }
+                UpdateColumnIndexes();
+                SetColumnWidthRetry(ColumnIndexDFX, 100);
+                AutoSizeAllColumns(null);
+            }
+        }
+
         public void HideColumn(SubtitleColumn column)
         {
             var idx = GetColumnIndex(column);
@@ -1803,6 +1891,12 @@ namespace Nikse.SubtitleEdit.Controls
                         break;
                     case SubtitleColumn.Notes:
                         item.SubItems.Add(paragraph.Notes);
+                        break;
+                    case SubtitleColumn.DialogueReverb:
+                        item.SubItems.Add(paragraph.DialogueReverb);
+                        break;
+                    case SubtitleColumn.DFX:
+                        item.SubItems.Add(paragraph.DFX);
                         break;
                     case SubtitleColumn.Text:
                         item.SubItems.Add(paragraph.Text.Replace(Environment.NewLine, _lineSeparatorString));

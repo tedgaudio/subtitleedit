@@ -2377,6 +2377,44 @@ namespace Nikse.SubtitleEdit.Forms
                 SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.Region);
             }
 
+            // Show OnOffScreen, Diegetic, Notes, DialogueReverb, DFX columns for supported formats
+            if (formatType == typeof(WebVTT) || formatType == typeof(SubRip) || formatType == typeof(AdvancedSubStationAlpha) ||
+                formatType == typeof(Json) || formatType == typeof(JsonType8))
+            {
+                if (Configuration.Settings.Tools.ListViewShowColumnOnOffScreen)
+                {
+                    SubtitleListview1.ShowOnOffScreenColumn(LanguageSettings.Current.General.OnOffScreen);
+                }
+                
+                if (Configuration.Settings.Tools.ListViewShowColumnDiegetic)
+                {
+                    SubtitleListview1.ShowDiegeticColumn(LanguageSettings.Current.General.Diegetic);
+                }
+                
+                if (Configuration.Settings.Tools.ListViewShowColumnNotes)
+                {
+                    SubtitleListview1.ShowNotesColumn(LanguageSettings.Current.General.Notes);
+                }
+                
+                if (Configuration.Settings.Tools.ListViewShowColumnDialogueReverb)
+                {
+                    SubtitleListview1.ShowDialogueReverbColumn(LanguageSettings.Current.General.DialogueReverb);
+                }
+                
+                if (Configuration.Settings.Tools.ListViewShowColumnDFX)
+                {
+                    SubtitleListview1.ShowDFXColumn(LanguageSettings.Current.General.DFX);
+                }
+            }
+            else
+            {
+                SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.OnOffScreen);
+                SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.Diegetic);
+                SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.Notes);
+                SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.DialogueReverb);
+                SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.DFX);
+            }
+
             if (format.HasStyleSupport)
             {
                 var styles = new List<string>();
@@ -9151,7 +9189,8 @@ namespace Nikse.SubtitleEdit.Forms
                     cm.Items.Add(contextMenuStripLvHeaderRegionToolStripMenuItem);
                 }
 
-                if (formatType == typeof(WebVTT) || formatType == typeof(SubRip) || formatType == typeof(AdvancedSubStationAlpha))
+                if (formatType == typeof(WebVTT) || formatType == typeof(SubRip) || formatType == typeof(AdvancedSubStationAlpha) || 
+                    formatType == typeof(Json) || formatType == typeof(JsonType8))
                 {
                     // ON/OFF SCREEN
                     var contextMenuStripLvHeaderOnOffScreenToolStripMenuItem = new ToolStripMenuItem(LanguageSettings.Current.General.OnOffScreen)
@@ -9233,6 +9272,60 @@ namespace Nikse.SubtitleEdit.Forms
                         SubtitleListview1.EndUpdate();
                     };
                     cm.Items.Add(contextMenuStripLvHeaderNotesToolStripMenuItem);
+
+                    // DIALOGUE REVERB
+                    var contextMenuStripLvHeaderDialogueReverbToolStripMenuItem = new ToolStripMenuItem(LanguageSettings.Current.General.DialogueReverb)
+                    {
+                        CheckOnClick = true,
+                        Checked = Configuration.Settings.Tools.ListViewShowColumnDialogueReverb
+                    };
+                    contextMenuStripLvHeaderDialogueReverbToolStripMenuItem.Click += (sender2, e2) =>
+                    {
+                        SubtitleListview1.BeginUpdate();
+                        Configuration.Settings.Tools.ListViewShowColumnDialogueReverb = contextMenuStripLvHeaderDialogueReverbToolStripMenuItem.Checked;
+                        if (Configuration.Settings.Tools.ListViewShowColumnDialogueReverb)
+                        {
+                            SubtitleListview1.ShowDialogueReverbColumn(LanguageSettings.Current.General.DialogueReverb);
+                        }
+                        else
+                        {
+                            SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.DialogueReverb);
+                        }
+
+                        SaveSubtitleListviewIndices();
+                        UiUtil.InitializeSubtitleFont(SubtitleListview1);
+                        SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+                        RestoreSubtitleListviewIndices();
+                        SubtitleListview1.EndUpdate();
+                    };
+                    cm.Items.Add(contextMenuStripLvHeaderDialogueReverbToolStripMenuItem);
+
+                    // DFX
+                    var contextMenuStripLvHeaderDFXToolStripMenuItem = new ToolStripMenuItem(LanguageSettings.Current.General.DFX)
+                    {
+                        CheckOnClick = true,
+                        Checked = Configuration.Settings.Tools.ListViewShowColumnDFX
+                    };
+                    contextMenuStripLvHeaderDFXToolStripMenuItem.Click += (sender2, e2) =>
+                    {
+                        SubtitleListview1.BeginUpdate();
+                        Configuration.Settings.Tools.ListViewShowColumnDFX = contextMenuStripLvHeaderDFXToolStripMenuItem.Checked;
+                        if (Configuration.Settings.Tools.ListViewShowColumnDFX)
+                        {
+                            SubtitleListview1.ShowDFXColumn(LanguageSettings.Current.General.DFX);
+                        }
+                        else
+                        {
+                            SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.DFX);
+                        }
+
+                        SaveSubtitleListviewIndices();
+                        UiUtil.InitializeSubtitleFont(SubtitleListview1);
+                        SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+                        RestoreSubtitleListviewIndices();
+                        SubtitleListview1.EndUpdate();
+                    };
+                    cm.Items.Add(contextMenuStripLvHeaderDFXToolStripMenuItem);
                 }
 
                 cm.Show(SubtitleListview1, coordinates);
@@ -9862,13 +9955,16 @@ namespace Nikse.SubtitleEdit.Forms
                 setActorForSelectedLinesToolStripMenuItem.Visible = false;
             }
 
-            // Show OnOffScreen, Priority, Notes for WebVTT, SubRip, and ASS formats
+            // Show OnOffScreen, Priority, Notes for WebVTT, SubRip, ASS, and JSON formats
             bool showOnOffScreenPriorityNotes = formatType == typeof(WebVTT) || formatType == typeof(SubRip) || 
-                                              formatType == typeof(AdvancedSubStationAlpha) || formatType == typeof(SubStationAlpha);
+                                              formatType == typeof(AdvancedSubStationAlpha) || formatType == typeof(SubStationAlpha) ||
+                                              formatType == typeof(Json) || formatType == typeof(JsonType8);
             
             setOnOffScreenForSelectedLinesToolStripMenuItem.Visible = showOnOffScreenPriorityNotes;
             SetDiegeticForSelectedLinesToolStripMenuItem.Visible = showOnOffScreenPriorityNotes;
             setNotesForSelectedLinesToolStripMenuItem.Visible = showOnOffScreenPriorityNotes;
+            setDialogueReverbForSelectedLinesToolStripMenuItem.Visible = showOnOffScreenPriorityNotes;
+            setDFXForSelectedLinesToolStripMenuItem.Visible = showOnOffScreenPriorityNotes;
 
             if (showOnOffScreenPriorityNotes)
             {
@@ -9892,9 +9988,26 @@ namespace Nikse.SubtitleEdit.Forms
                 setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
                 setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetNotes);
 
+                // Setup Dialogue Reverb menu
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("None", null, SetDialogueReverb);
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("Low", null, SetDialogueReverb);
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("Mid", null, SetDialogueReverb);
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("High", null, SetDialogueReverb);
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetDialogueReverb);
+
+                // Setup DFX menu
+                setDFXForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                setDFXForSelectedLinesToolStripMenuItem.DropDownItems.Add("New DFX...", null, SetNewDFX);
+                setDFXForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+                setDFXForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetDFX);
+
                 UiUtil.FixFonts(setOnOffScreenForSelectedLinesToolStripMenuItem);
                 UiUtil.FixFonts(SetDiegeticForSelectedLinesToolStripMenuItem);
                 UiUtil.FixFonts(setNotesForSelectedLinesToolStripMenuItem);
+                UiUtil.FixFonts(setDialogueReverbForSelectedLinesToolStripMenuItem);
+                UiUtil.FixFonts(setDFXForSelectedLinesToolStripMenuItem);
             }
 
             if (formatType == typeof(Ebu))
@@ -10334,7 +10447,7 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-        private void SetEmotion(string emotion)
+        private void SetOnOffScreen(string emotion)
         {
             if (!string.IsNullOrEmpty(emotion))
             {
@@ -10375,11 +10488,11 @@ namespace Nikse.SubtitleEdit.Forms
             string onOffScreen = (sender as ToolStripItem).Text;
             if (onOffScreen == "Clear")
             {
-                SetEmotion("");
+                SetOnOffScreen("");
             }
             else
             {
-                SetEmotion(onOffScreen);
+                SetOnOffScreen(onOffScreen);
             }
         }
 
@@ -10405,10 +10518,30 @@ namespace Nikse.SubtitleEdit.Forms
             string notesText = (sender as ToolStripItem).Text;
             if (notesText == "Clear")
             {
-                SetNotes("");
+                SetNotesText("");
+            }
+            else
+            {
+                SetNotesText(notesText);
             }
         }
 
+        private void SetNotesText(string notesText)
+        {
+            if (SubtitleListview1.SelectedItems.Count == 0)
+                return;
+
+            MakeHistoryForUndo(_language.BeforeInsertLine);
+            foreach (var item in SubtitleListview1.SelectedItems.Cast<ListViewItem>())
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                if (paragraph != null)
+                {
+                    paragraph.Notes = notesText;
+                }
+            }
+            SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+        }
 
 
         private void SetLayer(object sender, EventArgs e)
@@ -17989,52 +18122,52 @@ namespace Nikse.SubtitleEdit.Forms
             }
             else if (_shortcuts.MainListViewSetOnOffScreen1 == e.KeyData)
             {
-                SetEmotionVoice(0);
+                SetOnOffScreenVoice(0);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen2 == e.KeyData)
             {
-                SetEmotionVoice(1);
+                SetOnOffScreenVoice(1);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen3 == e.KeyData)
             {
-                SetEmotionVoice(2);
+                SetOnOffScreenVoice(2);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen4 == e.KeyData)
             {
-                SetEmotionVoice(3);
+                SetOnOffScreenVoice(3);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen5 == e.KeyData)
             {
-                SetEmotionVoice(4);
+                SetOnOffScreenVoice(4);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen6 == e.KeyData)
             {
-                SetEmotionVoice(5);
+                SetOnOffScreenVoice(5);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen7 == e.KeyData)
             {
-                SetEmotionVoice(6);
+                SetOnOffScreenVoice(6);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen8 == e.KeyData)
             {
-                SetEmotionVoice(7);
+                SetOnOffScreenVoice(7);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen9 == e.KeyData)
             {
-                SetEmotionVoice(8);
+                SetOnOffScreenVoice(8);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetOnOffScreen10 == e.KeyData)
             {
-                SetEmotionVoice(9);
+                SetOnOffScreenVoice(9);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetDiegetic1 == e.KeyData)
@@ -19891,7 +20024,7 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-        private void SetEmotionVoice(int index)
+        private void SetOnOffScreenVoice(int index)
         {
             var emotions = new List<string>();
             foreach (var p in _subtitle.Paragraphs)
@@ -19906,7 +20039,7 @@ namespace Nikse.SubtitleEdit.Forms
 
             if (index >= 0 && index < emotions.Count)
             {
-                SetEmotion(emotions[index]);
+                SetOnOffScreen(emotions[index]);
             }
         }
 
@@ -37775,6 +37908,79 @@ namespace Nikse.SubtitleEdit.Forms
                     Cursor = Cursors.Default;
                 }
             }
+        }
+
+
+
+        private void SetDialogueReverb(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            if (item?.Text == "Clear")
+            {
+                SetDialogueReverbText(string.Empty);
+            }
+            else
+            {
+                SetDialogueReverbText(item?.Text);
+            }
+        }
+
+        private void SetDialogueReverbText(string reverbText)
+        {
+            if (SubtitleListview1.SelectedItems.Count == 0)
+                return;
+
+            MakeHistoryForUndo(_language.BeforeInsertLine);
+            foreach (var item in SubtitleListview1.SelectedItems.Cast<ListViewItem>())
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                if (paragraph != null)
+                {
+                    paragraph.DialogueReverb = reverbText;
+                }
+            }
+            SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+        }
+
+        private void SetNewDFX(object sender, EventArgs e)
+        {
+            using (var form = new TextPrompt("New DFX", "DFX", string.Empty))
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    SetDFXText(form.InputText);
+                }
+            }
+        }
+
+        private void SetDFX(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            if (item?.Text == "Clear")
+            {
+                SetDFXText(string.Empty);
+            }
+            else
+            {
+                SetDFXText(item?.Text);
+            }
+        }
+
+        private void SetDFXText(string dfxText)
+        {
+            if (SubtitleListview1.SelectedItems.Count == 0)
+                return;
+
+            MakeHistoryForUndo(_language.BeforeInsertLine);
+            foreach (var item in SubtitleListview1.SelectedItems.Cast<ListViewItem>())
+            {
+                var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                if (paragraph != null)
+                {
+                    paragraph.DFX = dfxText;
+                }
+            }
+            SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
         }
     }
 }

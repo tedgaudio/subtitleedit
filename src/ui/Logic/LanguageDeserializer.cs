@@ -181,6 +181,12 @@ namespace Nikse.SubtitleEdit.Logic
                 case "General/Notes":
                     language.General.Notes = reader.Value;
                     break;
+                case "General/DialogueReverb":
+                    language.General.DialogueReverb = reader.Value;
+                    break;
+                case "General/DFX":
+                    language.General.DFX = reader.Value;
+                    break;
                 case "General/Layer":
                     language.General.Layer = reader.Value;
                     break;

@@ -44,6 +44,16 @@ namespace Nikse.SubtitleEdit.Core.Common
         /// </summary>
         public string Notes { get; set; }
 
+        /// <summary>
+        /// Dialogue reverb setting (e.g., "None", "Low", "Mid", "High")
+        /// </summary>
+        public string DialogueReverb { get; set; }
+
+        /// <summary>
+        /// DFX (Digital Effects) information for the subtitle
+        /// </summary>
+        public string DFX { get; set; }
+
         public string MarginL { get; set; }
         public string MarginR { get; set; }
         public string MarginV { get; set; }
@@ -95,6 +105,8 @@ namespace Nikse.SubtitleEdit.Core.Common
             OnOff_Screen = paragraph.OnOff_Screen;
             Diegetic = paragraph.Diegetic;
             Notes = paragraph.Notes;
+            DialogueReverb = paragraph.DialogueReverb;
+            DFX = paragraph.DFX;
             MarginL = paragraph.MarginL;
             MarginR = paragraph.MarginR;
             MarginV = paragraph.MarginV;

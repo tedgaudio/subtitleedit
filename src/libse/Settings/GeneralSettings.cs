@@ -165,6 +165,8 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public int ListViewOnOffScreenWidth { get; set; }
         public int ListViewDiegeticWidth { get; set; }
         public int ListViewNotesWidth { get; set; }
+        public int ListViewDialogueReverbWidth { get; set; }
+        public int ListViewDFXWidth { get; set; }
         public int ListViewTextWidth { get; set; }
 
         public int ListViewNumberDisplayIndex { get; set; } = -1;
@@ -179,6 +181,8 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public int ListViewOnOffScreenDisplayIndex { get; set; } = -1;
         public int ListViewDiegeticDisplayIndex { get; set; } = -1;
         public int ListViewNotesDisplayIndex { get; set; } = -1;
+        public int ListViewDialogueReverbDisplayIndex { get; set; } = -1;
+        public int ListViewDFXDisplayIndex { get; set; } = -1;
         public int ListViewTextDisplayIndex { get; set; } = -1;
 
         public bool DirectShowDoubleLoad { get; set; }

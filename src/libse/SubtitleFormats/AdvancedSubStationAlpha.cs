@@ -258,6 +258,16 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
                 {
                     additionalInfo.Add($"notes:{p.Notes}");
                 }
+
+                if (!string.IsNullOrEmpty(p.DialogueReverb))
+                {
+                    additionalInfo.Add($"dialoguereverb:{p.DialogueReverb}");
+                }
+
+                if (!string.IsNullOrEmpty(p.DFX))
+                {
+                    additionalInfo.Add($"dfx:{p.DFX}");
+                }
                 
                 if (additionalInfo.Count > 0)
                 {
@@ -2830,7 +2840,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
             if (lines.Length > 1)
             {
                 var lastLine = lines[lines.Length - 1];
-                if (lastLine.Contains("onoffscreen:") || lastLine.Contains("priority:") || lastLine.Contains("notes:"))
+                if (lastLine.Contains("onoffscreen:") || lastLine.Contains("priority:") || lastLine.Contains("notes:") || lastLine.Contains("dialoguereverb:") || lastLine.Contains("dfx:"))
                 {
                     // Extract new fields from the last line
                     var parts = lastLine.Split(new[] { " | " }, StringSplitOptions.None);
@@ -2847,6 +2857,14 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
                         else if (part.StartsWith("notes:"))
                         {
                             p.Notes = part.Substring("notes:".Length);
+                        }
+                        else if (part.StartsWith("dialoguereverb:"))
+                        {
+                            p.DialogueReverb = part.Substring("dialoguereverb:".Length);
+                        }
+                        else if (part.StartsWith("dfx:"))
+                        {
+                            p.DFX = part.Substring("dfx:".Length);
                         }
                     }
                     

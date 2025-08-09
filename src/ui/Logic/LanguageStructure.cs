@@ -46,6 +46,8 @@ namespace Nikse.SubtitleEdit.Logic
             public string OnOffScreen { get; set; }
             public string Diegetic { get; set; }
             public string Notes { get; set; }
+            public string DialogueReverb { get; set; }
+            public string DFX { get; set; }
             public string Layer { get; set; }
             public string NumberSymbol { get; set; }
             public string Number { get; set; }

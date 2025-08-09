@@ -105,7 +105,52 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 sb.Append(p.EndTime.TotalSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
                 sb.Append(",\"text\":\"");
                 sb.Append(EncodeJsonText(p.Text));
-                sb.Append("\"}");
+                sb.Append("\"");
+                
+                // Add custom fields
+                if (!string.IsNullOrEmpty(p.Actor))
+                {
+                    sb.Append(",\"actor\":\"");
+                    sb.Append(EncodeJsonText(p.Actor));
+                    sb.Append("\"");
+                }
+                
+                if (!string.IsNullOrEmpty(p.OnOff_Screen))
+                {
+                    sb.Append(",\"onOffScreen\":\"");
+                    sb.Append(EncodeJsonText(p.OnOff_Screen));
+                    sb.Append("\"");
+                }
+                
+                if (!string.IsNullOrEmpty(p.Diegetic))
+                {
+                    sb.Append(",\"diegetic\":\"");
+                    sb.Append(EncodeJsonText(p.Diegetic));
+                    sb.Append("\"");
+                }
+                
+                if (!string.IsNullOrEmpty(p.Notes))
+                {
+                    sb.Append(",\"notes\":\"");
+                    sb.Append(EncodeJsonText(p.Notes));
+                    sb.Append("\"");
+                }
+                
+                if (!string.IsNullOrEmpty(p.DialogueReverb))
+                {
+                    sb.Append(",\"dialogueReverb\":\"");
+                    sb.Append(EncodeJsonText(p.DialogueReverb));
+                    sb.Append("\"");
+                }
+                
+                if (!string.IsNullOrEmpty(p.DFX))
+                {
+                    sb.Append(",\"dfx\":\"");
+                    sb.Append(EncodeJsonText(p.DFX));
+                    sb.Append("\"");
+                }
+                
+                sb.Append("}");
                 count++;
             }
             sb.Append(']');
@@ -138,7 +183,46 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     if (double.TryParse(start, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
                         double.TryParse(end, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
                     {
-                        subtitle.Paragraphs.Add(new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit));
+                        var p = new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit);
+                        
+                        // Read custom fields
+                        string actor = ReadTag(s, "actor");
+                        if (!string.IsNullOrEmpty(actor))
+                        {
+                            p.Actor = DecodeJsonText(actor);
+                        }
+                        
+                        string onOffScreen = ReadTag(s, "onOffScreen");
+                        if (!string.IsNullOrEmpty(onOffScreen))
+                        {
+                            p.OnOff_Screen = DecodeJsonText(onOffScreen);
+                        }
+                        
+                        string diegetic = ReadTag(s, "diegetic");
+                        if (!string.IsNullOrEmpty(diegetic))
+                        {
+                            p.Diegetic = DecodeJsonText(diegetic);
+                        }
+                        
+                        string notes = ReadTag(s, "notes");
+                        if (!string.IsNullOrEmpty(notes))
+                        {
+                            p.Notes = DecodeJsonText(notes);
+                        }
+                        
+                        string dialogueReverb = ReadTag(s, "dialogueReverb");
+                        if (!string.IsNullOrEmpty(dialogueReverb))
+                        {
+                            p.DialogueReverb = DecodeJsonText(dialogueReverb);
+                        }
+                        
+                        string dfx = ReadTag(s, "dfx");
+                        if (!string.IsNullOrEmpty(dfx))
+                        {
+                            p.DFX = DecodeJsonText(dfx);
+                        }
+                        
+                        subtitle.Paragraphs.Add(p);
                     }
                     else
                     {
