@@ -285,6 +285,9 @@ namespace Nikse.SubtitleEdit.Forms
             this.contextMenuStripListView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setStylesForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setActorForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setOnOffScreenForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SetDiegeticForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setNotesForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSetLayer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAssaTools = new System.Windows.Forms.ToolStripMenuItem();
             this.applyCustomStylesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -2710,6 +2713,9 @@ namespace Nikse.SubtitleEdit.Forms
             this.contextMenuStripListView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setStylesForSelectedLinesToolStripMenuItem,
             this.setActorForSelectedLinesToolStripMenuItem,
+            this.setOnOffScreenForSelectedLinesToolStripMenuItem,
+            this.SetDiegeticForSelectedLinesToolStripMenuItem,
+            this.setNotesForSelectedLinesToolStripMenuItem,
             this.toolStripMenuItemSetLayer,
             this.toolStripMenuItemAssaTools,
             this.toolStripMenuItemAssStyles,
@@ -2766,6 +2772,24 @@ namespace Nikse.SubtitleEdit.Forms
             this.setActorForSelectedLinesToolStripMenuItem.Name = "setActorForSelectedLinesToolStripMenuItem";
             this.setActorForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.setActorForSelectedLinesToolStripMenuItem.Text = "Set actor";
+            // 
+            // setOnOffScreenForSelectedLinesToolStripMenuItem
+            // 
+            this.setOnOffScreenForSelectedLinesToolStripMenuItem.Name = "setOnOffScreenForSelectedLinesToolStripMenuItem";
+            this.setOnOffScreenForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.setOnOffScreenForSelectedLinesToolStripMenuItem.Text = "Set on/off screen";
+            // 
+            // SetDiegeticForSelectedLinesToolStripMenuItem
+            // 
+            this.SetDiegeticForSelectedLinesToolStripMenuItem.Name = "SetDiegeticForSelectedLinesToolStripMenuItem";
+            this.SetDiegeticForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.SetDiegeticForSelectedLinesToolStripMenuItem.Text = "Set priority";
+            // 
+            // setNotesForSelectedLinesToolStripMenuItem
+            // 
+            this.setNotesForSelectedLinesToolStripMenuItem.Name = "setNotesForSelectedLinesToolStripMenuItem";
+            this.setNotesForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.setNotesForSelectedLinesToolStripMenuItem.Text = "Set notes";
             // 
             // toolStripMenuItemSetLayer
             // 
@@ -6430,6 +6454,9 @@ namespace Nikse.SubtitleEdit.Forms
         private System.Windows.Forms.ToolStripMenuItem netflixQualityCheckToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonNetflixQualityCheck;
         private System.Windows.Forms.ToolStripMenuItem setActorForSelectedLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setOnOffScreenForSelectedLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SetDiegeticForSelectedLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setNotesForSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSetRegion;
         private System.Windows.Forms.ToolStripMenuItem insertSubtitleHereToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem actorToolStripMenuItem;

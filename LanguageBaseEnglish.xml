@@ -39,6 +39,9 @@
     <Actor>Actor</Actor>
     <Gap>Gap</Gap>
     <Region>Region</Region>
+    <OnOffScreen>On/Off Screen</OnOffScreen>
+    <Diegetic>Diegetic</Diegetic>
+    <Notes>Notes</Notes>
     <Layer>Layer</Layer>
     <NumberSymbol>#</NumberSymbol>
     <Number>Number</Number>

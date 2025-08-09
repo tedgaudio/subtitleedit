@@ -22,6 +22,9 @@ namespace Nikse.SubtitleEdit.Logic
             Configuration.Settings.General.ListViewGapDisplayIndex = -1;
             Configuration.Settings.General.ListViewActorDisplayIndex = -1;
             Configuration.Settings.General.ListViewRegionDisplayIndex = -1;
+            Configuration.Settings.General.ListViewOnOffScreenDisplayIndex = -1;
+            Configuration.Settings.General.ListViewDiegeticDisplayIndex = -1;
+            Configuration.Settings.General.ListViewNotesDisplayIndex = -1;
             Configuration.Settings.General.ListViewTextDisplayIndex = -1;
 
             if (subtitleListView.ColumnIndexNumber >= 0)
@@ -78,6 +81,24 @@ namespace Nikse.SubtitleEdit.Logic
             {
                 Configuration.Settings.General.ListViewRegionWidth = subtitleListView.Columns[subtitleListView.ColumnIndexRegion].Width;
                 Configuration.Settings.General.ListViewRegionDisplayIndex = subtitleListView.Columns[subtitleListView.ColumnIndexRegion].DisplayIndex;
+            }
+
+            if (subtitleListView.ColumnIndexOnOffScreen >= 0)
+            {
+                Configuration.Settings.General.ListViewOnOffScreenWidth = subtitleListView.Columns[subtitleListView.ColumnIndexOnOffScreen].Width;
+                Configuration.Settings.General.ListViewOnOffScreenDisplayIndex = subtitleListView.Columns[subtitleListView.ColumnIndexOnOffScreen].DisplayIndex;
+            }
+
+            if (subtitleListView.ColumnIndexDiegetic >= 0)
+            {
+                Configuration.Settings.General.ListViewDiegeticWidth = subtitleListView.Columns[subtitleListView.ColumnIndexDiegetic].Width;
+                Configuration.Settings.General.ListViewDiegeticDisplayIndex = subtitleListView.Columns[subtitleListView.ColumnIndexDiegetic].DisplayIndex;
+            }
+
+            if (subtitleListView.ColumnIndexNotes >= 0)
+            {
+                Configuration.Settings.General.ListViewNotesWidth = subtitleListView.Columns[subtitleListView.ColumnIndexNotes].Width;
+                Configuration.Settings.General.ListViewNotesDisplayIndex = subtitleListView.Columns[subtitleListView.ColumnIndexNotes].DisplayIndex;
             }
 
             if (subtitleListView.ColumnIndexText >= 0)
@@ -157,6 +178,27 @@ namespace Nikse.SubtitleEdit.Logic
                 Configuration.Settings.General.ListViewRegionDisplayIndex < columnCount)
             {
                 subtitleListView.Columns[subtitleListView.ColumnIndexRegion].DisplayIndex = Configuration.Settings.General.ListViewRegionDisplayIndex;
+            }
+
+            if (subtitleListView.ColumnIndexOnOffScreen >= 0 && 
+                Configuration.Settings.General.ListViewOnOffScreenDisplayIndex >= 0 &&
+                Configuration.Settings.General.ListViewOnOffScreenDisplayIndex < columnCount)
+            {
+                subtitleListView.Columns[subtitleListView.ColumnIndexOnOffScreen].DisplayIndex = Configuration.Settings.General.ListViewOnOffScreenDisplayIndex;
+            }
+
+            if (subtitleListView.ColumnIndexDiegetic >= 0 && 
+                Configuration.Settings.General.ListViewDiegeticDisplayIndex >= 0 &&
+                Configuration.Settings.General.ListViewDiegeticDisplayIndex < columnCount)
+            {
+                subtitleListView.Columns[subtitleListView.ColumnIndexDiegetic].DisplayIndex = Configuration.Settings.General.ListViewDiegeticDisplayIndex;
+            }
+
+            if (subtitleListView.ColumnIndexNotes >= 0 && 
+                Configuration.Settings.General.ListViewNotesDisplayIndex >= 0 &&
+                Configuration.Settings.General.ListViewNotesDisplayIndex < columnCount)
+            {
+                subtitleListView.Columns[subtitleListView.ColumnIndexNotes].DisplayIndex = Configuration.Settings.General.ListViewNotesDisplayIndex;
             }
 
             if (subtitleListView.ColumnIndexText >= 0 &&

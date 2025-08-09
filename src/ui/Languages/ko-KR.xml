@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Language Name="Korean (한국어)">
   <General>
     <Title>Subtitle Edit</Title>
@@ -39,6 +39,9 @@
     <Actor>배우</Actor>
     <Gap>간격</Gap>
     <Region>지역</Region>
+    <OnOffScreen>온/오프 스크린</OnOffScreen>
+          <Diegetic>다이제틱</Diegetic>
+    <Notes>메모</Notes>
     <Layer>레이어</Layer>
     <NumberSymbol>번호</NumberSymbol>
     <Number>번호</Number>

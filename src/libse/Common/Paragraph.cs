@@ -30,14 +30,14 @@ namespace Nikse.SubtitleEdit.Core.Common
         public string Region { get; set; }
 
         /// <summary>
-        /// Emotion/feeling of the subtitle (e.g., "angry", "happy", "sad")
+        /// On/Off screen indicator for the subtitle (e.g., "on", "off")
         /// </summary>
-        public string Emotion { get; set; }
+        public string OnOff_Screen { get; set; }
 
         /// <summary>
-        /// Priority level for translation/review (1-5, where 1 is highest priority)
+        /// Diegetic/Non-diegetic indicator for the subtitle (e.g., "diegetic", "non-diegetic")
         /// </summary>
-        public int Priority { get; set; }
+        public string Diegetic { get; set; }
 
         /// <summary>
         /// Additional notes for the subtitle
@@ -92,8 +92,8 @@ namespace Nikse.SubtitleEdit.Core.Common
             IsComment = paragraph.IsComment;
             Actor = paragraph.Actor;
             Region = paragraph.Region;
-            Emotion = paragraph.Emotion;
-            Priority = paragraph.Priority;
+            OnOff_Screen = paragraph.OnOff_Screen;
+            Diegetic = paragraph.Diegetic;
             Notes = paragraph.Notes;
             MarginL = paragraph.MarginL;
             MarginR = paragraph.MarginR;

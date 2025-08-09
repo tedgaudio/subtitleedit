@@ -53,7 +53,7 @@ else
 fi
 
 #Try update souce code
-git pull
+# git pull
 
 echo
 echo "Starting compilation..."

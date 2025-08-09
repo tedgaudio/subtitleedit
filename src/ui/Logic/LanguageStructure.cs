@@ -1,4 +1,4 @@
-﻿namespace Nikse.SubtitleEdit.Logic
+namespace Nikse.SubtitleEdit.Logic
 {
     // The language classes are built for easy xml-serialization (makes save/load code simple)
     public static class LanguageStructure
@@ -43,6 +43,9 @@
             public string Actor { get; set; }
             public string Gap { get; set; }
             public string Region { get; set; }
+            public string OnOffScreen { get; set; }
+            public string Diegetic { get; set; }
+            public string Notes { get; set; }
             public string Layer { get; set; }
             public string NumberSymbol { get; set; }
             public string Number { get; set; }

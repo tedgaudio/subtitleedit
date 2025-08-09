@@ -255,28 +255,28 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public string MainListViewSetActor8 { get; set; }
         public string MainListViewSetActor9 { get; set; }
         public string MainListViewSetActor10 { get; set; }
-        public string MainListViewSetNewEmotion { get; set; }
-        public string MainListViewSetEmotion1 { get; set; }
-        public string MainListViewSetEmotion2 { get; set; }
-        public string MainListViewSetEmotion3 { get; set; }
-        public string MainListViewSetEmotion4 { get; set; }
-        public string MainListViewSetEmotion5 { get; set; }
-        public string MainListViewSetEmotion6 { get; set; }
-        public string MainListViewSetEmotion7 { get; set; }
-        public string MainListViewSetEmotion8 { get; set; }
-        public string MainListViewSetEmotion9 { get; set; }
-        public string MainListViewSetEmotion10 { get; set; }
-        public string MainListViewSetNewPriority { get; set; }
-        public string MainListViewSetPriority1 { get; set; }
-        public string MainListViewSetPriority2 { get; set; }
-        public string MainListViewSetPriority3 { get; set; }
-        public string MainListViewSetPriority4 { get; set; }
-        public string MainListViewSetPriority5 { get; set; }
-        public string MainListViewSetPriority6 { get; set; }
-        public string MainListViewSetPriority7 { get; set; }
-        public string MainListViewSetPriority8 { get; set; }
-        public string MainListViewSetPriority9 { get; set; }
-        public string MainListViewSetPriority10 { get; set; }
+        public string MainListViewSetNewOnOffScreen { get; set; }
+        public string MainListViewSetOnOffScreen1 { get; set; }
+        public string MainListViewSetOnOffScreen2 { get; set; }
+        public string MainListViewSetOnOffScreen3 { get; set; }
+        public string MainListViewSetOnOffScreen4 { get; set; }
+        public string MainListViewSetOnOffScreen5 { get; set; }
+        public string MainListViewSetOnOffScreen6 { get; set; }
+        public string MainListViewSetOnOffScreen7 { get; set; }
+        public string MainListViewSetOnOffScreen8 { get; set; }
+        public string MainListViewSetOnOffScreen9 { get; set; }
+        public string MainListViewSetOnOffScreen10 { get; set; }
+        public string MainListViewSetNewDiegetic { get; set; }
+        public string MainListViewSetDiegetic1 { get; set; }
+        public string MainListViewSetDiegetic2 { get; set; }
+        public string MainListViewSetDiegetic3 { get; set; }
+        public string MainListViewSetDiegetic4 { get; set; }
+        public string MainListViewSetDiegetic5 { get; set; }
+        public string MainListViewSetDiegetic6 { get; set; }
+        public string MainListViewSetDiegetic7 { get; set; }
+        public string MainListViewSetDiegetic8 { get; set; }
+        public string MainListViewSetDiegetic9 { get; set; }
+        public string MainListViewSetDiegetic10 { get; set; }
         public string MainListViewSetNewNotes { get; set; }
         public string MainListViewColorChoose { get; set; }
         public string MainRemoveFormatting { get; set; }

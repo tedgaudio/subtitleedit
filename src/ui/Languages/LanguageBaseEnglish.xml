@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English">
+  <General>
+    <Title>Subtitle Edit</Title>
+    <Version>4.0.12</Version>
+    <TranslatedBy> </TranslatedBy>
+    <CultureName>en-US</CultureName>
+    <HelpFile />
+    <Ok>&amp;OK</Ok>
+    <Cancel>C&amp;ancel</Cancel>
+    <Yes>Yes</Yes>
+    <No>No</No>
+    <Close>Close</Close>
+    <Apply>Apply</Apply>
+    <ApplyTo>Apply to</ApplyTo>
+    <None>None</None>
+    <All>All</All>
+    <Preview>Preview</Preview>
+    <ShowPreview>Show preview</ShowPreview>
+    <HidePreview>Hide preview</HidePreview>
+    <SubtitleFile>Subtitle file</SubtitleFile>
+    <SubtitleFiles>Subtitle files</SubtitleFiles>
+    <AllFiles>All files</AllFiles>
+    <VideoFiles>Video files</VideoFiles>
+    <Images>Images</Images>
+    <Fonts>Fonts</Fonts>
+    <AudioFiles>Audio files</AudioFiles>
+    <OpenSubtitle>Open subtitle...</OpenSubtitle>
+    <OpenVideoFile>Open video file...</OpenVideoFile>
+    <OpenVideoFileTitle>Open video file...</OpenVideoFileTitle>
+    <NoVideoLoaded>No video loaded</NoVideoLoaded>
+    <OnlineVideoFeatureNotAvailable>Feature not available for online video</OnlineVideoFeatureNotAvailable>
+    <VideoInformation>Video info</VideoInformation>
+    <StartTime>Start time</StartTime>
+    <EndTime>End time</EndTime>
+    <Duration>Duration</Duration>
+    <CharsPerSec>Chars/sec</CharsPerSec>
+    <WordsPerMin>Words/min</WordsPerMin>
+    <Actor>Actor</Actor>
+    <Gap>Gap</Gap>
+    <Region>Region</Region>
+    <OnOffScreen>On/Off Screen</OnOffScreen>
+    <Diegetic>Diegetic</Diegetic>
+    <Notes>Notes</Notes>
+    <Layer>Layer</Layer>
+    <NumberSymbol>#</NumberSymbol>
+    <Number>Number</Number>
+    <Text>Text</Text>
+    <HourMinutesSecondsDecimalSeparatorMilliseconds>Hour:min:sec{0}ms</HourMinutesSecondsDecimalSeparatorMilliseconds>
+  </General>
+</Language>

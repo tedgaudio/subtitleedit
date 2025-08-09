@@ -172,6 +172,15 @@ namespace Nikse.SubtitleEdit.Logic
                 case "General/Region":
                     language.General.Region = reader.Value;
                     break;
+                case "General/OnOffScreen":
+                    language.General.OnOffScreen = reader.Value;
+                    break;
+                case "General/Diegetic":
+                    language.General.Diegetic = reader.Value;
+                    break;
+                case "General/Notes":
+                    language.General.Notes = reader.Value;
+                    break;
                 case "General/Layer":
                     language.General.Layer = reader.Value;
                     break;

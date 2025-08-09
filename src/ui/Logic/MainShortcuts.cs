@@ -250,28 +250,28 @@ namespace Nikse.SubtitleEdit.Logic
         public Keys MainListViewSetActor8 { get; set; }
         public Keys MainListViewSetActor9 { get; set; }
         public Keys MainListViewSetActor10 { get; set; }
-        public Keys MainListViewSetNewEmotion { get; set; }
-        public Keys MainListViewSetEmotion1 { get; set; }
-        public Keys MainListViewSetEmotion2 { get; set; }
-        public Keys MainListViewSetEmotion3 { get; set; }
-        public Keys MainListViewSetEmotion4 { get; set; }
-        public Keys MainListViewSetEmotion5 { get; set; }
-        public Keys MainListViewSetEmotion6 { get; set; }
-        public Keys MainListViewSetEmotion7 { get; set; }
-        public Keys MainListViewSetEmotion8 { get; set; }
-        public Keys MainListViewSetEmotion9 { get; set; }
-        public Keys MainListViewSetEmotion10 { get; set; }
-        public Keys MainListViewSetNewPriority { get; set; }
-        public Keys MainListViewSetPriority1 { get; set; }
-        public Keys MainListViewSetPriority2 { get; set; }
-        public Keys MainListViewSetPriority3 { get; set; }
-        public Keys MainListViewSetPriority4 { get; set; }
-        public Keys MainListViewSetPriority5 { get; set; }
-        public Keys MainListViewSetPriority6 { get; set; }
-        public Keys MainListViewSetPriority7 { get; set; }
-        public Keys MainListViewSetPriority8 { get; set; }
-        public Keys MainListViewSetPriority9 { get; set; }
-        public Keys MainListViewSetPriority10 { get; set; }
+        public Keys MainListViewSetNewOnOffScreen { get; set; }
+        public Keys MainListViewSetOnOffScreen1 { get; set; }
+        public Keys MainListViewSetOnOffScreen2 { get; set; }
+        public Keys MainListViewSetOnOffScreen3 { get; set; }
+        public Keys MainListViewSetOnOffScreen4 { get; set; }
+        public Keys MainListViewSetOnOffScreen5 { get; set; }
+        public Keys MainListViewSetOnOffScreen6 { get; set; }
+        public Keys MainListViewSetOnOffScreen7 { get; set; }
+        public Keys MainListViewSetOnOffScreen8 { get; set; }
+        public Keys MainListViewSetOnOffScreen9 { get; set; }
+        public Keys MainListViewSetOnOffScreen10 { get; set; }
+        public Keys MainListViewSetNewDiegetic { get; set; }
+        public Keys MainListViewSetDiegetic1 { get; set; }
+        public Keys MainListViewSetDiegetic2 { get; set; }
+        public Keys MainListViewSetDiegetic3 { get; set; }
+        public Keys MainListViewSetDiegetic4 { get; set; }
+        public Keys MainListViewSetDiegetic5 { get; set; }
+        public Keys MainListViewSetDiegetic6 { get; set; }
+        public Keys MainListViewSetDiegetic7 { get; set; }
+        public Keys MainListViewSetDiegetic8 { get; set; }
+        public Keys MainListViewSetDiegetic9 { get; set; }
+        public Keys MainListViewSetDiegetic10 { get; set; }
         public Keys MainListViewSetNewNotes { get; set; }
         public Keys MainListViewGoToNextError { get; set; }
         public Keys MainListViewRemoveBlankLines { get; set; }
@@ -469,28 +469,28 @@ namespace Nikse.SubtitleEdit.Logic
             MainListViewSetActor8 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor8);
             MainListViewSetActor9 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor9);
             MainListViewSetActor10 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor10);
-            MainListViewSetNewEmotion = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewEmotion);
-            MainListViewSetEmotion1 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion1);
-            MainListViewSetEmotion2 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion2);
-            MainListViewSetEmotion3 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion3);
-            MainListViewSetEmotion4 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion4);
-            MainListViewSetEmotion5 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion5);
-            MainListViewSetEmotion6 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion6);
-            MainListViewSetEmotion7 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion7);
-            MainListViewSetEmotion8 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion8);
-            MainListViewSetEmotion9 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion9);
-            MainListViewSetEmotion10 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetEmotion10);
-            MainListViewSetNewPriority = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewPriority);
-            MainListViewSetPriority1 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority1);
-            MainListViewSetPriority2 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority2);
-            MainListViewSetPriority3 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority3);
-            MainListViewSetPriority4 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority4);
-            MainListViewSetPriority5 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority5);
-            MainListViewSetPriority6 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority6);
-            MainListViewSetPriority7 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority7);
-            MainListViewSetPriority8 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority8);
-            MainListViewSetPriority9 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority9);
-            MainListViewSetPriority10 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetPriority10);
+            MainListViewSetNewOnOffScreen = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewOnOffScreen);
+            MainListViewSetOnOffScreen1 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen1);
+            MainListViewSetOnOffScreen2 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen2);
+            MainListViewSetOnOffScreen3 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen3);
+            MainListViewSetOnOffScreen4 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen4);
+            MainListViewSetOnOffScreen5 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen5);
+            MainListViewSetOnOffScreen6 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen6);
+            MainListViewSetOnOffScreen7 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen7);
+            MainListViewSetOnOffScreen8 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen8);
+            MainListViewSetOnOffScreen9 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen9);
+            MainListViewSetOnOffScreen10 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen10);
+            MainListViewSetNewDiegetic = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewDiegetic);
+            MainListViewSetDiegetic1 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic1);
+            MainListViewSetDiegetic2 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic2);
+            MainListViewSetDiegetic3 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic3);
+            MainListViewSetDiegetic4 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic4);
+            MainListViewSetDiegetic5 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic5);
+            MainListViewSetDiegetic6 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic6);
+            MainListViewSetDiegetic7 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic7);
+            MainListViewSetDiegetic8 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic8);
+            MainListViewSetDiegetic9 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic9);
+            MainListViewSetDiegetic10 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDiegetic10);
             MainListViewSetNewNotes = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewNotes);
             MainListViewGoToNextError = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewGoToNextError);
             MainListViewRemoveBlankLines = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralRemoveBlankLines);

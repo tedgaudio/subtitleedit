@@ -1924,6 +1924,9 @@ namespace Nikse.SubtitleEdit.Forms
             toolStripMenuItemAssaStyles.Text = _language.Menu.ContextMenu.SubStationAlphaStyles;
             setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
             setActorForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetActor;
+            setOnOffScreenForSelectedLinesToolStripMenuItem.Text = "Set on/off screen";
+            SetDiegeticForSelectedLinesToolStripMenuItem.Text = "Set diegetic";
+            setNotesForSelectedLinesToolStripMenuItem.Text = "Set notes";
             toolStripMenuItemSetLayer.Text = _language.Menu.ContextMenu.SetLayer;
             toolStripMenuItemAssaTools.Text = _language.Menu.ContextMenu.AssaTools;
             applyCustomStylesToolStripMenuItem.Text = _language.Menu.ContextMenu.ApplyCustomOverrideTag;
@@ -9148,6 +9151,90 @@ namespace Nikse.SubtitleEdit.Forms
                     cm.Items.Add(contextMenuStripLvHeaderRegionToolStripMenuItem);
                 }
 
+                if (formatType == typeof(WebVTT) || formatType == typeof(SubRip) || formatType == typeof(AdvancedSubStationAlpha))
+                {
+                    // ON/OFF SCREEN
+                    var contextMenuStripLvHeaderOnOffScreenToolStripMenuItem = new ToolStripMenuItem(LanguageSettings.Current.General.OnOffScreen)
+                    {
+                        CheckOnClick = true,
+                        Checked = Configuration.Settings.Tools.ListViewShowColumnOnOffScreen
+                    };
+                    contextMenuStripLvHeaderOnOffScreenToolStripMenuItem.Click += (sender2, e2) =>
+                    {
+                        SubtitleListview1.BeginUpdate();
+                        Configuration.Settings.Tools.ListViewShowColumnOnOffScreen = contextMenuStripLvHeaderOnOffScreenToolStripMenuItem.Checked;
+                        if (Configuration.Settings.Tools.ListViewShowColumnOnOffScreen)
+                        {
+                            SubtitleListview1.ShowOnOffScreenColumn(LanguageSettings.Current.General.OnOffScreen);
+                        }
+                        else
+                        {
+                            SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.OnOffScreen);
+                        }
+
+                        SaveSubtitleListviewIndices();
+                        UiUtil.InitializeSubtitleFont(SubtitleListview1);
+                        SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+                        RestoreSubtitleListviewIndices();
+                        SubtitleListview1.EndUpdate();
+                    };
+                    cm.Items.Add(contextMenuStripLvHeaderOnOffScreenToolStripMenuItem);
+
+                    // DIEGETIC
+                    var contextMenuStripLvHeaderDiegeticToolStripMenuItem = new ToolStripMenuItem(LanguageSettings.Current.General.Diegetic)
+                    {
+                        CheckOnClick = true,
+                        Checked = Configuration.Settings.Tools.ListViewShowColumnDiegetic
+                    };
+                    contextMenuStripLvHeaderDiegeticToolStripMenuItem.Click += (sender2, e2) =>
+                    {
+                        SubtitleListview1.BeginUpdate();
+                        Configuration.Settings.Tools.ListViewShowColumnDiegetic = contextMenuStripLvHeaderDiegeticToolStripMenuItem.Checked;
+                        if (Configuration.Settings.Tools.ListViewShowColumnDiegetic)
+                        {
+                            SubtitleListview1.ShowDiegeticColumn(LanguageSettings.Current.General.Diegetic);
+                        }
+                        else
+                        {
+                            SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.Diegetic);
+                        }
+
+                        SaveSubtitleListviewIndices();
+                        UiUtil.InitializeSubtitleFont(SubtitleListview1);
+                        SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+                        RestoreSubtitleListviewIndices();
+                        SubtitleListview1.EndUpdate();
+                    };
+                    cm.Items.Add(contextMenuStripLvHeaderDiegeticToolStripMenuItem);
+
+                    // NOTES
+                    var contextMenuStripLvHeaderNotesToolStripMenuItem = new ToolStripMenuItem(LanguageSettings.Current.General.Notes)
+                    {
+                        CheckOnClick = true,
+                        Checked = Configuration.Settings.Tools.ListViewShowColumnNotes
+                    };
+                    contextMenuStripLvHeaderNotesToolStripMenuItem.Click += (sender2, e2) =>
+                    {
+                        SubtitleListview1.BeginUpdate();
+                        Configuration.Settings.Tools.ListViewShowColumnNotes = contextMenuStripLvHeaderNotesToolStripMenuItem.Checked;
+                        if (Configuration.Settings.Tools.ListViewShowColumnNotes)
+                        {
+                            SubtitleListview1.ShowNotesColumn(LanguageSettings.Current.General.Notes);
+                        }
+                        else
+                        {
+                            SubtitleListview1.HideColumn(SubtitleListView.SubtitleColumn.Notes);
+                        }
+
+                        SaveSubtitleListviewIndices();
+                        UiUtil.InitializeSubtitleFont(SubtitleListview1);
+                        SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+                        RestoreSubtitleListviewIndices();
+                        SubtitleListview1.EndUpdate();
+                    };
+                    cm.Items.Add(contextMenuStripLvHeaderNotesToolStripMenuItem);
+                }
+
                 cm.Show(SubtitleListview1, coordinates);
                 return;
             }
@@ -9775,6 +9862,41 @@ namespace Nikse.SubtitleEdit.Forms
                 setActorForSelectedLinesToolStripMenuItem.Visible = false;
             }
 
+            // Show OnOffScreen, Priority, Notes for WebVTT, SubRip, and ASS formats
+            bool showOnOffScreenPriorityNotes = formatType == typeof(WebVTT) || formatType == typeof(SubRip) || 
+                                              formatType == typeof(AdvancedSubStationAlpha) || formatType == typeof(SubStationAlpha);
+            
+            setOnOffScreenForSelectedLinesToolStripMenuItem.Visible = showOnOffScreenPriorityNotes;
+            SetDiegeticForSelectedLinesToolStripMenuItem.Visible = showOnOffScreenPriorityNotes;
+            setNotesForSelectedLinesToolStripMenuItem.Visible = showOnOffScreenPriorityNotes;
+
+            if (showOnOffScreenPriorityNotes)
+            {
+                // Setup OnOffScreen menu
+                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("on", null, SetOnOffScreen);
+                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("off", null, SetOnOffScreen);
+                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetOnOffScreen);
+
+                // Setup Diegetic menu
+                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("diegetic", null, SetDiegetic);
+                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("non-diegetic", null, SetDiegetic);
+                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetDiegetic);
+
+                // Setup Notes menu
+                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add("New note...", null, SetNewNotes);
+                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetNotes);
+
+                UiUtil.FixFonts(setOnOffScreenForSelectedLinesToolStripMenuItem);
+                UiUtil.FixFonts(SetDiegeticForSelectedLinesToolStripMenuItem);
+                UiUtil.FixFonts(setNotesForSelectedLinesToolStripMenuItem);
+            }
+
             if (formatType == typeof(Ebu))
             {
                 Ebu.EbuGeneralSubtitleInformation header;
@@ -10220,19 +10342,19 @@ namespace Nikse.SubtitleEdit.Forms
 
                 foreach (int index in SubtitleListview1.SelectedIndices)
                 {
-                    _subtitle.Paragraphs[index].Emotion = emotion;
+                    _subtitle.Paragraphs[index].OnOff_Screen = emotion;
                     SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
                 }
             }
         }
 
-        private void SetPriority(int priority)
+        private void SetDiegeticText(string diegeticText)
         {
-            MakeHistoryForUndo("Set priority: " + priority);
+            MakeHistoryForUndo("Set diegetic: " + diegeticText);
 
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
-                _subtitle.Paragraphs[index].Priority = priority;
+                _subtitle.Paragraphs[index].Diegetic = diegeticText;
                 SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
         }
@@ -10247,6 +10369,47 @@ namespace Nikse.SubtitleEdit.Forms
                 SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
         }
+
+        private void SetOnOffScreen(object sender, EventArgs e)
+        {
+            string onOffScreen = (sender as ToolStripItem).Text;
+            if (onOffScreen == "Clear")
+            {
+                SetEmotion("");
+            }
+            else
+            {
+                SetEmotion(onOffScreen);
+            }
+        }
+
+        private void SetDiegetic(object sender, EventArgs e)
+        {
+            string diegeticText = (sender as ToolStripItem).Text;
+            if (diegeticText == "Clear")
+            {
+                SetDiegeticText("");
+            }
+            else if (diegeticText == "diegetic")
+            {
+                SetDiegeticText("diegetic");
+            }
+            else if (diegeticText == "non-diegetic")
+            {
+                SetDiegeticText("non-diegetic");
+            }
+        }
+
+        private void SetNotes(object sender, EventArgs e)
+        {
+            string notesText = (sender as ToolStripItem).Text;
+            if (notesText == "Clear")
+            {
+                SetNotes("");
+            }
+        }
+
+
 
         private void SetLayer(object sender, EventArgs e)
         {
@@ -10404,7 +10567,7 @@ namespace Nikse.SubtitleEdit.Forms
                     {
                         foreach (int index in SubtitleListview1.SelectedIndices)
                         {
-                            _subtitle.Paragraphs[index].Emotion = emotion;
+                            _subtitle.Paragraphs[index].OnOff_Screen = emotion;
                             SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
                         }
                     }
@@ -10412,20 +10575,13 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-        private void SetNewPriority(object sender, EventArgs e)
+        private void SetNewDiegetic(object sender, EventArgs e)
         {
-            using (var form = new TextPrompt("New priority", "Priority (1-5)", string.Empty))
+            using (var form = new TextPrompt("New diegetic", "Diegetic (diegetic/non-diegetic)", string.Empty))
             {
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (int.TryParse(form.InputText, out int priority) && priority >= 1 && priority <= 5)
-                    {
-                        foreach (int index in SubtitleListview1.SelectedIndices)
-                        {
-                            _subtitle.Paragraphs[index].Priority = priority;
-                            SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
-                        }
-                    }
+                    SetDiegeticText(form.InputText);
                 }
             }
         }
@@ -17766,14 +17922,14 @@ namespace Nikse.SubtitleEdit.Forms
 
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetNewEmotion == e.KeyData)
+            else if (_shortcuts.MainListViewSetNewOnOffScreen == e.KeyData)
             {
                 SetNewEmotion(null, null);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetNewPriority == e.KeyData)
+            else if (_shortcuts.MainListViewSetNewDiegetic == e.KeyData)
             {
-                SetNewPriority(null, null);
+                SetNewDiegetic(null, null);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetNewNotes == e.KeyData)
@@ -17831,104 +17987,104 @@ namespace Nikse.SubtitleEdit.Forms
                 SetActorVoice(9);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion1 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen1 == e.KeyData)
             {
                 SetEmotionVoice(0);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion2 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen2 == e.KeyData)
             {
                 SetEmotionVoice(1);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion3 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen3 == e.KeyData)
             {
                 SetEmotionVoice(2);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion4 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen4 == e.KeyData)
             {
                 SetEmotionVoice(3);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion5 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen5 == e.KeyData)
             {
                 SetEmotionVoice(4);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion6 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen6 == e.KeyData)
             {
                 SetEmotionVoice(5);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion7 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen7 == e.KeyData)
             {
                 SetEmotionVoice(6);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion8 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen8 == e.KeyData)
             {
                 SetEmotionVoice(7);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion9 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen9 == e.KeyData)
             {
                 SetEmotionVoice(8);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetEmotion10 == e.KeyData)
+            else if (_shortcuts.MainListViewSetOnOffScreen10 == e.KeyData)
             {
                 SetEmotionVoice(9);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority1 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic1 == e.KeyData)
             {
-                SetPriorityVoice(0);
+                SetDiegeticVoice(0);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority2 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic2 == e.KeyData)
             {
-                SetPriorityVoice(1);
+                SetDiegeticVoice(1);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority3 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic3 == e.KeyData)
             {
-                SetPriorityVoice(2);
+                SetDiegeticVoice(2);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority4 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic4 == e.KeyData)
             {
-                SetPriorityVoice(3);
+                SetDiegeticVoice(3);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority5 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic5 == e.KeyData)
             {
-                SetPriorityVoice(4);
+                SetDiegeticVoice(4);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority6 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic6 == e.KeyData)
             {
-                SetPriorityVoice(5);
+                SetDiegeticVoice(5);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority7 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic7 == e.KeyData)
             {
-                SetPriorityVoice(6);
+                SetDiegeticVoice(6);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority8 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic8 == e.KeyData)
             {
-                SetPriorityVoice(7);
+                SetDiegeticVoice(7);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority9 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic9 == e.KeyData)
             {
-                SetPriorityVoice(8);
+                SetDiegeticVoice(8);
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetPriority10 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDiegetic10 == e.KeyData)
             {
-                SetPriorityVoice(9);
+                SetDiegeticVoice(9);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainGeneralToggleMode == e.KeyData && Configuration.Settings.General.ShowVideoControls)
@@ -19740,9 +19896,9 @@ namespace Nikse.SubtitleEdit.Forms
             var emotions = new List<string>();
             foreach (var p in _subtitle.Paragraphs)
             {
-                if (!string.IsNullOrEmpty(p.Emotion) && !emotions.Contains(p.Emotion))
+                if (!string.IsNullOrEmpty(p.OnOff_Screen) && !emotions.Contains(p.OnOff_Screen))
                 {
-                    emotions.Add(p.Emotion);
+                    emotions.Add(p.OnOff_Screen);
                 }
 
                 emotions.Sort();
@@ -19754,22 +19910,13 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-        private void SetPriorityVoice(int index)
+        private void SetDiegeticVoice(int index)
         {
-            var priorities = new List<int>();
-            foreach (var p in _subtitle.Paragraphs)
-            {
-                if (p.Priority > 0 && !priorities.Contains(p.Priority))
-                {
-                    priorities.Add(p.Priority);
-                }
+            var diegeticValues = new List<string> { "diegetic", "non-diegetic" };
 
-                priorities.Sort();
-            }
-
-            if (index >= 0 && index < priorities.Count)
+            if (index >= 0 && index < diegeticValues.Count)
             {
-                SetPriority(priorities[index]);
+                SetDiegeticText(diegeticValues[index]);
             }
         }
 

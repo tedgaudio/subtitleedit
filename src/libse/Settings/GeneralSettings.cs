@@ -162,6 +162,9 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public int ListViewGapWidth { get; set; }
         public int ListViewActorWidth { get; set; }
         public int ListViewRegionWidth { get; set; }
+        public int ListViewOnOffScreenWidth { get; set; }
+        public int ListViewDiegeticWidth { get; set; }
+        public int ListViewNotesWidth { get; set; }
         public int ListViewTextWidth { get; set; }
 
         public int ListViewNumberDisplayIndex { get; set; } = -1;
@@ -173,6 +176,9 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public int ListViewGapDisplayIndex { get; set; } = -1;
         public int ListViewActorDisplayIndex { get; set; } = -1;
         public int ListViewRegionDisplayIndex { get; set; } = -1;
+        public int ListViewOnOffScreenDisplayIndex { get; set; } = -1;
+        public int ListViewDiegeticDisplayIndex { get; set; } = -1;
+        public int ListViewNotesDisplayIndex { get; set; } = -1;
         public int ListViewTextDisplayIndex { get; set; } = -1;
 
         public bool DirectShowDoubleLoad { get; set; }

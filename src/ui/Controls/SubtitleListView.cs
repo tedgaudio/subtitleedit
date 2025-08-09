@@ -24,8 +24,8 @@ namespace Nikse.SubtitleEdit.Controls
             Gap,
             Actor,
             Region,
-            Emotion,
-            Priority,
+            OnOffScreen,
+            Diegetic,
             Notes,
             Text,
             TextOriginal,
@@ -52,8 +52,8 @@ namespace Nikse.SubtitleEdit.Controls
         public int ColumnIndexGap { get; private set; }
         public int ColumnIndexActor { get; private set; }
         public int ColumnIndexRegion { get; private set; }
-        public int ColumnIndexEmotion { get; private set; }
-        public int ColumnIndexPriority { get; private set; }
+        public int ColumnIndexOnOffScreen { get; private set; }
+        public int ColumnIndexDiegetic { get; private set; }
         public int ColumnIndexNotes { get; private set; }
         public int ColumnIndexText { get; private set; }
         public int ColumnIndexTextOriginal { get; private set; }
@@ -152,6 +152,24 @@ namespace Nikse.SubtitleEdit.Controls
                 Columns[idx].Text = general.Region;
             }
 
+            idx = GetColumnIndex(SubtitleColumn.OnOffScreen);
+            if (idx >= 0)
+            {
+                Columns[idx].Text = general.OnOffScreen;
+            }
+
+            idx = GetColumnIndex(SubtitleColumn.Diegetic);
+            if (idx >= 0)
+            {
+                Columns[idx].Text = general.Diegetic;
+            }
+
+            idx = GetColumnIndex(SubtitleColumn.Notes);
+            if (idx >= 0)
+            {
+                Columns[idx].Text = general.Notes;
+            }
+
             idx = GetColumnIndex(SubtitleColumn.Text);
             if (idx >= 0)
             {
@@ -236,6 +254,24 @@ namespace Nikse.SubtitleEdit.Controls
                 if (idx >= 0)
                 {
                     Columns[idx].Width = _settings.General.ListViewRegionWidth;
+                }
+
+                idx = GetColumnIndex(SubtitleColumn.OnOffScreen);
+                if (idx >= 0 && _settings.General.ListViewOnOffScreenWidth > 1)
+                {
+                    Columns[idx].Width = _settings.General.ListViewOnOffScreenWidth;
+                }
+
+                idx = GetColumnIndex(SubtitleColumn.Diegetic);
+                if (idx >= 0 && _settings.General.ListViewDiegeticWidth > 1)
+                {
+                    Columns[idx].Width = _settings.General.ListViewDiegeticWidth;
+                }
+
+                idx = GetColumnIndex(SubtitleColumn.Notes);
+                if (idx >= 0 && _settings.General.ListViewNotesWidth > 1)
+                {
+                    Columns[idx].Width = _settings.General.ListViewNotesWidth;
                 }
 
                 idx = GetColumnIndex(SubtitleColumn.Text);
@@ -339,10 +375,10 @@ namespace Nikse.SubtitleEdit.Controls
                     case SubtitleColumn.Region:
                         Columns.Add(new ColumnHeader { Width = 60 });
                         break;
-                    case SubtitleColumn.Emotion:
+                    case SubtitleColumn.OnOffScreen:
                         Columns.Add(new ColumnHeader { Width = 60 });
                         break;
-                    case SubtitleColumn.Priority:
+                    case SubtitleColumn.Diegetic:
                         Columns.Add(new ColumnHeader { Width = 60 });
                         break;
                     case SubtitleColumn.Notes:
@@ -431,8 +467,8 @@ namespace Nikse.SubtitleEdit.Controls
             ColumnIndexGap = GetColumnIndex(SubtitleColumn.Gap);
             ColumnIndexActor = GetColumnIndex(SubtitleColumn.Actor);
             ColumnIndexRegion = GetColumnIndex(SubtitleColumn.Region);
-            ColumnIndexEmotion = GetColumnIndex(SubtitleColumn.Emotion);
-            ColumnIndexPriority = GetColumnIndex(SubtitleColumn.Priority);
+            ColumnIndexOnOffScreen = GetColumnIndex(SubtitleColumn.OnOffScreen);
+            ColumnIndexDiegetic = GetColumnIndex(SubtitleColumn.Diegetic);
             ColumnIndexNotes = GetColumnIndex(SubtitleColumn.Notes);
             ColumnIndexText = GetColumnIndex(SubtitleColumn.Text);
             ColumnIndexTextOriginal = GetColumnIndex(SubtitleColumn.TextOriginal);
@@ -628,6 +664,18 @@ namespace Nikse.SubtitleEdit.Controls
                 else if (e.ColumnIndex == ColumnIndexRegion)
                 {
                     Configuration.Settings.General.ListViewRegionWidth = Columns[ColumnIndexRegion].Width;
+                }
+                else if (e.ColumnIndex == ColumnIndexOnOffScreen)
+                {
+                    Configuration.Settings.General.ListViewOnOffScreenWidth = Columns[ColumnIndexOnOffScreen].Width;
+                }
+                else if (e.ColumnIndex == ColumnIndexDiegetic)
+                {
+                    Configuration.Settings.General.ListViewDiegeticWidth = Columns[ColumnIndexDiegetic].Width;
+                }
+                else if (e.ColumnIndex == ColumnIndexNotes)
+                {
+                    Configuration.Settings.General.ListViewNotesWidth = Columns[ColumnIndexNotes].Width;
                 }
                 if (e.ColumnIndex == ColumnIndexText)
                 {
@@ -1224,54 +1272,54 @@ namespace Nikse.SubtitleEdit.Controls
             }
         }
 
-        public void ShowEmotionColumn(string title)
+        public void ShowOnOffScreenColumn(string title)
         {
-            if (GetColumnIndex(SubtitleColumn.Emotion) == -1)
+            if (GetColumnIndex(SubtitleColumn.OnOffScreen) == -1)
             {
                 var ch = new ColumnHeader { Text = title };
                 if (ColumnIndexRegion >= 0)
                 {
-                    SubtitleColumns.Insert(ColumnIndexRegion + 1, SubtitleColumn.Emotion);
+                    SubtitleColumns.Insert(ColumnIndexRegion + 1, SubtitleColumn.OnOffScreen);
                     Columns.Insert(ColumnIndexRegion + 1, ch);
                 }
                 else if (ColumnIndexActor >= 0)
                 {
-                    SubtitleColumns.Insert(ColumnIndexActor + 1, SubtitleColumn.Emotion);
+                    SubtitleColumns.Insert(ColumnIndexActor + 1, SubtitleColumn.OnOffScreen);
                     Columns.Insert(ColumnIndexActor + 1, ch);
                 }
                 else
                 {
-                    SubtitleColumns.Add(SubtitleColumn.Emotion);
+                    SubtitleColumns.Add(SubtitleColumn.OnOffScreen);
                     Columns.Add(ch);
                 }
                 UpdateColumnIndexes();
-                SetColumnWidthRetry(ColumnIndexEmotion, 60);
+                SetColumnWidthRetry(ColumnIndexOnOffScreen, 60);
                 AutoSizeAllColumns(null);
             }
         }
 
-        public void ShowPriorityColumn(string title)
+        public void ShowDiegeticColumn(string title)
         {
-            if (GetColumnIndex(SubtitleColumn.Priority) == -1)
+            if (GetColumnIndex(SubtitleColumn.Diegetic) == -1)
             {
                 var ch = new ColumnHeader { Text = title };
-                if (ColumnIndexEmotion >= 0)
+                if (ColumnIndexOnOffScreen >= 0)
                 {
-                    SubtitleColumns.Insert(ColumnIndexEmotion + 1, SubtitleColumn.Priority);
-                    Columns.Insert(ColumnIndexEmotion + 1, ch);
+                    SubtitleColumns.Insert(ColumnIndexOnOffScreen + 1, SubtitleColumn.Diegetic);
+                    Columns.Insert(ColumnIndexOnOffScreen + 1, ch);
                 }
                 else if (ColumnIndexRegion >= 0)
                 {
-                    SubtitleColumns.Insert(ColumnIndexRegion + 1, SubtitleColumn.Priority);
+                    SubtitleColumns.Insert(ColumnIndexRegion + 1, SubtitleColumn.Diegetic);
                     Columns.Insert(ColumnIndexRegion + 1, ch);
                 }
                 else
                 {
-                    SubtitleColumns.Add(SubtitleColumn.Priority);
+                    SubtitleColumns.Add(SubtitleColumn.Diegetic);
                     Columns.Add(ch);
                 }
                 UpdateColumnIndexes();
-                SetColumnWidthRetry(ColumnIndexPriority, 50);
+                SetColumnWidthRetry(ColumnIndexDiegetic, 50);
                 AutoSizeAllColumns(null);
             }
         }
@@ -1281,15 +1329,15 @@ namespace Nikse.SubtitleEdit.Controls
             if (GetColumnIndex(SubtitleColumn.Notes) == -1)
             {
                 var ch = new ColumnHeader { Text = title };
-                if (ColumnIndexPriority >= 0)
+                if (ColumnIndexDiegetic >= 0)
                 {
-                    SubtitleColumns.Insert(ColumnIndexPriority + 1, SubtitleColumn.Notes);
-                    Columns.Insert(ColumnIndexPriority + 1, ch);
+                    SubtitleColumns.Insert(ColumnIndexDiegetic + 1, SubtitleColumn.Notes);
+                    Columns.Insert(ColumnIndexDiegetic + 1, ch);
                 }
-                else if (ColumnIndexEmotion >= 0)
+                else if (ColumnIndexOnOffScreen >= 0)
                 {
-                    SubtitleColumns.Insert(ColumnIndexEmotion + 1, SubtitleColumn.Notes);
-                    Columns.Insert(ColumnIndexEmotion + 1, ch);
+                    SubtitleColumns.Insert(ColumnIndexOnOffScreen + 1, SubtitleColumn.Notes);
+                    Columns.Insert(ColumnIndexOnOffScreen + 1, ch);
                 }
                 else
                 {
@@ -1747,11 +1795,11 @@ namespace Nikse.SubtitleEdit.Controls
                     case SubtitleColumn.Region:
                         item.SubItems.Add(paragraph.Region);
                         break;
-                    case SubtitleColumn.Emotion:
-                        item.SubItems.Add(paragraph.Emotion);
+                    case SubtitleColumn.OnOffScreen:
+                        item.SubItems.Add(paragraph.OnOff_Screen);
                         break;
-                    case SubtitleColumn.Priority:
-                        item.SubItems.Add(paragraph.Priority > 0 ? paragraph.Priority.ToString() : string.Empty);
+                    case SubtitleColumn.Diegetic:
+                        item.SubItems.Add(paragraph.Diegetic);
                         break;
                     case SubtitleColumn.Notes:
                         item.SubItems.Add(paragraph.Notes);

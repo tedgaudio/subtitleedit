@@ -246,13 +246,13 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
                 
                 // Add new fields as comments or special tags
                 var additionalInfo = new List<string>();
-                if (!string.IsNullOrEmpty(p.Emotion))
+                if (!string.IsNullOrEmpty(p.OnOff_Screen))
                 {
-                    additionalInfo.Add($"emotion:{p.Emotion}");
+                    additionalInfo.Add($"onoffscreen:{p.OnOff_Screen}");
                 }
-                if (p.Priority > 0)
+                if (!string.IsNullOrEmpty(p.Diegetic))
                 {
-                    additionalInfo.Add($"priority:{p.Priority}");
+                    additionalInfo.Add($"diegetic:{p.Diegetic}");
                 }
                 if (!string.IsNullOrEmpty(p.Notes))
                 {
@@ -2830,22 +2830,19 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
             if (lines.Length > 1)
             {
                 var lastLine = lines[lines.Length - 1];
-                if (lastLine.Contains("emotion:") || lastLine.Contains("priority:") || lastLine.Contains("notes:"))
+                if (lastLine.Contains("onoffscreen:") || lastLine.Contains("priority:") || lastLine.Contains("notes:"))
                 {
                     // Extract new fields from the last line
                     var parts = lastLine.Split(new[] { " | " }, StringSplitOptions.None);
                     foreach (var part in parts)
                     {
-                        if (part.StartsWith("emotion:"))
+                        if (part.StartsWith("onoffscreen:"))
                         {
-                            p.Emotion = part.Substring("emotion:".Length);
+                            p.OnOff_Screen = part.Substring("onoffscreen:".Length);
                         }
-                        else if (part.StartsWith("priority:"))
+                        else if (part.StartsWith("diegetic:"))
                         {
-                            if (int.TryParse(part.Substring("priority:".Length), out int priority))
-                            {
-                                p.Priority = priority;
-                            }
+                            p.Diegetic = part.Substring("diegetic:".Length);
                         }
                         else if (part.StartsWith("notes:"))
                         {
