@@ -2343,7 +2343,9 @@ namespace Nikse.SubtitleEdit.Forms
             if ((formatType == typeof(AdvancedSubStationAlpha) ||
                  formatType == typeof(SubStationAlpha) ||
                  formatType == typeof(CsvNuendo) ||
-                 formatType == typeof(PodcastIndexer)) && (_subtitle.Paragraphs.Any(p => !string.IsNullOrEmpty(p.Actor)) ||
+                 formatType == typeof(PodcastIndexer) ||
+                 formatType == typeof(Json) ||
+                 formatType == typeof(JsonType8)) && (_subtitle.Paragraphs.Any(p => !string.IsNullOrEmpty(p.Actor)) ||
                                                       Configuration.Settings.Tools.ListViewShowColumnActor))
             {
                 bool wasVisible = SubtitleListview1.ColumnIndexActor >= 0;
@@ -9128,7 +9130,8 @@ namespace Nikse.SubtitleEdit.Forms
                 };
                 cm.Items.Add(contextMenuStripLvHeaderGapToolStripMenuItem);
 
-                if (formatType == typeof(AdvancedSubStationAlpha) || formatType == typeof(SubStationAlpha) || formatType == typeof(CsvNuendo) || formatType == typeof(PodcastIndexer))
+                if (formatType == typeof(AdvancedSubStationAlpha) || formatType == typeof(SubStationAlpha) || formatType == typeof(CsvNuendo) || formatType == typeof(PodcastIndexer) || 
+                    formatType == typeof(Json) || formatType == typeof(JsonType8))
                 {
                     // ACTOR
                     var actorTitle = formatType == typeof(CsvNuendo) ? LanguageSettings.Current.General.Character : LanguageSettings.Current.General.Actor;
@@ -9486,47 +9489,59 @@ namespace Nikse.SubtitleEdit.Forms
             toolStripMenuItemSetLanguage.Visible = false;
             toolStripMenuItemSetLayer.Visible = false;
             List<string> actors = null;
-            if ((formatType == typeof(AdvancedSubStationAlpha) || formatType == typeof(SubStationAlpha) || formatType == typeof(CsvNuendo) || formatType == typeof(PodcastIndexer)) && SubtitleListview1.SelectedItems.Count > 0)
+            if ((formatType == typeof(AdvancedSubStationAlpha) || formatType == typeof(SubStationAlpha) || formatType == typeof(CsvNuendo) || formatType == typeof(PodcastIndexer) ||
+                 formatType == typeof(Json) || formatType == typeof(JsonType8)) && SubtitleListview1.SelectedItems.Count > 0)
             {
                 actors = new List<string>();
-                toolStripMenuItemWebVTT.Visible = false;
-                var styles = AdvancedSubStationAlpha.GetStylesFromHeader(_subtitle.Header);
-                if (styles.Count == 0)
+                
+                // Only handle styles for non-JSON formats
+                if (formatType != typeof(Json) && formatType != typeof(JsonType8))
                 {
-                    styles = AdvancedSubStationAlpha.GetStylesFromHeader(AdvancedSubStationAlpha.DefaultHeader);
-                }
-
-                setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
-                foreach (var style in styles)
-                {
-                    setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Add(style, null, SetStyle);
-                    if (SubtitleListview1.SelectedItems.Count == 1 && SubtitleListview1.SelectedItems.Count > 0 &&
-                        _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index)?.Extra == style)
+                    toolStripMenuItemWebVTT.Visible = false;
+                    var styles = AdvancedSubStationAlpha.GetStylesFromHeader(_subtitle.Header);
+                    if (styles.Count == 0)
                     {
-                        ((ToolStripMenuItem)setStylesForSelectedLinesToolStripMenuItem.DropDownItems[setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1]).Checked = true;
+                        styles = AdvancedSubStationAlpha.GetStylesFromHeader(AdvancedSubStationAlpha.DefaultHeader);
+                    }
+
+                    setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                    foreach (var style in styles)
+                    {
+                        setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Add(style, null, SetStyle);
+                        if (SubtitleListview1.SelectedItems.Count == 1 && SubtitleListview1.SelectedItems.Count > 0 &&
+                            _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index)?.Extra == style)
+                        {
+                            ((ToolStripMenuItem)setStylesForSelectedLinesToolStripMenuItem.DropDownItems[setStylesForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1]).Checked = true;
+                        }
+                    }
+
+                    toolStripMenuItemAssStyles.Visible = true;
+                    if (styles.Count > 1)
+                    {
+                        setStylesForSelectedLinesToolStripMenuItem.Visible = true;
+                        UiUtil.FixFonts(setStylesForSelectedLinesToolStripMenuItem);
+                    }
+                    else
+                    {
+                        setStylesForSelectedLinesToolStripMenuItem.Visible = false;
+                    }
+
+                    if (formatType == typeof(AdvancedSubStationAlpha))
+                    {
+                        toolStripMenuItemAssStyles.Text = _language.Menu.ContextMenu.AdvancedSubStationAlphaStyles;
+                        setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
+                    }
+                    else
+                    {
+                        toolStripMenuItemAssStyles.Text = _language.Menu.ContextMenu.SubStationAlphaStyles;
+                        setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
                     }
                 }
-
-                toolStripMenuItemAssStyles.Visible = true;
-                if (styles.Count > 1)
-                {
-                    setStylesForSelectedLinesToolStripMenuItem.Visible = true;
-                    UiUtil.FixFonts(setStylesForSelectedLinesToolStripMenuItem);
-                }
                 else
                 {
+                    // For JSON formats, hide style-related menu items
+                    toolStripMenuItemAssStyles.Visible = false;
                     setStylesForSelectedLinesToolStripMenuItem.Visible = false;
-                }
-
-                if (formatType == typeof(AdvancedSubStationAlpha))
-                {
-                    toolStripMenuItemAssStyles.Text = _language.Menu.ContextMenu.AdvancedSubStationAlphaStyles;
-                    setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
-                }
-                else
-                {
-                    toolStripMenuItemAssStyles.Text = _language.Menu.ContextMenu.SubStationAlphaStyles;
-                    setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
                 }
 
                 // actor

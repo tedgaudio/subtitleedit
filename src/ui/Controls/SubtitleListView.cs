@@ -26,9 +26,9 @@ namespace Nikse.SubtitleEdit.Controls
             Region,
             OnOffScreen,
             Diegetic,
-            Notes,
-            DialogueReverb,
             DFX,
+            DialogueReverb,
+            Notes,
             Text,
             TextOriginal,
             Extra,
@@ -56,9 +56,9 @@ namespace Nikse.SubtitleEdit.Controls
         public int ColumnIndexRegion { get; private set; }
         public int ColumnIndexOnOffScreen { get; private set; }
         public int ColumnIndexDiegetic { get; private set; }
-        public int ColumnIndexNotes { get; private set; }
-        public int ColumnIndexDialogueReverb { get; private set; }
         public int ColumnIndexDFX { get; private set; }
+        public int ColumnIndexDialogueReverb { get; private set; }
+        public int ColumnIndexNotes { get; private set; }
         public int ColumnIndexText { get; private set; }
         public int ColumnIndexTextOriginal { get; private set; }
         public int ColumnIndexExtra { get; private set; }
@@ -409,14 +409,14 @@ namespace Nikse.SubtitleEdit.Controls
                     case SubtitleColumn.Diegetic:
                         Columns.Add(new ColumnHeader { Width = 60 });
                         break;
-                    case SubtitleColumn.Notes:
-                        Columns.Add(new ColumnHeader { Width = 60 });
+                    case SubtitleColumn.DFX:
+                        Columns.Add(new ColumnHeader { Width = 100 });
                         break;
                     case SubtitleColumn.DialogueReverb:
                         Columns.Add(new ColumnHeader { Width = 80 });
                         break;
-                    case SubtitleColumn.DFX:
-                        Columns.Add(new ColumnHeader { Width = 100 });
+                    case SubtitleColumn.Notes:
+                        Columns.Add(new ColumnHeader { Width = 60 });
                         break;
                     case SubtitleColumn.Text:
                         Columns.Add(new ColumnHeader { Width = 300 });
@@ -503,9 +503,9 @@ namespace Nikse.SubtitleEdit.Controls
             ColumnIndexRegion = GetColumnIndex(SubtitleColumn.Region);
             ColumnIndexOnOffScreen = GetColumnIndex(SubtitleColumn.OnOffScreen);
             ColumnIndexDiegetic = GetColumnIndex(SubtitleColumn.Diegetic);
-            ColumnIndexNotes = GetColumnIndex(SubtitleColumn.Notes);
-            ColumnIndexDialogueReverb = GetColumnIndex(SubtitleColumn.DialogueReverb);
             ColumnIndexDFX = GetColumnIndex(SubtitleColumn.DFX);
+            ColumnIndexDialogueReverb = GetColumnIndex(SubtitleColumn.DialogueReverb);
+            ColumnIndexNotes = GetColumnIndex(SubtitleColumn.Notes);
             ColumnIndexText = GetColumnIndex(SubtitleColumn.Text);
             ColumnIndexTextOriginal = GetColumnIndex(SubtitleColumn.TextOriginal);
             ColumnIndexExtra = GetColumnIndex(SubtitleColumn.Extra);
@@ -1889,14 +1889,14 @@ namespace Nikse.SubtitleEdit.Controls
                     case SubtitleColumn.Diegetic:
                         item.SubItems.Add(paragraph.Diegetic);
                         break;
-                    case SubtitleColumn.Notes:
-                        item.SubItems.Add(paragraph.Notes);
+                    case SubtitleColumn.DFX:
+                        item.SubItems.Add(paragraph.DFX);
                         break;
                     case SubtitleColumn.DialogueReverb:
                         item.SubItems.Add(paragraph.DialogueReverb);
                         break;
-                    case SubtitleColumn.DFX:
-                        item.SubItems.Add(paragraph.DFX);
+                    case SubtitleColumn.Notes:
+                        item.SubItems.Add(paragraph.Notes);
                         break;
                     case SubtitleColumn.Text:
                         item.SubItems.Add(paragraph.Text.Replace(Environment.NewLine, _lineSeparatorString));
