@@ -5623,7 +5623,7 @@ namespace Nikse.SubtitleEdit.Forms
             // buttonSplitLine
             // 
             this.buttonSplitLine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSplitLine.Location = new System.Drawing.Point(620, 84);
+            this.buttonSplitLine.Location = new System.Drawing.Point(420, 84);
             this.buttonSplitLine.Name = "buttonSplitLine";
             this.buttonSplitLine.Size = new System.Drawing.Size(114, 23);
             this.buttonSplitLine.TabIndex = 39;
