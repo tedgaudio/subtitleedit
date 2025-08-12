@@ -322,6 +322,7 @@ namespace Nikse.SubtitleEdit.Core.Settings
             MergeLinesShorterThan = 33;
             SubtitleMinimumDisplayMilliseconds = 1000;
             SubtitleMaximumDisplayMilliseconds = 8 * 1000;
+            AllowSubtitleOverlap = true;
             RemoveBadCharsWhenOpening = true;
             MinimumMillisecondsBetweenLines = 24;
             SetStartEndHumanDelay = 100;
