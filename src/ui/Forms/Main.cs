@@ -2391,30 +2391,12 @@ namespace Nikse.SubtitleEdit.Forms
             // Show OnOffScreen, Diegetic, Notes, DialogueReverb, DFX columns for supported formats
             if (formatType == typeof(GaudioJson))
             {
-                if (Configuration.Settings.Tools.ListViewShowColumnOnOffScreen)
-                {
+                // GaudioJson 포맷일 때는 기본적으로 모든 커스텀 컬럼을 표시
                     SubtitleListview1.ShowOnOffScreenColumn(LanguageSettings.Current.General.OnOffScreen);
-                }
-                
-                if (Configuration.Settings.Tools.ListViewShowColumnDiegetic)
-                {
                     SubtitleListview1.ShowDiegeticColumn(LanguageSettings.Current.General.Diegetic);
-                }
-                
-                if (Configuration.Settings.Tools.ListViewShowColumnNotes)
-                {
                     SubtitleListview1.ShowNotesColumn(LanguageSettings.Current.General.Notes);
-                }
-                
-                if (Configuration.Settings.Tools.ListViewShowColumnDialogueReverb)
-                {
                     SubtitleListview1.ShowDialogueReverbColumn(LanguageSettings.Current.General.DialogueReverb);
-                }
-                
-                if (Configuration.Settings.Tools.ListViewShowColumnDFX)
-                {
                     SubtitleListview1.ShowDFXColumn(LanguageSettings.Current.General.DFX);
-                }
             }
             else
             {
@@ -9681,10 +9663,17 @@ namespace Nikse.SubtitleEdit.Forms
                     }
                     dialogueReverbValues.Sort();
                     
+                    // Keep default items and add existing values
                     comboBoxEditDialogueReverb.Items.Clear();
+                    // Add default items first
+                    comboBoxEditDialogueReverb.Items.AddRange(new object[] { "None", "Low", "Mid", "High" });
+                    // Add existing values from subtitle
                     foreach (var value in dialogueReverbValues)
                     {
-                        comboBoxEditDialogueReverb.Items.Add(value);
+                        if (!comboBoxEditDialogueReverb.Items.Contains(value))
+                        {
+                            comboBoxEditDialogueReverb.Items.Add(value);
+                        }
                     }
                 }
 
@@ -38269,11 +38258,11 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                    if (paragraph != null)
-                    {
+                if (paragraph != null)
+                {
                         paragraph.DFX = comboBoxEditDFX.Text;
                         UpdateListViewItemColumns(item.Index, paragraph);
-                    }
+                }
                 }
                 SubtitleListview1.Refresh();
             }

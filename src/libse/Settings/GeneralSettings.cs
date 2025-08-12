@@ -306,7 +306,7 @@ namespace Nikse.SubtitleEdit.Core.Settings
             SubtitleLineMaximumPixelWidth = 576;
             SubtitleBackgroundColor = Color.White;
             CenterSubtitleInTextBox = false;
-            DefaultSubtitleFormat = "SubRip";
+            DefaultSubtitleFormat = "Gaudio JSON";
             DefaultEncoding = TextEncoding.Utf8WithBom;
             AutoConvertToUtf8 = false;
             AutoGuessAnsiEncoding = true;

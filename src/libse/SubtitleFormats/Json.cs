@@ -138,7 +138,21 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     if (double.TryParse(start, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
                         double.TryParse(end, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
                     {
-                        subtitle.Paragraphs.Add(new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit));
+                        var logMessage = $"Json: start={start}, startSeconds={startSeconds}, startMilliseconds={startSeconds * TimeCode.BaseUnit}";
+                        System.Diagnostics.Debug.WriteLine(logMessage);
+                        System.Console.WriteLine(logMessage);
+                        
+                        logMessage = $"Json: end={end}, endSeconds={endSeconds}, endMilliseconds={endSeconds * TimeCode.BaseUnit}";
+                        System.Diagnostics.Debug.WriteLine(logMessage);
+                        System.Console.WriteLine(logMessage);
+                        
+                        var p = new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit);
+                        
+                        logMessage = $"Json: Created paragraph with StartTime={p.StartTime.TotalMilliseconds}, EndTime={p.EndTime.TotalMilliseconds}";
+                        System.Diagnostics.Debug.WriteLine(logMessage);
+                        System.Console.WriteLine(logMessage);
+                        
+                        subtitle.Paragraphs.Add(p);
                     }
                     else
                     {

@@ -1069,7 +1069,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.comboBoxSubtitleFormats.ButtonForeColorOver = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             this.comboBoxSubtitleFormats.DropDownHeight = 295;
             this.comboBoxSubtitleFormats.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSubtitleFormats.DropDownWidth = 0;
+            this.comboBoxSubtitleFormats.DropDownWidth = 150;
             this.comboBoxSubtitleFormats.Name = "comboBoxSubtitleFormats";
             this.comboBoxSubtitleFormats.Padding = new System.Windows.Forms.Padding(2);
             this.comboBoxSubtitleFormats.SelectedIndex = -1;

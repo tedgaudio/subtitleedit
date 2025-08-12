@@ -11,6 +11,21 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 
         public override string Name => "Gaudio JSON";
 
+        public override bool IsMine(List<string> lines, string fileName)
+        {
+            var sb = new StringBuilder();
+            foreach (var s in lines)
+            {
+                sb.Append(s);
+            }
+
+            var jsonText = sb.ToString().Trim();
+            
+            // Gaudio JSON 포맷 감지: metadata와 subtitles를 포함하는지 확인
+            return jsonText.StartsWith("{\"metadata\"", StringComparison.Ordinal) && 
+                   jsonText.Contains("\"subtitles\":", StringComparison.Ordinal);
+        }
+
         public static string EncodeJsonText(string text, string newLineCharacter = "<br />")
         {
             var sb = new StringBuilder(text.Length);
@@ -109,7 +124,8 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     sb.Append(',');
                 }
 
-                sb.Append("{\"start\":");
+                sb.AppendLine();
+                sb.Append("    {\"start\":");
                 sb.Append(p.StartTime.TotalSeconds.ToString("F3", System.Globalization.CultureInfo.InvariantCulture));
                 sb.Append(",\"end\":");
                 sb.Append(p.EndTime.TotalSeconds.ToString("F3", System.Globalization.CultureInfo.InvariantCulture));
@@ -185,11 +201,6 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             if (jsonText.StartsWith("{\"metadata\"", StringComparison.Ordinal))
             {
                 LoadSubtitleNewFormat(subtitle, jsonText);
-            }
-            else if (jsonText.StartsWith("[{\"", StringComparison.Ordinal))
-            {
-                // Old format - direct array
-                LoadSubtitleOldFormat(subtitle, jsonText);
             }
             else
             {
@@ -293,7 +304,22 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                         if (double.TryParse(start, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
                             double.TryParse(end, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
                         {
+                            var logMessage = $"GaudioJson: start={start}, startSeconds={startSeconds}, startMilliseconds={startSeconds * TimeCode.BaseUnit}";
+                            System.Diagnostics.Debug.WriteLine(logMessage);
+                            System.Console.WriteLine(logMessage);
+                            System.IO.File.AppendAllText("gaudio_debug.log", logMessage + Environment.NewLine);
+                            
+                            logMessage = $"GaudioJson: end={end}, endSeconds={endSeconds}, endMilliseconds={endSeconds * TimeCode.BaseUnit}";
+                            System.Diagnostics.Debug.WriteLine(logMessage);
+                            System.Console.WriteLine(logMessage);
+                            System.IO.File.AppendAllText("gaudio_debug.log", logMessage + Environment.NewLine);
+                            
                             var p = new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit);
+                            
+                            logMessage = $"GaudioJson: Created paragraph with StartTime={p.StartTime.TotalMilliseconds}, EndTime={p.EndTime.TotalMilliseconds}";
+                            System.Diagnostics.Debug.WriteLine(logMessage);
+                            System.Console.WriteLine(logMessage);
+                            System.IO.File.AppendAllText("gaudio_debug.log", logMessage + Environment.NewLine);
                             
                             // Read custom fields with better error handling and debugging
                             try
@@ -451,7 +477,20 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     if (double.TryParse(start, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
                         double.TryParse(end, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
                     {
+ 
+                        var logMessage = $"GaudioJson Fallback: start={start}, startSeconds={startSeconds}, startMilliseconds={startSeconds * TimeCode.BaseUnit}";
+                        System.Diagnostics.Debug.WriteLine(logMessage);
+                        System.IO.File.AppendAllText("gaudio_debug.log", logMessage + Environment.NewLine);
+                        
+                        logMessage = $"GaudioJson Fallback: end={end}, endSeconds={endSeconds}, endMilliseconds={endSeconds * TimeCode.BaseUnit}";
+                        System.Diagnostics.Debug.WriteLine(logMessage);
+                        System.IO.File.AppendAllText("gaudio_debug.log", logMessage + Environment.NewLine);
+                        
                         var p = new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit);
+                        
+                        logMessage = $"GaudioJson Fallback: Created paragraph with StartTime={p.StartTime.TotalMilliseconds}, EndTime={p.EndTime.TotalMilliseconds}";
+                        System.Diagnostics.Debug.WriteLine(logMessage);
+                        System.IO.File.AppendAllText("gaudio_debug.log", logMessage + Environment.NewLine);
                         
                         // Read custom fields
                         string actor = ReadTag(s, "actor");
