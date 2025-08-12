@@ -94,9 +94,10 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             
             sb.AppendLine("{");
             sb.AppendLine("  \"metadata\": {");
-            sb.AppendLine("    \"generator\": \"Subtitle Edit\",");
-            sb.AppendLine("    \"version\": \"" + Utilities.AssemblyVersion + "\",");
-            sb.AppendLine("    \"created\": \"" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\"");
+            sb.AppendLine("    \"generator\": \"Gaudio Subtitle Edit\",");
+            sb.AppendLine("    \"version\": \"" + "4.0.12.4d9edc1" + "\",");
+            //sb.AppendLine("    \"version\": \"" + Utilities.AssemblyVersion + "\",");
+            sb.AppendLine("    \"updated\": \"" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\"");
             sb.AppendLine("  },");
             sb.AppendLine("  \"subtitles\": [");
             
@@ -109,9 +110,9 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 }
 
                 sb.Append("{\"start\":");
-                sb.Append(p.StartTime.TotalSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                sb.Append(p.StartTime.TotalSeconds.ToString("F3", System.Globalization.CultureInfo.InvariantCulture));
                 sb.Append(",\"end\":");
-                sb.Append(p.EndTime.TotalSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                sb.Append(p.EndTime.TotalSeconds.ToString("F3", System.Globalization.CultureInfo.InvariantCulture));
                 sb.Append(",\"text\":\"");
                 sb.Append(EncodeJsonText(p.Text));
                 sb.Append("\"");
@@ -289,8 +290,8 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     
                     if (start != null && end != null && text != null && !IsTagArray(jsonObj, "text"))
                     {
-                        if (double.TryParse(start, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
-                            double.TryParse(end, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
+                        if (double.TryParse(start, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
+                            double.TryParse(end, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
                         {
                             var p = new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit);
                             
@@ -447,8 +448,8 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 string text = ReadTag(s, "text");
                 if (start != null && end != null && text != null && !IsTagArray(s, "text"))
                 {
-                    if (double.TryParse(start, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
-                        double.TryParse(end, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
+                    if (double.TryParse(start, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
+                        double.TryParse(end, System.Globalization.NumberStyles.Float | System.Globalization.NumberStyles.AllowThousands, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
                     {
                         var p = new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit);
                         
