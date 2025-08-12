@@ -400,7 +400,7 @@ namespace Nikse.SubtitleEdit.Forms
                 labelEditDiegetic.Visible = false;
                 comboBoxEditDiegetic.Visible = false;
                 labelEditDFX.Visible = false;
-                textBoxEditDFX.Visible = false;
+                comboBoxEditDFX.Visible = false;
                 labelEditDialogueReverb.Visible = false;
                 comboBoxEditDialogueReverb.Visible = false;
                 labelEditNotes.Visible = false;
@@ -4325,55 +4325,21 @@ namespace Nikse.SubtitleEdit.Forms
                     comboBoxEditActor.Items.Add(actor);
                 }
 
-                // Update comboBoxEditOnOffScreen items
-                var onOffScreenValues = new List<string>();
+                // Update comboBoxEditDFX items
+                var dfxValues = new List<string>();
                 foreach (var paragraph in _subtitle.Paragraphs)
                 {
-                    if (!string.IsNullOrEmpty(paragraph.OnOff_Screen) && !onOffScreenValues.Contains(paragraph.OnOff_Screen))
+                    if (!string.IsNullOrEmpty(paragraph.DFX) && !dfxValues.Contains(paragraph.DFX))
                     {
-                        onOffScreenValues.Add(paragraph.OnOff_Screen);
+                        dfxValues.Add(paragraph.DFX);
                     }
                 }
-                onOffScreenValues.Sort();
+                dfxValues.Sort();
                 
-                comboBoxEditOnOffScreen.Items.Clear();
-                foreach (var value in onOffScreenValues)
+                comboBoxEditDFX.Items.Clear();
+                foreach (var value in dfxValues)
                 {
-                    comboBoxEditOnOffScreen.Items.Add(value);
-                }
-
-                // Update comboBoxEditDiegetic items
-                var diegeticValues = new List<string>();
-                foreach (var paragraph in _subtitle.Paragraphs)
-                {
-                    if (!string.IsNullOrEmpty(paragraph.Diegetic) && !diegeticValues.Contains(paragraph.Diegetic))
-                    {
-                        diegeticValues.Add(paragraph.Diegetic);
-                    }
-                }
-                diegeticValues.Sort();
-                
-                comboBoxEditDiegetic.Items.Clear();
-                foreach (var value in diegeticValues)
-                {
-                    comboBoxEditDiegetic.Items.Add(value);
-                }
-
-                // Update comboBoxEditDialogueReverb items
-                var dialogueReverbValues = new List<string>();
-                foreach (var paragraph in _subtitle.Paragraphs)
-                {
-                    if (!string.IsNullOrEmpty(paragraph.DialogueReverb) && !dialogueReverbValues.Contains(paragraph.DialogueReverb))
-                    {
-                        dialogueReverbValues.Add(paragraph.DialogueReverb);
-                    }
-                }
-                dialogueReverbValues.Sort();
-                
-                comboBoxEditDialogueReverb.Items.Clear();
-                foreach (var value in dialogueReverbValues)
-                {
-                    comboBoxEditDialogueReverb.Items.Add(value);
+                    comboBoxEditDFX.Items.Add(value);
                 }
             }
         }
@@ -14389,7 +14355,7 @@ namespace Nikse.SubtitleEdit.Forms
             labelEditDiegetic.Visible = showCustomFields;
             comboBoxEditDiegetic.Visible = showCustomFields;
             labelEditDFX.Visible = showCustomFields;
-            textBoxEditDFX.Visible = showCustomFields;
+            comboBoxEditDFX.Visible = showCustomFields;
             labelEditDialogueReverb.Visible = showCustomFields;
             comboBoxEditDialogueReverb.Visible = showCustomFields;
             labelEditNotes.Visible = showCustomFields;
@@ -14413,6 +14379,23 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (var actor in actors)
                 {
                     comboBoxEditActor.Items.Add(actor);
+                }
+
+                // Update comboBoxEditDFX items
+                var dfxValues = new List<string>();
+                foreach (var paragraph in _subtitle.Paragraphs)
+                {
+                    if (!string.IsNullOrEmpty(paragraph.DFX) && !dfxValues.Contains(paragraph.DFX))
+                    {
+                        dfxValues.Add(paragraph.DFX);
+                    }
+                }
+                dfxValues.Sort();
+                
+                comboBoxEditDFX.Items.Clear();
+                foreach (var value in dfxValues)
+                {
+                    comboBoxEditDFX.Items.Add(value);
                 }
             }
 
@@ -38279,18 +38262,18 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-        private void TextBoxEditDFX_TextChanged(object sender, EventArgs e)
+        private void ComboBoxEditDFX_TextChanged(object sender, EventArgs e)
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                if (paragraph != null)
-                {
-                    paragraph.DFX = textBoxEditDFX.Text;
+                    if (paragraph != null)
+                    {
+                        paragraph.DFX = comboBoxEditDFX.Text;
                         UpdateListViewItemColumns(item.Index, paragraph);
-                }
+                    }
                 }
                 SubtitleListview1.Refresh();
             }
@@ -38410,7 +38393,15 @@ namespace Nikse.SubtitleEdit.Forms
                     }
                     
                     // Update DFX
-                    textBoxEditDFX.Text = paragraph.DFX ?? string.Empty;
+                    if (string.IsNullOrEmpty(paragraph.DFX))
+                    {
+                        comboBoxEditDFX.SelectedIndex = -1;
+                    }
+                    else
+                    {
+                        var index = comboBoxEditDFX.Items.IndexOf(paragraph.DFX);
+                        comboBoxEditDFX.SelectedIndex = index >= 0 ? index : -1;
+                    }
                     
                     // Update DialogueReverb - use SelectedIndex to handle empty values properly
                     if (string.IsNullOrEmpty(paragraph.DialogueReverb))
@@ -38472,7 +38463,15 @@ namespace Nikse.SubtitleEdit.Forms
                         
                         // DFX - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
                         var dfxs = selectedParagraphs.Select(p => p.DFX ?? string.Empty).Distinct().ToList();
-                        textBoxEditDFX.Text = dfxs.Count == 1 ? dfxs[0] : string.Empty;
+                        if (dfxs.Count == 1 && !string.IsNullOrEmpty(dfxs[0]))
+                        {
+                            var index = comboBoxEditDFX.Items.IndexOf(dfxs[0]);
+                            comboBoxEditDFX.SelectedIndex = index >= 0 ? index : -1;
+                        }
+                        else
+                        {
+                            comboBoxEditDFX.SelectedIndex = -1;
+                        }
                         
                         // Dialogue Reverb - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
                         var dialogueReverbs = selectedParagraphs.Select(p => p.DialogueReverb ?? string.Empty).Distinct().ToList();
@@ -38498,7 +38497,7 @@ namespace Nikse.SubtitleEdit.Forms
                 comboBoxEditActor.Text = string.Empty;
                 comboBoxEditOnOffScreen.SelectedIndex = -1;
                 comboBoxEditDiegetic.SelectedIndex = -1;
-                textBoxEditDFX.Text = string.Empty;
+                comboBoxEditDFX.SelectedIndex = -1;
                 comboBoxEditDialogueReverb.SelectedIndex = -1;
                 textBoxEditNotes.Text = string.Empty;
             }

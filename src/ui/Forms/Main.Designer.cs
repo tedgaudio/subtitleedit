@@ -572,7 +572,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.labelEditDiegetic = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.comboBoxEditDiegetic = new System.Windows.Forms.ComboBox();
             this.labelEditDFX = new Nikse.SubtitleEdit.Controls.NikseLabel();
-            this.textBoxEditDFX = new System.Windows.Forms.TextBox();
+            this.comboBoxEditDFX = new System.Windows.Forms.ComboBox();
             this.labelEditDialogueReverb = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.comboBoxEditDialogueReverb = new System.Windows.Forms.ComboBox();
             this.labelEditNotes = new Nikse.SubtitleEdit.Controls.NikseLabel();
@@ -4874,7 +4874,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.groupBoxEdit.Controls.Add(this.labelEditDiegetic);
             this.groupBoxEdit.Controls.Add(this.comboBoxEditDiegetic);
             this.groupBoxEdit.Controls.Add(this.labelEditDFX);
-            this.groupBoxEdit.Controls.Add(this.textBoxEditDFX);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditDFX);
             this.groupBoxEdit.Controls.Add(this.labelEditDialogueReverb);
             this.groupBoxEdit.Controls.Add(this.comboBoxEditDialogueReverb);
             this.groupBoxEdit.Controls.Add(this.labelEditNotes);
@@ -4914,7 +4914,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.groupBoxEdit.Controls.Add(this.labelEditDiegetic);
             this.groupBoxEdit.Controls.Add(this.comboBoxEditDiegetic);
             this.groupBoxEdit.Controls.Add(this.labelEditDFX);
-            this.groupBoxEdit.Controls.Add(this.textBoxEditDFX);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditDFX);
             this.groupBoxEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxEdit.Location = new System.Drawing.Point(0, 0);
             this.groupBoxEdit.Name = "groupBoxEdit";
@@ -5050,14 +5050,16 @@ namespace Nikse.SubtitleEdit.Forms
             this.labelEditDFX.TabIndex = 52;
             this.labelEditDFX.Text = "DFX";
             // 
-            // textBoxEditDFX
+            // comboBoxEditDFX
             // 
-            this.textBoxEditDFX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxEditDFX.Location = new System.Drawing.Point(545, 114);
-            this.textBoxEditDFX.Name = "textBoxEditDFX";
-            this.textBoxEditDFX.Size = new System.Drawing.Size(190, 20);
-            this.textBoxEditDFX.TabIndex = 53;
-            this.textBoxEditDFX.TextChanged += new System.EventHandler(this.TextBoxEditDFX_TextChanged);
+            this.comboBoxEditDFX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxEditDFX.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.comboBoxEditDFX.FormattingEnabled = true;
+            this.comboBoxEditDFX.Location = new System.Drawing.Point(545, 114);
+            this.comboBoxEditDFX.Name = "comboBoxEditDFX";
+            this.comboBoxEditDFX.Size = new System.Drawing.Size(190, 21);
+            this.comboBoxEditDFX.TabIndex = 53;
+            this.comboBoxEditDFX.TextChanged += new System.EventHandler(this.ComboBoxEditDFX_TextChanged);
             // 
             // labelEditDialogueReverb
             // 
@@ -6796,7 +6798,7 @@ namespace Nikse.SubtitleEdit.Forms
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDiegetic;
         private System.Windows.Forms.ComboBox comboBoxEditDiegetic;
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDFX;
-        private System.Windows.Forms.TextBox textBoxEditDFX;
+        private System.Windows.Forms.ComboBox comboBoxEditDFX;
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDialogueReverb;
         private System.Windows.Forms.ComboBox comboBoxEditDialogueReverb;
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditNotes;
