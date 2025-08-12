@@ -209,7 +209,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                                     System.Diagnostics.Debug.WriteLine($"Loaded onOffScreen: {p.OnOff_Screen}");
                                 }
                                 
-                                string diegetic = ReadTag(jsonObj, "Diegetic");
+                                string diegetic = ReadTag(jsonObj, "diegetic");
                                 if (!string.IsNullOrEmpty(diegetic))
                                 {
                                     p.Diegetic = DecodeJsonText(diegetic);
