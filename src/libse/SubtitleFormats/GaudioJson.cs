@@ -90,7 +90,16 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 
         public override string ToText(Subtitle subtitle, string title)
         {
-            var sb = new StringBuilder(@"[");
+            var sb = new StringBuilder();
+            
+            sb.AppendLine("{");
+            sb.AppendLine("  \"metadata\": {");
+            sb.AppendLine("    \"generator\": \"Subtitle Edit\",");
+            sb.AppendLine("    \"version\": \"" + Utilities.AssemblyVersion + "\",");
+            sb.AppendLine("    \"created\": \"" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\"");
+            sb.AppendLine("  },");
+            sb.AppendLine("  \"subtitles\": [");
+            
             var count = 0;
             foreach (var p in subtitle.Paragraphs)
             {
@@ -153,7 +162,9 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 sb.Append("}");
                 count++;
             }
-            sb.Append(']');
+            sb.AppendLine();
+            sb.AppendLine("  ]");
+            sb.AppendLine("}");
             return sb.ToString().Trim();
         }
 
@@ -168,10 +179,101 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             }
 
             var jsonText = sb.ToString().Trim();
-            if (!jsonText.StartsWith("[{\"", StringComparison.Ordinal))
+            
+            // Check if it's the new format with metadata
+            if (jsonText.StartsWith("{\"metadata\"", StringComparison.Ordinal))
+            {
+                LoadSubtitleNewFormat(subtitle, jsonText);
+            }
+            else if (jsonText.StartsWith("[{\"", StringComparison.Ordinal))
+            {
+                // Old format - direct array
+                LoadSubtitleOldFormat(subtitle, jsonText);
+            }
+            else
             {
                 return;
             }
+        }
+
+        private void LoadSubtitleNewFormat(Subtitle subtitle, string jsonText)
+        {
+            try
+            {
+                // Extract subtitles array from the new format
+                var subtitlesStart = jsonText.IndexOf("\"subtitles\":[", StringComparison.Ordinal);
+                if (subtitlesStart < 0)
+                {
+                    return;
+                }
+                
+                var subtitlesContent = jsonText.Substring(subtitlesStart + 12); // Skip "subtitles":[
+                var subtitlesEnd = FindMatchingBracket(subtitlesContent, 0);
+                if (subtitlesEnd < 0)
+                {
+                    return;
+                }
+                
+                var subtitlesArray = "[" + subtitlesContent.Substring(0, subtitlesEnd) + "]";
+                LoadSubtitleOldFormat(subtitle, subtitlesArray);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error parsing new format: {ex.Message}");
+                // Fallback to old format parsing
+                LoadSubtitleOldFormat(subtitle, jsonText);
+            }
+        }
+
+        private int FindMatchingBracket(string text, int startIndex)
+        {
+            var braceCount = 0;
+            var inString = false;
+            var escapeNext = false;
+            
+            for (int i = startIndex; i < text.Length; i++)
+            {
+                char c = text[i];
+                
+                if (escapeNext)
+                {
+                    escapeNext = false;
+                    continue;
+                }
+                
+                if (c == '\\')
+                {
+                    escapeNext = true;
+                    continue;
+                }
+                
+                if (c == '"' && !escapeNext)
+                {
+                    inString = !inString;
+                }
+                
+                if (!inString)
+                {
+                    if (c == '[')
+                    {
+                        braceCount++;
+                    }
+                    else if (c == ']')
+                    {
+                        braceCount--;
+                        if (braceCount == 0)
+                        {
+                            return i;
+                        }
+                    }
+                }
+            }
+            
+            return -1;
+        }
+
+        private void LoadSubtitleOldFormat(Subtitle subtitle, string jsonText)
+        {
 
             // JSON 파싱을 더 안정적으로 처리
             try
@@ -261,7 +363,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             {
                 // JSON 파싱 중 오류 발생 시 기존 방식으로 fallback
                 System.Diagnostics.Debug.WriteLine($"JSON parsing error, falling back to old method: {ex.Message}");
-                LoadSubtitleFallback(subtitle, lines, fileName);
+                LoadSubtitleFallback(subtitle, jsonText);
             }
             
             subtitle.Renumber();
@@ -334,16 +436,10 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             return objects;
         }
 
-        private void LoadSubtitleFallback(Subtitle subtitle, List<string> lines, string fileName)
+        private void LoadSubtitleFallback(Subtitle subtitle, string jsonText)
         {
             // 기존의 로드 방식을 fallback으로 사용
-            var sb = new StringBuilder();
-            foreach (var s in lines)
-            {
-                sb.Append(s);
-            }
-
-            foreach (string line in sb.ToString().Replace("},{", Environment.NewLine).SplitToLines())
+            foreach (string line in jsonText.Replace("},{", Environment.NewLine).SplitToLines())
             {
                 string s = line.Trim() + "}";
                 string start = ReadTag(s, "start");
