@@ -9999,15 +9999,15 @@ namespace Nikse.SubtitleEdit.Forms
             {
                 // Setup OnOffScreen menu
                 setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
-                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("on", null, SetOnOffScreen);
-                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("off", null, SetOnOffScreen);
+                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("On Screen", null, SetOnOffScreen);
+                setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("Off Screen", null, SetOnOffScreen);
                 setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
                 setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetOnOffScreen);
 
                 // Setup Diegetic menu
                 SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
-                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("diegetic", null, SetDiegetic);
-                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("non-diegetic", null, SetDiegetic);
+                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("Diegetic", null, SetDiegetic);
+                SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("Non-diegetic", null, SetDiegetic);
                 SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
                 SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetDiegetic);
 
@@ -10464,52 +10464,74 @@ namespace Nikse.SubtitleEdit.Forms
         }
         private void SetActor(string actor)
         {
-            if (!string.IsNullOrEmpty(actor))
-            {
-                MakeHistoryForUndo(LanguageSettings.Current.Main.Menu.ContextMenu.SetActor + ": " + actor);
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
 
-                foreach (int index in SubtitleListview1.SelectedIndices)
-                {
-                    _subtitle.Paragraphs[index].Actor = actor;
-                    SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
-                }
+            string action = string.IsNullOrEmpty(actor) ? "Clear actor" : "Set actor: " + actor;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].Actor = actor;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
             }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
         }
 
         private void SetOnOffScreen(string emotion)
         {
-            if (!string.IsNullOrEmpty(emotion))
-            {
-                MakeHistoryForUndo("Set emotion: " + emotion);
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
 
-                foreach (int index in SubtitleListview1.SelectedIndices)
-                {
-                    _subtitle.Paragraphs[index].OnOff_Screen = emotion;
-                    SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
-                }
+            string action = string.IsNullOrEmpty(emotion) ? "Clear on/off screen" : "Set on/off screen: " + emotion;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].OnOff_Screen = emotion;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
             }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
         }
 
         private void SetDiegeticText(string diegeticText)
         {
-            MakeHistoryForUndo("Set diegetic: " + diegeticText);
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+
+            string action = string.IsNullOrEmpty(diegeticText) ? "Clear diegetic" : "Set diegetic: " + diegeticText;
+            MakeHistoryForUndo(action);
 
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].Diegetic = diegeticText;
-                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
             }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
         }
 
         private void SetNotes(string notes)
         {
-            MakeHistoryForUndo("Set notes: " + notes);
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+
+            string action = string.IsNullOrEmpty(notes) ? "Clear notes" : "Set notes: " + notes;
+            MakeHistoryForUndo(action);
 
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].Notes = notes;
-                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
             }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
         }
 
         private void SetOnOffScreen(object sender, EventArgs e)
@@ -10532,13 +10554,13 @@ namespace Nikse.SubtitleEdit.Forms
             {
                 SetDiegeticText("");
             }
-            else if (diegeticText == "diegetic")
+            else if (diegeticText == "Diegetic")
             {
-                SetDiegeticText("diegetic");
+                SetDiegeticText("Diegetic");
             }
-            else if (diegeticText == "non-diegetic")
+            else if (diegeticText == "Non-diegetic")
             {
-                SetDiegeticText("non-diegetic");
+                SetDiegeticText("Non-diegetic");
             }
         }
 
@@ -10547,29 +10569,12 @@ namespace Nikse.SubtitleEdit.Forms
             string notesText = (sender as ToolStripItem).Text;
             if (notesText == "Clear")
             {
-                SetNotesText("");
+                SetNotes("");
             }
             else
             {
-                SetNotesText(notesText);
+                SetNotes(notesText);
             }
-        }
-
-        private void SetNotesText(string notesText)
-        {
-            if (SubtitleListview1.SelectedItems.Count == 0)
-                return;
-
-            MakeHistoryForUndo(_language.BeforeInsertLine);
-            foreach (var item in SubtitleListview1.SelectedItems.Cast<ListViewItem>())
-            {
-                var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                if (paragraph != null)
-                {
-                    paragraph.Notes = notesText;
-                }
-            }
-            SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
         }
 
 
@@ -10711,6 +10716,24 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
+        private void SetActorForSelectedLines(string actor)
+        {
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+
+            string action = string.IsNullOrEmpty(actor) ? "Clear actor" : "Set actor: " + actor;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].Actor = actor;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+            }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
+        }
+
         private void SetNewActor(object sender, EventArgs e)
         {
             using (var form = new TextPrompt(LanguageSettings.Current.Main.Menu.ContextMenu.NewActor.Replace("...", string.Empty), LanguageSettings.Current.General.Actor, string.Empty))
@@ -10720,11 +10743,7 @@ namespace Nikse.SubtitleEdit.Forms
                     string actor = form.InputText;
                     if (!string.IsNullOrEmpty(actor))
                     {
-                        foreach (int index in SubtitleListview1.SelectedIndices)
-                        {
-                            _subtitle.Paragraphs[index].Actor = actor;
-                            SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
-                        }
+                        SetActorForSelectedLines(actor);
                     }
                 }
             }
@@ -10732,18 +10751,14 @@ namespace Nikse.SubtitleEdit.Forms
 
         private void SetNewEmotion(object sender, EventArgs e)
         {
-            using (var form = new TextPrompt("New emotion", "Emotion", string.Empty))
+            using (var form = new TextPrompt("New on/off screen", "On/Off Screen", string.Empty))
             {
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     string emotion = form.InputText;
                     if (!string.IsNullOrEmpty(emotion))
                     {
-                        foreach (int index in SubtitleListview1.SelectedIndices)
-                        {
-                            _subtitle.Paragraphs[index].OnOff_Screen = emotion;
-                            SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
-                        }
+                        SetOnOffScreen(emotion);
                     }
                 }
             }
@@ -10769,11 +10784,7 @@ namespace Nikse.SubtitleEdit.Forms
                     string notes = form.InputText;
                     if (!string.IsNullOrEmpty(notes))
                     {
-                        foreach (int index in SubtitleListview1.SelectedIndices)
-                        {
-                            _subtitle.Paragraphs[index].Notes = notes;
-                            SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
-                        }
+                        SetNotes(notes);
                     }
                 }
             }
@@ -37989,19 +38000,20 @@ namespace Nikse.SubtitleEdit.Forms
 
         private void SetDialogueReverbText(string reverbText)
         {
-            if (SubtitleListview1.SelectedItems.Count == 0)
+            if (SubtitleListview1.SelectedIndices.Count == 0)
                 return;
 
-            MakeHistoryForUndo(_language.BeforeInsertLine);
-            foreach (var item in SubtitleListview1.SelectedItems.Cast<ListViewItem>())
+            string action = string.IsNullOrEmpty(reverbText) ? "Clear dialogue reverb" : "Set dialogue reverb: " + reverbText;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                if (paragraph != null)
-                {
-                    paragraph.DialogueReverb = reverbText;
-                }
+                _subtitle.Paragraphs[index].DialogueReverb = reverbText;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
             }
-            SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
         }
 
         private void SetNewDFX(object sender, EventArgs e)
@@ -38030,96 +38042,121 @@ namespace Nikse.SubtitleEdit.Forms
 
         private void SetDFXText(string dfxText)
         {
-            if (SubtitleListview1.SelectedItems.Count == 0)
+            if (SubtitleListview1.SelectedIndices.Count == 0)
                 return;
 
-            MakeHistoryForUndo(_language.BeforeInsertLine);
-            foreach (var item in SubtitleListview1.SelectedItems.Cast<ListViewItem>())
+            string action = string.IsNullOrEmpty(dfxText) ? "Clear DFX" : "Set DFX: " + dfxText;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                if (paragraph != null)
-                {
-                    paragraph.DFX = dfxText;
-                }
+                _subtitle.Paragraphs[index].DFX = dfxText;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
             }
-            SubtitleListview1.Fill(_subtitle, _subtitleOriginal);
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
         }
 
         private void ComboBoxEditActor_TextChanged(object sender, EventArgs e)
         {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                if (paragraph != null)
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
-                    paragraph.Actor = comboBoxEditActor.Text;
-                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.Actor = comboBoxEditActor.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
                 }
+                SubtitleListview1.Refresh();
             }
         }
 
         private void ComboBoxEditOnOffScreen_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                if (paragraph != null)
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
-                    paragraph.OnOff_Screen = comboBoxEditOnOffScreen.Text;
-                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.OnOff_Screen = comboBoxEditOnOffScreen.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
                 }
+                SubtitleListview1.Refresh();
             }
         }
 
         private void ComboBoxEditDiegetic_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                if (paragraph != null)
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
-                    paragraph.Diegetic = comboBoxEditDiegetic.Text;
-                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.Diegetic = comboBoxEditDiegetic.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
                 }
+                SubtitleListview1.Refresh();
             }
         }
 
         private void TextBoxEditDFX_TextChanged(object sender, EventArgs e)
         {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                if (paragraph != null)
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
-                    paragraph.DFX = textBoxEditDFX.Text;
-                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.DFX = textBoxEditDFX.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
                 }
+                SubtitleListview1.Refresh();
             }
         }
 
         private void ComboBoxEditDialogueReverb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                if (paragraph != null)
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
-                    paragraph.DialogueReverb = comboBoxEditDialogueReverb.Text;
-                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.DialogueReverb = comboBoxEditDialogueReverb.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
                 }
+                SubtitleListview1.Refresh();
             }
         }
 
         private void TextBoxEditNotes_TextChanged(object sender, EventArgs e)
         {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                if (paragraph != null)
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
-                    paragraph.Notes = textBoxEditNotes.Text;
-                    UpdateListViewItemColumns(SubtitleListview1.SelectedItems[0].Index, paragraph);
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.Notes = textBoxEditNotes.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
                 }
+                SubtitleListview1.Refresh();
             }
         }
 
@@ -38169,57 +38206,125 @@ namespace Nikse.SubtitleEdit.Forms
 
         private void UpdateEditingControlsFromSelection()
         {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count == 1)
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
-                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                if (paragraph != null)
+                if (SubtitleListview1.SelectedItems.Count == 1)
                 {
-                    // Update Actor
-                    comboBoxEditActor.Text = paragraph.Actor ?? string.Empty;
+                    // 단일 선택일 때는 해당 항목의 값으로 설정
+                    var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                    if (paragraph != null)
+                    {
+                        // Update Actor
+                        comboBoxEditActor.Text = paragraph.Actor ?? string.Empty;
+                        
+                        // Update OnOffScreen - use SelectedIndex to handle empty values properly
+                        if (string.IsNullOrEmpty(paragraph.OnOff_Screen))
+                        {
+                            comboBoxEditOnOffScreen.SelectedIndex = -1;
+                        }
+                        else
+                        {
+                            var index = comboBoxEditOnOffScreen.Items.IndexOf(paragraph.OnOff_Screen);
+                            comboBoxEditOnOffScreen.SelectedIndex = index >= 0 ? index : -1;
+                        }
+                        
+                        // Update Diegetic - use SelectedIndex to handle empty values properly
+                        if (string.IsNullOrEmpty(paragraph.Diegetic))
+                        {
+                            comboBoxEditDiegetic.SelectedIndex = -1;
+                        }
+                        else
+                        {
+                            var index = comboBoxEditDiegetic.Items.IndexOf(paragraph.Diegetic);
+                            comboBoxEditDiegetic.SelectedIndex = index >= 0 ? index : -1;
+                        }
+                        
+                        // Update DFX
+                        textBoxEditDFX.Text = paragraph.DFX ?? string.Empty;
+                        
+                        // Update DialogueReverb - use SelectedIndex to handle empty values properly
+                        if (string.IsNullOrEmpty(paragraph.DialogueReverb))
+                        {
+                            comboBoxEditDialogueReverb.SelectedIndex = -1;
+                        }
+                        else
+                        {
+                            var index = comboBoxEditDialogueReverb.Items.IndexOf(paragraph.DialogueReverb);
+                            comboBoxEditDialogueReverb.SelectedIndex = index >= 0 ? index : -1;
+                        }
+                        
+                        // Update Notes
+                        textBoxEditNotes.Text = paragraph.Notes ?? string.Empty;
+                    }
+                }
+                else
+                {
+                    // 복수 선택일 때는 공통 값이 있으면 표시하고, 없으면 빈 값으로 설정
+                    var selectedParagraphs = new List<Paragraph>();
+                    foreach (ListViewItem item in SubtitleListview1.SelectedItems)
+                    {
+                        var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                        if (paragraph != null)
+                        {
+                            selectedParagraphs.Add(paragraph);
+                        }
+                    }
                     
-                    // Update OnOffScreen - use SelectedIndex to handle empty values properly
-                    if (string.IsNullOrEmpty(paragraph.OnOff_Screen))
+                    if (selectedParagraphs.Count > 0)
                     {
-                        comboBoxEditOnOffScreen.SelectedIndex = -1;
+                        // Actor - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
+                        var actors = selectedParagraphs.Select(p => p.Actor ?? string.Empty).Distinct().ToList();
+                        comboBoxEditActor.Text = actors.Count == 1 ? actors[0] : string.Empty;
+                        
+                        // OnOffScreen - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
+                        var onOffScreens = selectedParagraphs.Select(p => p.OnOff_Screen ?? string.Empty).Distinct().ToList();
+                        if (onOffScreens.Count == 1 && !string.IsNullOrEmpty(onOffScreens[0]))
+                        {
+                            var index = comboBoxEditOnOffScreen.Items.IndexOf(onOffScreens[0]);
+                            comboBoxEditOnOffScreen.SelectedIndex = index >= 0 ? index : -1;
+                        }
+                        else
+                        {
+                            comboBoxEditOnOffScreen.SelectedIndex = -1;
+                        }
+                        
+                        // Diegetic - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
+                        var diegetics = selectedParagraphs.Select(p => p.Diegetic ?? string.Empty).Distinct().ToList();
+                        if (diegetics.Count == 1 && !string.IsNullOrEmpty(diegetics[0]))
+                        {
+                            var index = comboBoxEditDiegetic.Items.IndexOf(diegetics[0]);
+                            comboBoxEditDiegetic.SelectedIndex = index >= 0 ? index : -1;
+                        }
+                        else
+                        {
+                            comboBoxEditDiegetic.SelectedIndex = -1;
+                        }
+                        
+                        // DFX - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
+                        var dfxs = selectedParagraphs.Select(p => p.DFX ?? string.Empty).Distinct().ToList();
+                        textBoxEditDFX.Text = dfxs.Count == 1 ? dfxs[0] : string.Empty;
+                        
+                        // Dialogue Reverb - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
+                        var dialogueReverbs = selectedParagraphs.Select(p => p.DialogueReverb ?? string.Empty).Distinct().ToList();
+                        if (dialogueReverbs.Count == 1 && !string.IsNullOrEmpty(dialogueReverbs[0]))
+                        {
+                            var index = comboBoxEditDialogueReverb.Items.IndexOf(dialogueReverbs[0]);
+                            comboBoxEditDialogueReverb.SelectedIndex = index >= 0 ? index : -1;
+                        }
+                        else
+                        {
+                            comboBoxEditDialogueReverb.SelectedIndex = -1;
+                        }
+                        
+                        // Notes - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
+                        var notes = selectedParagraphs.Select(p => p.Notes ?? string.Empty).Distinct().ToList();
+                        textBoxEditNotes.Text = notes.Count == 1 ? notes[0] : string.Empty;
                     }
-                    else
-                    {
-                        var index = comboBoxEditOnOffScreen.Items.IndexOf(paragraph.OnOff_Screen);
-                        comboBoxEditOnOffScreen.SelectedIndex = index >= 0 ? index : -1;
-                    }
-                    
-                    // Update Diegetic - use SelectedIndex to handle empty values properly
-                    if (string.IsNullOrEmpty(paragraph.Diegetic))
-                    {
-                        comboBoxEditDiegetic.SelectedIndex = -1;
-                    }
-                    else
-                    {
-                        var index = comboBoxEditDiegetic.Items.IndexOf(paragraph.Diegetic);
-                        comboBoxEditDiegetic.SelectedIndex = index >= 0 ? index : -1;
-                    }
-                    
-                    // Update DFX
-                    textBoxEditDFX.Text = paragraph.DFX ?? string.Empty;
-                    
-                    // Update DialogueReverb - use SelectedIndex to handle empty values properly
-                    if (string.IsNullOrEmpty(paragraph.DialogueReverb))
-                    {
-                        comboBoxEditDialogueReverb.SelectedIndex = -1;
-                    }
-                    else
-                    {
-                        var index = comboBoxEditDialogueReverb.Items.IndexOf(paragraph.DialogueReverb);
-                        comboBoxEditDialogueReverb.SelectedIndex = index >= 0 ? index : -1;
-                    }
-                    
-                    // Update Notes
-                    textBoxEditNotes.Text = paragraph.Notes ?? string.Empty;
                 }
             }
             else
             {
-                // Clear controls when no selection or multiple selection
+                // Clear controls when no selection
                 comboBoxEditActor.Text = string.Empty;
                 comboBoxEditOnOffScreen.SelectedIndex = -1;
                 comboBoxEditDiegetic.SelectedIndex = -1;

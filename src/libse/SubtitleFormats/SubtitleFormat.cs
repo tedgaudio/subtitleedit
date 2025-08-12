@@ -38,6 +38,7 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 
                 _allSubtitleFormats = new List<SubtitleFormat>
                 {
+                    new GaudioJson(),
                     new SubRip(),
                     new AbcIViewer(),
                     new AdobeAfterEffectsFTME(),
