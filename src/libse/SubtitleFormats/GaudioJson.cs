@@ -2,14 +2,108 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 {
+    public class GaudioJsonMetadata
+    {
+        [JsonProperty("gaudioJsonVersion")]
+        public string GaudioJsonVersion { get; set; }
+        
+        [JsonProperty("subtitleEditVersion")]
+        public string SubtitleEditVersion { get; set; }
+        
+        [JsonProperty("format")]
+        public string Format { get; set; }
+        
+        [JsonProperty("created")]
+        public string Created { get; set; }
+        
+        [JsonProperty("modified")]
+        public string Modified { get; set; }
+        
+        [JsonProperty("subtitleCount")]
+        public int SubtitleCount { get; set; }
+        
+        [JsonProperty("totalDuration")]
+        public double TotalDuration { get; set; }
+        
+        [JsonProperty("title")]
+        public string Title { get; set; }
+    }
+
+    public class GaudioJsonTranscription
+    {
+        [JsonProperty("index")]
+        public int Index { get; set; }
+        
+        [JsonProperty("start")]
+        public double Start { get; set; }
+        
+        [JsonProperty("end")]
+        public double End { get; set; }
+        
+        [JsonProperty("text")]
+        public string Text { get; set; }
+        
+        [JsonProperty("actor")]
+        public string Actor { get; set; }
+        
+        [JsonProperty("speaker")]
+        public string Speaker { get; set; }
+        
+        [JsonProperty("onOffScreen")]
+        public string OnOffScreen { get; set; }
+        
+        [JsonProperty("diegetic")]
+        public string Diegetic { get; set; }
+        
+        [JsonProperty("notes")]
+        public string Notes { get; set; }
+        
+        [JsonProperty("dialogueReverb")]
+        public string DialogueReverb { get; set; }
+        
+        [JsonProperty("dfx")]
+        public string DFX { get; set; }
+    }
+
+    public class GaudioJsonRoot
+    {
+        [JsonProperty("metadata")]
+        public GaudioJsonMetadata Metadata { get; set; }
+        
+        [JsonProperty("transcriptions")]
+        public List<GaudioJsonTranscription> Transcriptions { get; set; }
+    }
+
     public class GaudioJson : SubtitleFormat
     {
         public override string Extension => ".json";
 
         public override string Name => "Gaudio JSON";
+
+        public override bool IsMine(List<string> lines, string fileName)
+        {
+            var sb = new StringBuilder();
+            foreach (var s in lines)
+            {
+                sb.Append(s);
+            }
+
+            var jsonText = sb.ToString().Trim();
+
+            // .json
+            if (jsonText.Contains("\"gaudioJsonVersion\"", StringComparison.Ordinal) && 
+                jsonText.Contains("\"transcriptions\"", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         public static string EncodeJsonText(string text, string newLineCharacter = "<br />")
         {
@@ -54,6 +148,46 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             return sb.ToString();
         }
 
+        private string GetCreatedTime(Subtitle subtitle)
+        {
+            // 기존 파일에서 created 시간을 가져오려고 시도
+            try
+            {
+                // Subtitle 객체에 원본 파일 정보가 있는지 확인
+                if (subtitle.FileName != null && System.IO.File.Exists(subtitle.FileName))
+                {
+                    var lines = System.IO.File.ReadAllLines(subtitle.FileName);
+                    var jsonText = string.Join("", lines).Trim();
+                    
+                    if (jsonText.StartsWith("{\"metadata\"", StringComparison.Ordinal))
+                    {
+                        var createdStart = jsonText.IndexOf("\"created\":\"", StringComparison.Ordinal);
+                        if (createdStart >= 0)
+                        {
+                            createdStart += 11; // Skip "created":"
+                            var createdEnd = jsonText.IndexOf("\"", createdStart);
+                            if (createdEnd > createdStart)
+                            {
+                                var createdTime = jsonText.Substring(createdStart, createdEnd - createdStart);
+                                // 유효한 날짜 형식인지 확인
+                                if (DateTime.TryParse(createdTime, out _))
+                                {
+                                    return createdTime;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // 파일 읽기 실패 시 무시하고 현재 시간 사용
+            }
+            
+            // 기존 created 시간을 찾을 수 없으면 현재 시간 사용
+            return DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
         private static void DecodeJsonText(string text, StringBuilder sb)
         {
             text = string.Join(Environment.NewLine, text.SplitToLines());
@@ -90,71 +224,68 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
 
         public override string ToText(Subtitle subtitle, string title)
         {
-            var sb = new StringBuilder(@"[");
-            var count = 0;
-            foreach (var p in subtitle.Paragraphs)
+            try
             {
-                if (count > 0)
+                // 메타데이터 생성
+                var metadata = new GaudioJsonMetadata
                 {
-                    sb.Append(',');
-                }
-
-                sb.Append("{\"start\":");
-                sb.Append(p.StartTime.TotalSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                sb.Append(",\"end\":");
-                sb.Append(p.EndTime.TotalSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                sb.Append(",\"text\":\"");
-                sb.Append(EncodeJsonText(p.Text));
-                sb.Append("\"");
+                    GaudioJsonVersion = "1.0",
+                    SubtitleEditVersion = Utilities.AssemblyVersion,
+                    Format = "Gaudio JSON",
+                    Created = GetCreatedTime(subtitle),
+                    Modified = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+                    SubtitleCount = subtitle.Paragraphs.Count,
+                    TotalDuration = subtitle.Paragraphs.Count > 0 
+                        ? subtitle.Paragraphs[subtitle.Paragraphs.Count - 1].EndTime.TotalSeconds 
+                        : 0.0,
+                    Title = title
+                };
                 
-                // Add custom fields
-                if (!string.IsNullOrEmpty(p.Actor))
-                {
-                    sb.Append(",\"actor\":\"");
-                    sb.Append(EncodeJsonText(p.Actor));
-                    sb.Append("\"");
-                }
+                // transcriptions 생성
+                var transcriptions = new List<GaudioJsonTranscription>();
+                var count = 0;
                 
-                if (!string.IsNullOrEmpty(p.OnOff_Screen))
+                foreach (var p in subtitle.Paragraphs)
                 {
-                    sb.Append(",\"onOffScreen\":\"");
-                    sb.Append(EncodeJsonText(p.OnOff_Screen));
-                    sb.Append("\"");
-                }
-                
-                if (!string.IsNullOrEmpty(p.Diegetic))
-                {
-                    sb.Append(",\"diegetic\":\"");
-                    sb.Append(EncodeJsonText(p.Diegetic));
-                    sb.Append("\"");
-                }
-                
-                if (!string.IsNullOrEmpty(p.Notes))
-                {
-                    sb.Append(",\"notes\":\"");
-                    sb.Append(EncodeJsonText(p.Notes));
-                    sb.Append("\"");
+                    var transcription = new GaudioJsonTranscription
+                    {
+                        Index = count + 1,
+                        Start = p.StartTime.TotalSeconds,
+                        End = p.EndTime.TotalSeconds,
+                        Text = p.Text,
+                        Speaker = p.Actor,
+                        OnOffScreen = p.OnOff_Screen,
+                        Diegetic = p.Diegetic,
+                        Notes = p.Notes,
+                        DialogueReverb = p.DialogueReverb,
+                        DFX = p.DFX
+                    };
+                    
+                    transcriptions.Add(transcription);
+                    count++;
                 }
                 
-                if (!string.IsNullOrEmpty(p.DialogueReverb))
+                // 루트 객체 생성
+                var root = new GaudioJsonRoot
                 {
-                    sb.Append(",\"dialogueReverb\":\"");
-                    sb.Append(EncodeJsonText(p.DialogueReverb));
-                    sb.Append("\"");
-                }
+                    Metadata = metadata,
+                    Transcriptions = transcriptions
+                };
                 
-                if (!string.IsNullOrEmpty(p.DFX))
+                // JSON 직렬화 (들여쓰기 포함)
+                var settings = new JsonSerializerSettings
                 {
-                    sb.Append(",\"dfx\":\"");
-                    sb.Append(EncodeJsonText(p.DFX));
-                    sb.Append("\"");
-                }
+                    Formatting = Formatting.Indented,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
                 
-                sb.Append("}");
-                count++;
+                return JsonConvert.SerializeObject(root, settings);
             }
-            sb.Append(']');
-            return sb.ToString().Trim();
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error serializing GaudioJson: {ex.Message}");
+                return "{}";
+            }
         }
 
         public override void LoadSubtitle(Subtitle subtitle, List<string> lines, string fileName)
@@ -168,558 +299,89 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
             }
 
             var jsonText = sb.ToString().Trim();
-            if (!jsonText.StartsWith("[{\"", StringComparison.Ordinal))
-            {
-                return;
-            }
-
-            // JSON 파싱을 더 안정적으로 처리
+            
             try
             {
-                // 각 JSON 객체를 개별적으로 파싱
-                var jsonObjects = ParseJsonObjects(jsonText);
-                
-                foreach (var jsonObj in jsonObjects)
-                {
-                    string start = ReadTag(jsonObj, "start");
-                    string end = ReadTag(jsonObj, "end");
-                    string text = ReadTag(jsonObj, "text");
-                    
-                    if (start != null && end != null && text != null && !IsTagArray(jsonObj, "text"))
-                    {
-                        if (double.TryParse(start, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
-                            double.TryParse(end, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
-                        {
-                            var p = new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit);
-                            
-                            // Read custom fields with better error handling and debugging
-                            try
-                            {
-                                string actor = ReadTag(jsonObj, "actor");
-                                if (!string.IsNullOrEmpty(actor))
-                                {
-                                    p.Actor = DecodeJsonText(actor);
-                                    System.Diagnostics.Debug.WriteLine($"Loaded actor: {p.Actor}");
-                                }
-                                
-                                string onOffScreen = ReadTag(jsonObj, "onOffScreen");
-                                if (!string.IsNullOrEmpty(onOffScreen))
-                                {
-                                    p.OnOff_Screen = DecodeJsonText(onOffScreen);
-                                    System.Diagnostics.Debug.WriteLine($"Loaded onOffScreen: {p.OnOff_Screen}");
-                                }
-                                
-                                string diegetic = ReadTag(jsonObj, "diegetic");
-                                if (!string.IsNullOrEmpty(diegetic))
-                                {
-                                    p.Diegetic = DecodeJsonText(diegetic);
-                                    System.Diagnostics.Debug.WriteLine($"Loaded diegetic: {p.Diegetic}");
-                                }
-                                
-                                string notes = ReadTag(jsonObj, "notes");
-                                if (!string.IsNullOrEmpty(notes))
-                                {
-                                    p.Notes = DecodeJsonText(notes);
-                                    System.Diagnostics.Debug.WriteLine($"Loaded notes: {p.Notes}");
-                                }
-                                
-                                string dialogueReverb = ReadTag(jsonObj, "dialogueReverb");
-                                if (!string.IsNullOrEmpty(dialogueReverb))
-                                {
-                                    p.DialogueReverb = DecodeJsonText(dialogueReverb);
-                                    System.Diagnostics.Debug.WriteLine($"Loaded dialogueReverb: {p.DialogueReverb}");
-                                }
-                                
-                                string dfx = ReadTag(jsonObj, "dfx");
-                                if (!string.IsNullOrEmpty(dfx))
-                                {
-                                    p.DFX = DecodeJsonText(dfx);
-                                    System.Diagnostics.Debug.WriteLine($"Loaded dfx: {p.DFX}");
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                // 로그 또는 디버깅 정보를 여기에 추가할 수 있습니다
-                                System.Diagnostics.Debug.WriteLine($"Error parsing custom fields: {ex.Message}");
-                                System.Diagnostics.Debug.WriteLine($"JSON object: {jsonObj}");
-                            }
-                            
-                            subtitle.Paragraphs.Add(p);
-                        }
-                        else
-                        {
-                            _errorCount++;
-                        }
-                    }
-                    else
-                    {
-                        _errorCount++;
-                    }
-                }
+                LoadSubtitleWithMetadata(subtitle, jsonText);
             }
             catch (Exception ex)
             {
-                // JSON 파싱 중 오류 발생 시 기존 방식으로 fallback
-                System.Diagnostics.Debug.WriteLine($"JSON parsing error, falling back to old method: {ex.Message}");
-                LoadSubtitleFallback(subtitle, lines, fileName);
+                System.Diagnostics.Debug.WriteLine($"GaudioJson LoadSubtitle error: {ex.Message}");
+                _errorCount++;
             }
             
             subtitle.Renumber();
         }
 
-        private List<string> ParseJsonObjects(string jsonText)
+        private void LoadSubtitleWithMetadata(Subtitle subtitle, string jsonText)
         {
-            var objects = new List<string>();
-            var currentObject = new StringBuilder();
-            var braceCount = 0;
-            var inString = false;
-            var escapeNext = false;
-            
-            for (int i = 0; i < jsonText.Length; i++)
+            try
             {
-                char c = jsonText[i];
+                // Newtonsoft.Json을 사용하여 JSON 파싱
+                var root = JsonConvert.DeserializeObject<GaudioJsonRoot>(jsonText);
                 
-                if (escapeNext)
+                if (root?.Transcriptions == null)
                 {
-                    currentObject.Append(c);
-                    escapeNext = false;
-                    continue;
+                    return;
                 }
                 
-                if (c == '\\')
+                foreach (var transcription in root.Transcriptions)
                 {
-                    escapeNext = true;
-                    currentObject.Append(c);
-                    continue;
-                }
-                
-                if (c == '"' && !escapeNext)
-                {
-                    inString = !inString;
-                }
-                
-                if (!inString)
-                {
-                    if (c == '{')
-                    {
-                        if (braceCount == 0)
-                        {
-                            currentObject.Clear();
-                        }
-                        braceCount++;
-                    }
-                    else if (c == '}')
-                    {
-                        braceCount--;
-                        if (braceCount == 0)
-                        {
-                            currentObject.Append(c);
-                            var obj = currentObject.ToString().Trim();
-                            if (obj.Length > 2) // 최소한 "{}" 보다 커야 함
-                            {
-                                objects.Add(obj);
-                            }
-                            currentObject.Clear();
-                            continue;
-                        }
-                    }
-                }
-                
-                if (braceCount > 0)
-                {
-                    currentObject.Append(c);
-                }
-            }
-            
-            return objects;
-        }
-
-        private void LoadSubtitleFallback(Subtitle subtitle, List<string> lines, string fileName)
-        {
-            // 기존의 로드 방식을 fallback으로 사용
-            var sb = new StringBuilder();
-            foreach (var s in lines)
-            {
-                sb.Append(s);
-            }
-
-            foreach (string line in sb.ToString().Replace("},{", Environment.NewLine).SplitToLines())
-            {
-                string s = line.Trim() + "}";
-                string start = ReadTag(s, "start");
-                string end = ReadTag(s, "end");
-                string text = ReadTag(s, "text");
-                if (start != null && end != null && text != null && !IsTagArray(s, "text"))
-                {
-                    if (double.TryParse(start, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var startSeconds) &&
-                        double.TryParse(end, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var endSeconds))
-                    {
-                        var p = new Paragraph(DecodeJsonText(text), startSeconds * TimeCode.BaseUnit, endSeconds * TimeCode.BaseUnit);
-                        
-                        // Read custom fields
-                        string actor = ReadTag(s, "actor");
-                        if (!string.IsNullOrEmpty(actor))
-                        {
-                            p.Actor = DecodeJsonText(actor);
-                        }
-                        
-                        string onOffScreen = ReadTag(s, "onOffScreen");
-                        if (!string.IsNullOrEmpty(onOffScreen))
-                        {
-                            p.OnOff_Screen = DecodeJsonText(onOffScreen);
-                        }
-                        
-                        string diegetic = ReadTag(s, "diegetic");
-                        if (!string.IsNullOrEmpty(diegetic))
-                        {
-                            p.Diegetic = DecodeJsonText(diegetic);
-                        }
-                        
-                        string notes = ReadTag(s, "notes");
-                        if (!string.IsNullOrEmpty(notes))
-                        {
-                            p.Notes = DecodeJsonText(notes);
-                        }
-                        
-                        string dialogueReverb = ReadTag(s, "dialogueReverb");
-                        if (!string.IsNullOrEmpty(dialogueReverb))
-                        {
-                            p.DialogueReverb = DecodeJsonText(dialogueReverb);
-                        }
-                        
-                        string dfx = ReadTag(s, "dfx");
-                        if (!string.IsNullOrEmpty(dfx))
-                        {
-                            p.DFX = DecodeJsonText(dfx);
-                        }
-                        
-                        subtitle.Paragraphs.Add(p);
-                    }
-                    else
+                    if (string.IsNullOrEmpty(transcription.Text))
                     {
                         _errorCount++;
-                    }
-                }
-                else
-                {
-                    _errorCount++;
-                }
-            }
-        }
-
-        private static bool IsTagArray(string content, string tag)
-        {
-            var startIndex = content.IndexOfAny(new[] { "\"" + tag + "\"", "'" + tag + "'" }, StringComparison.Ordinal);
-            if (startIndex < 0)
-            {
-                return false;
-            }
-
-            return content.Substring(startIndex + 3 + tag.Length).Trim().TrimStart(':').TrimStart().StartsWith('[');
-        }
-
-        public static string ConvertJsonSpecialCharacters(string s)
-        {
-            if (s.Contains("\\u00"))
-            {
-                for (int i = 33; i < 200; i++)
-                {
-                    var tag = "\\u" + i.ToString("x4");
-                    if (s.Contains(tag))
-                    {
-                        s = s.Replace(tag, Convert.ToChar(i).ToString());
-                    }
-                }
-            }
-            return s;
-        }
-
-        private static readonly char[] CommaAndEndCurlyBracket = { ',', '}' };
-
-        public static string ReadTag(string s, string tag)
-        {
-            // 여러 가능한 필드명을 시도
-            var possibleTags = new[] { tag, tag.ToLower(), tag.ToUpper(), tag.Replace("_", ""), tag.Replace("_", " ") };
-            
-            foreach (var possibleTag in possibleTags)
-            {
-                var startIndex = s.IndexOfAny(new[] { "\"" + possibleTag + "\"", "'" + possibleTag + "'" }, StringComparison.Ordinal);
-                if (startIndex < 0)
-                {
-                    continue;
-                }
-
-                if (startIndex + 3 + possibleTag.Length > s.Length)
-                {
-                    continue;
-                }
-
-                var res = s.Substring(startIndex + 3 + possibleTag.Length).Trim().TrimStart(':').TrimStart();
-                if (res.StartsWith('"'))
-                { // text
-                    res = ConvertJsonSpecialCharacters(res);
-                    res = res.Replace("\\\"", "@__1");
-                    int endIndex = res.IndexOf("\"}", StringComparison.Ordinal);
-                    if (endIndex == -1)
-                    {
-                        endIndex = res.LastIndexOf('"');
-                    }
-                    int endAlternate = res.IndexOf("\",", StringComparison.Ordinal);
-                    if (endIndex < 0)
-                    {
-                        endIndex = endAlternate;
-                    }
-                    else if (endAlternate > 0 && endAlternate < endIndex)
-                    {
-                        endIndex = endAlternate;
-                    }
-
-                    if (endIndex < 0 && res.EndsWith("\"", StringComparison.Ordinal))
-                    {
-                        endIndex = res.Length - 1;
-                    }
-
-                    if (endIndex <= 0)
-                    {
                         continue;
                     }
-
-                    if (res.Length > 1)
+                    
+                    var p = new Paragraph(
+                        DecodeJsonText(transcription.Text), 
+                        transcription.Start * TimeCode.BaseUnit, 
+                        transcription.End * TimeCode.BaseUnit
+                    );
+                    
+                    // 커스텀 필드들 설정
+                    if (!string.IsNullOrEmpty(transcription.Actor))
                     {
-                        var result = res.Substring(1, endIndex - 1).Replace("@__1", "\\\"");
-                        if (!string.IsNullOrEmpty(result))
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Found tag '{possibleTag}' with value: {result}");
-                            return result;
-                        }
+                        p.Actor = DecodeJsonText(transcription.Actor);
                     }
-
-                    return string.Empty;
-                }
-                else
-                { // number
-                    var endIndex = res.IndexOfAny(CommaAndEndCurlyBracket);
-                    if (endIndex < 0)
+                    else if (!string.IsNullOrEmpty(transcription.Speaker))
                     {
-                        continue;
+                        p.Actor = DecodeJsonText(transcription.Speaker);
                     }
-
-                    var result = res.Substring(0, endIndex);
-                    if (!string.IsNullOrEmpty(result))
+                    
+                    if (!string.IsNullOrEmpty(transcription.OnOffScreen))
                     {
-                        System.Diagnostics.Debug.WriteLine($"Found tag '{possibleTag}' with value: {result}");
-                        return result;
+                        p.OnOff_Screen = DecodeJsonText(transcription.OnOffScreen);
                     }
+                    
+                    if (!string.IsNullOrEmpty(transcription.Diegetic))
+                    {
+                        p.Diegetic = DecodeJsonText(transcription.Diegetic);
+                    }
+                    
+                    if (!string.IsNullOrEmpty(transcription.Notes))
+                    {
+                        p.Notes = DecodeJsonText(transcription.Notes);
+                    }
+                    
+                    if (!string.IsNullOrEmpty(transcription.DialogueReverb))
+                    {
+                        p.DialogueReverb = DecodeJsonText(transcription.DialogueReverb);
+                    }
+                    
+                    if (!string.IsNullOrEmpty(transcription.DFX))
+                    {
+                        p.DFX = DecodeJsonText(transcription.DFX);
+                    }
+                    
+                    subtitle.Paragraphs.Add(p);
                 }
             }
-            
-            return null;
-        }
-
-        public static List<string> ReadArray(string s, string tag)
-        {
-            var list = new List<string>();
-
-            var startIndex = s.IndexOfAny(new[] { "\"" + tag + "\"", "'" + tag + "'" }, StringComparison.Ordinal);
-            if (startIndex < 0)
+            catch (Exception ex)
             {
-                return list;
+                System.Diagnostics.Debug.WriteLine($"Error parsing metadata format with Newtonsoft.Json: {ex.Message}");
+                _errorCount++;
             }
-
-            startIndex += tag.Length + 2;
-            string res = s.Substring(startIndex).TrimStart().TrimStart(':').TrimStart();
-            int tagLevel = 1;
-            int oldStart = 0;
-            if (oldStart < res.Length && res[oldStart] == '[')
-            {
-                oldStart++;
-            }
-            int nextTag = oldStart;
-            while (tagLevel >= 1 && nextTag >= 0 && nextTag + 1 < res.Length)
-            {
-                while (oldStart < res.Length && res[oldStart] == ' ')
-                {
-                    oldStart++;
-                }
-
-                if (oldStart < res.Length && res[oldStart] == '"')
-                {
-                    nextTag = res.IndexOf('"', oldStart + 1);
-
-                    while (nextTag > 0 && nextTag + 1 < res.Length && res[nextTag - 1] == '\\')
-                    {
-                        nextTag = res.IndexOf('"', nextTag + 1);
-                    }
-
-                    if (nextTag > 0)
-                    {
-                        string newValue = res.Substring(oldStart, nextTag - oldStart);
-                        list.Add(newValue.Remove(0, 1));
-                        oldStart = nextTag + 1;
-                        while (oldStart < res.Length && "\r\n\t ".Contains(res[oldStart]))
-                        {
-                            oldStart++;
-                        }
-                        if (oldStart < res.Length && res[oldStart] == ']')
-                        {
-                            oldStart++;
-                        }
-                        while (oldStart < res.Length && "\r\n\t ".Contains(res[oldStart]))
-                        {
-                            oldStart++;
-                        }
-                        if (oldStart < res.Length && res[oldStart] == ',')
-                        {
-                            oldStart++;
-                        }
-                        while (oldStart < res.Length && "\r\n\t ".Contains(res[oldStart]))
-                        {
-                            oldStart++;
-                        }
-                        if (oldStart < res.Length && res[oldStart] == '[')
-                        {
-                            oldStart++;
-                        }
-                        while (oldStart < res.Length && "\r\n\t ".Contains(res[oldStart]))
-                        {
-                            oldStart++;
-                        }
-                    }
-                }
-                else if (oldStart < res.Length && res[oldStart] != '[' && res[oldStart] != ']')
-                {
-                    nextTag = res.IndexOf(',', oldStart + 1);
-                    if (nextTag > 0)
-                    {
-                        string newValue = res.Substring(oldStart, nextTag - oldStart);
-                        if (newValue.EndsWith(']'))
-                        {
-                            newValue = newValue.TrimEnd(']');
-                            tagLevel = -10; // return
-                        }
-                        list.Add(newValue.Trim());
-                        oldStart = nextTag + 1;
-                    }
-                }
-                else
-                {
-                    int nextBegin = res.IndexOf('[', nextTag);
-                    int nextEnd = res.IndexOf(']', nextTag);
-                    if (nextBegin < nextEnd && nextBegin != -1)
-                    {
-                        nextTag = nextBegin + 1;
-                        tagLevel++;
-                    }
-                    else
-                    {
-                        nextTag = nextEnd + 1;
-                        tagLevel--;
-                        if (tagLevel == 1)
-                        {
-                            string newValue = res.Substring(oldStart, nextTag - oldStart);
-                            list.Add(newValue);
-                            if (res[nextTag] == ']')
-                            {
-                                tagLevel--;
-                            }
-
-                            oldStart = nextTag + 1;
-                        }
-                    }
-                }
-            }
-            return list;
-        }
-
-        internal static List<string> ReadArray(string text)
-        {
-            var list = new List<string>();
-            text = text.Trim();
-            if (text.StartsWith('[') && text.EndsWith(']'))
-            {
-                text = text.Trim('[', ']');
-                text = text.Trim();
-
-                text = text.Replace("<br />", Environment.NewLine);
-                text = text.Replace("<br>", Environment.NewLine);
-                text = text.Replace("<br/>", Environment.NewLine);
-                text = text.Replace("\\n", Environment.NewLine);
-
-                bool keepNext = false;
-                var sb = new StringBuilder();
-                foreach (var c in text)
-                {
-                    if (c == '\\' && !keepNext)
-                    {
-                        keepNext = true;
-                    }
-                    else if (!keepNext && c == ',')
-                    {
-                        list.Add(sb.ToString());
-                        sb.Clear();
-                    }
-                    else
-                    {
-                        sb.Append(c);
-                        keepNext = false;
-                    }
-                }
-                if (sb.Length > 0)
-                {
-                    list.Add(sb.ToString());
-                }
-            }
-            return list;
-        }
-
-        public static List<string> ReadObjectArray(string text)
-        {
-            var list = new List<string>();
-            text = text.Trim();
-            if (text.StartsWith('[') && text.EndsWith(']'))
-            {
-                text = text.Trim('[', ']').Trim();
-                int onCount = 0;
-                bool keepNext = false;
-                var sb = new StringBuilder();
-                foreach (var c in text)
-                {
-                    if (keepNext)
-                    {
-                        sb.Append(c);
-                        keepNext = false;
-                    }
-                    else if (c == '\\')
-                    {
-                        sb.Append(c);
-                        keepNext = true;
-                    }
-                    else if (c == '{')
-                    {
-                        sb.Append(c);
-                        onCount++;
-                    }
-                    else if (c == '}')
-                    {
-                        sb.Append(c);
-                        onCount--;
-                    }
-                    else if (c == ',' && onCount == 0)
-                    {
-                        list.Add(sb.ToString().Trim());
-                        sb.Clear();
-                    }
-                    else
-                    {
-                        sb.Append(c);
-                    }
-                }
-                if (sb.Length > 0)
-                {
-                    list.Add(sb.ToString().Trim());
-                }
-            }
-            return list;
         }
     }
 }
