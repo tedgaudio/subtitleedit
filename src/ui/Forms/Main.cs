@@ -38200,6 +38200,23 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
+        private void ComboBoxEditDFX_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
+                {
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.DFX = comboBoxEditDFX.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
+                }
+                SubtitleListview1.Refresh();
+            }
+        }
+
         private void ComboBoxEditDialogueReverb_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
@@ -38285,62 +38302,70 @@ namespace Nikse.SubtitleEdit.Forms
                 if (SubtitleListview1.SelectedItems.Count == 1)
                 {
                     // 단일 선택일 때는 해당 항목의 값으로 설정
-                var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                if (paragraph != null)
-                {
-                    // Update Actor
-                    comboBoxEditActor.Text = paragraph.Actor ?? string.Empty;
-                    
-                    // Update OnOffScreen - use SelectedIndex to handle empty values properly
-                    if (string.IsNullOrEmpty(paragraph.OnOff_Screen))
+                    var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
+                    if (paragraph != null)
                     {
-                        comboBoxEditOnOffScreen.SelectedIndex = -1;
+                        // 기존 패턴과 동일하게 이벤트 핸들러 제거 → 값 설정 → 이벤트 핸들러 재등록
+                        
+                        // Update Actor - 조건부 업데이트 적용
+                        comboBoxEditActor.TextChanged -= ComboBoxEditActor_TextChanged;
+                        if (comboBoxEditActor.Text != (paragraph.Actor ?? string.Empty))
+                        {
+                            comboBoxEditActor.Text = paragraph.Actor ?? string.Empty;
+                        }
+                        comboBoxEditActor.TextChanged += ComboBoxEditActor_TextChanged;
+                        
+                        // Update OnOffScreen - 조건부 업데이트 적용
+                        comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
+                        var onOffScreenIndex = string.IsNullOrEmpty(paragraph.OnOff_Screen) ? -1 : 
+                            comboBoxEditOnOffScreen.Items.IndexOf(paragraph.OnOff_Screen);
+                        if (comboBoxEditOnOffScreen.SelectedIndex != onOffScreenIndex)
+                        {
+                            comboBoxEditOnOffScreen.SelectedIndex = onOffScreenIndex >= 0 ? onOffScreenIndex : -1;
+                        }
+                        comboBoxEditOnOffScreen.SelectedIndexChanged += ComboBoxEditOnOffScreen_SelectedIndexChanged;
+                        
+                        // Update Diegetic - 조건부 업데이트 적용
+                        comboBoxEditDiegetic.SelectedIndexChanged -= ComboBoxEditDiegetic_SelectedIndexChanged;
+                        var diegeticIndex = string.IsNullOrEmpty(paragraph.Diegetic) ? -1 : 
+                            comboBoxEditDiegetic.Items.IndexOf(paragraph.Diegetic);
+                        if (comboBoxEditDiegetic.SelectedIndex != diegeticIndex)
+                        {
+                            comboBoxEditDiegetic.SelectedIndex = diegeticIndex >= 0 ? diegeticIndex : -1;
+                        }
+                        comboBoxEditDiegetic.SelectedIndexChanged += ComboBoxEditDiegetic_SelectedIndexChanged;
+                        
+                        // Update DFX - 조건부 업데이트 적용
+                        comboBoxEditDFX.SelectedIndexChanged -= ComboBoxEditDFX_SelectedIndexChanged;
+                        var dfxIndex = string.IsNullOrEmpty(paragraph.DFX) ? -1 : 
+                            comboBoxEditDFX.Items.IndexOf(paragraph.DFX);
+                        if (comboBoxEditDFX.SelectedIndex != dfxIndex)
+                        {
+                            comboBoxEditDFX.SelectedIndex = dfxIndex >= 0 ? dfxIndex : -1;
+                        }
+                        comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
+                        
+                        // Update DialogueReverb - 조건부 업데이트 적용
+                        comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
+                        var dialogueReverbIndex = string.IsNullOrEmpty(paragraph.DialogueReverb) ? -1 : 
+                            comboBoxEditDialogueReverb.Items.IndexOf(paragraph.DialogueReverb);
+                        if (comboBoxEditDialogueReverb.SelectedIndex != dialogueReverbIndex)
+                        {
+                            comboBoxEditDialogueReverb.SelectedIndex = dialogueReverbIndex >= 0 ? dialogueReverbIndex : -1;
+                        }
+                        comboBoxEditDialogueReverb.SelectedIndexChanged += ComboBoxEditDialogueReverb_SelectedIndexChanged;
+                        
+                        // Update Notes - 조건부 업데이트 적용
+                        textBoxEditNotes.TextChanged -= TextBoxEditNotes_TextChanged;
+                        if (textBoxEditNotes.Text != (paragraph.Notes ?? string.Empty))
+                        {
+                            textBoxEditNotes.Text = paragraph.Notes ?? string.Empty;
+                        }
+                        textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
                     }
-                    else
-                    {
-                        var index = comboBoxEditOnOffScreen.Items.IndexOf(paragraph.OnOff_Screen);
-                        comboBoxEditOnOffScreen.SelectedIndex = index >= 0 ? index : -1;
-                    }
-                    
-                    // Update Diegetic - use SelectedIndex to handle empty values properly
-                    if (string.IsNullOrEmpty(paragraph.Diegetic))
-                    {
-                        comboBoxEditDiegetic.SelectedIndex = -1;
-                    }
-                    else
-                    {
-                        var index = comboBoxEditDiegetic.Items.IndexOf(paragraph.Diegetic);
-                        comboBoxEditDiegetic.SelectedIndex = index >= 0 ? index : -1;
-                    }
-                    
-                    // Update DFX
-                    if (string.IsNullOrEmpty(paragraph.DFX))
-                    {
-                        comboBoxEditDFX.SelectedIndex = -1;
-                    }
-                    else
-                    {
-                        var index = comboBoxEditDFX.Items.IndexOf(paragraph.DFX);
-                        comboBoxEditDFX.SelectedIndex = index >= 0 ? index : -1;
-                    }
-                    
-                    // Update DialogueReverb - use SelectedIndex to handle empty values properly
-                    if (string.IsNullOrEmpty(paragraph.DialogueReverb))
-                    {
-                        comboBoxEditDialogueReverb.SelectedIndex = -1;
-                    }
-                    else
-                    {
-                        var index = comboBoxEditDialogueReverb.Items.IndexOf(paragraph.DialogueReverb);
-                        comboBoxEditDialogueReverb.SelectedIndex = index >= 0 ? index : -1;
-                    }
-                    
-                    // Update Notes
-                    textBoxEditNotes.Text = paragraph.Notes ?? string.Empty;
                 }
-            }
-            else
-            {
+                else
+                {
                     // 복수 선택일 때는 공통 값이 있으면 표시하고, 없으면 빈 값으로 설정
                     var selectedParagraphs = new List<Paragraph>();
                     foreach (ListViewItem item in SubtitleListview1.SelectedItems)
@@ -38354,73 +38379,105 @@ namespace Nikse.SubtitleEdit.Forms
                     
                     if (selectedParagraphs.Count > 0)
                     {
-                        // Actor - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
+                        // 공통 값 계산
                         var actors = selectedParagraphs.Select(p => p.Actor ?? string.Empty).Distinct().ToList();
-                        comboBoxEditActor.Text = actors.Count == 1 ? actors[0] : string.Empty;
-                        
-                        // OnOffScreen - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
                         var onOffScreens = selectedParagraphs.Select(p => p.OnOff_Screen ?? string.Empty).Distinct().ToList();
-                        if (onOffScreens.Count == 1 && !string.IsNullOrEmpty(onOffScreens[0]))
-                        {
-                            var index = comboBoxEditOnOffScreen.Items.IndexOf(onOffScreens[0]);
-                            comboBoxEditOnOffScreen.SelectedIndex = index >= 0 ? index : -1;
-                        }
-                        else
-                        {
-                            comboBoxEditOnOffScreen.SelectedIndex = -1;
-                        }
-                        
-                        // Diegetic - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
                         var diegetics = selectedParagraphs.Select(p => p.Diegetic ?? string.Empty).Distinct().ToList();
-                        if (diegetics.Count == 1 && !string.IsNullOrEmpty(diegetics[0]))
-                        {
-                            var index = comboBoxEditDiegetic.Items.IndexOf(diegetics[0]);
-                            comboBoxEditDiegetic.SelectedIndex = index >= 0 ? index : -1;
-                        }
-                        else
-                        {
-                            comboBoxEditDiegetic.SelectedIndex = -1;
-                        }
-                        
-                        // DFX - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
                         var dfxs = selectedParagraphs.Select(p => p.DFX ?? string.Empty).Distinct().ToList();
-                        if (dfxs.Count == 1 && !string.IsNullOrEmpty(dfxs[0]))
-                        {
-                            var index = comboBoxEditDFX.Items.IndexOf(dfxs[0]);
-                            comboBoxEditDFX.SelectedIndex = index >= 0 ? index : -1;
-                        }
-                        else
-                        {
-                            comboBoxEditDFX.SelectedIndex = -1;
-                        }
-                        
-                        // Dialogue Reverb - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
                         var dialogueReverbs = selectedParagraphs.Select(p => p.DialogueReverb ?? string.Empty).Distinct().ToList();
-                        if (dialogueReverbs.Count == 1 && !string.IsNullOrEmpty(dialogueReverbs[0]))
-                        {
-                            var index = comboBoxEditDialogueReverb.Items.IndexOf(dialogueReverbs[0]);
-                            comboBoxEditDialogueReverb.SelectedIndex = index >= 0 ? index : -1;
-                        }
-                        else
-                        {
-                            comboBoxEditDialogueReverb.SelectedIndex = -1;
-                        }
-                        
-                        // Notes - 모든 선택된 항목이 같은 값을 가지면 표시, 아니면 빈 값
                         var notes = selectedParagraphs.Select(p => p.Notes ?? string.Empty).Distinct().ToList();
-                        textBoxEditNotes.Text = notes.Count == 1 ? notes[0] : string.Empty;
+
+                        var commonActor = actors.Count == 1 ? actors[0] : string.Empty;
+                        var commonOnOffScreen = onOffScreens.Count == 1 ? onOffScreens[0] : string.Empty;
+                        var commonDiegetic = diegetics.Count == 1 ? diegetics[0] : string.Empty;
+                        var commonDFX = dfxs.Count == 1 ? dfxs[0] : string.Empty;
+                        var commonDialogueReverb = dialogueReverbs.Count == 1 ? dialogueReverbs[0] : string.Empty;
+                        var commonNotes = notes.Count == 1 ? notes[0] : string.Empty;
+
+                        // Actor - 조건부 업데이트 적용
+                        comboBoxEditActor.TextChanged -= ComboBoxEditActor_TextChanged;
+                        if (comboBoxEditActor.Text != commonActor)
+                        {
+                            comboBoxEditActor.Text = commonActor;
+                        }
+                        comboBoxEditActor.TextChanged += ComboBoxEditActor_TextChanged;
+                        
+                        // OnOffScreen - 조건부 업데이트 적용
+                        comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
+                        var onOffScreenIndex = string.IsNullOrEmpty(commonOnOffScreen) ? -1 : 
+                            comboBoxEditOnOffScreen.Items.IndexOf(commonOnOffScreen);
+                        if (comboBoxEditOnOffScreen.SelectedIndex != onOffScreenIndex)
+                        {
+                            comboBoxEditOnOffScreen.SelectedIndex = onOffScreenIndex >= 0 ? onOffScreenIndex : -1;
+                        }
+                        comboBoxEditOnOffScreen.SelectedIndexChanged += ComboBoxEditOnOffScreen_SelectedIndexChanged;
+                        
+                        // Diegetic - 조건부 업데이트 적용
+                        comboBoxEditDiegetic.SelectedIndexChanged -= ComboBoxEditDiegetic_SelectedIndexChanged;
+                        var diegeticIndex = string.IsNullOrEmpty(commonDiegetic) ? -1 : 
+                            comboBoxEditDiegetic.Items.IndexOf(commonDiegetic);
+                        if (comboBoxEditDiegetic.SelectedIndex != diegeticIndex)
+                        {
+                            comboBoxEditDiegetic.SelectedIndex = diegeticIndex >= 0 ? diegeticIndex : -1;
+                        }
+                        comboBoxEditDiegetic.SelectedIndexChanged += ComboBoxEditDiegetic_SelectedIndexChanged;
+                        
+                        // DFX - 조건부 업데이트 적용
+                        comboBoxEditDFX.SelectedIndexChanged -= ComboBoxEditDFX_SelectedIndexChanged;
+                        var dfxIndex = string.IsNullOrEmpty(commonDFX) ? -1 : 
+                            comboBoxEditDFX.Items.IndexOf(commonDFX);
+                        if (comboBoxEditDFX.SelectedIndex != dfxIndex)
+                        {
+                            comboBoxEditDFX.SelectedIndex = dfxIndex >= 0 ? dfxIndex : -1;
+                        }
+                        comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
+                        
+                        // Dialogue Reverb - 조건부 업데이트 적용
+                        comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
+                        var dialogueReverbIndex = string.IsNullOrEmpty(commonDialogueReverb) ? -1 : 
+                            comboBoxEditDialogueReverb.Items.IndexOf(commonDialogueReverb);
+                        if (comboBoxEditDialogueReverb.SelectedIndex != dialogueReverbIndex)
+                        {
+                            comboBoxEditDialogueReverb.SelectedIndex = dialogueReverbIndex >= 0 ? dialogueReverbIndex : -1;
+                        }
+                        comboBoxEditDialogueReverb.SelectedIndexChanged += ComboBoxEditDialogueReverb_SelectedIndexChanged;
+                        
+                        // Notes - 조건부 업데이트 적용
+                        textBoxEditNotes.TextChanged -= TextBoxEditNotes_TextChanged;
+                        if (textBoxEditNotes.Text != commonNotes)
+                        {
+                            textBoxEditNotes.Text = commonNotes;
+                        }
+                        textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
                     }
                 }
             }
             else
             {
-                // Clear controls when no selection
+                // Clear controls when no selection - 기존 패턴과 동일하게 이벤트 핸들러 관리
+                comboBoxEditActor.TextChanged -= ComboBoxEditActor_TextChanged;
                 comboBoxEditActor.Text = string.Empty;
+                comboBoxEditActor.TextChanged += ComboBoxEditActor_TextChanged;
+
+                comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
                 comboBoxEditOnOffScreen.SelectedIndex = -1;
+                comboBoxEditOnOffScreen.SelectedIndexChanged += ComboBoxEditOnOffScreen_SelectedIndexChanged;
+
+                comboBoxEditDiegetic.SelectedIndexChanged -= ComboBoxEditDiegetic_SelectedIndexChanged;
                 comboBoxEditDiegetic.SelectedIndex = -1;
+                comboBoxEditDiegetic.SelectedIndexChanged += ComboBoxEditDiegetic_SelectedIndexChanged;
+
+                comboBoxEditDFX.SelectedIndexChanged -= ComboBoxEditDFX_SelectedIndexChanged;
                 comboBoxEditDFX.SelectedIndex = -1;
+                comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
+
+                comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
                 comboBoxEditDialogueReverb.SelectedIndex = -1;
+                comboBoxEditDialogueReverb.SelectedIndexChanged += ComboBoxEditDialogueReverb_SelectedIndexChanged;
+
+                textBoxEditNotes.TextChanged -= TextBoxEditNotes_TextChanged;
                 textBoxEditNotes.Text = string.Empty;
+                textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
             }
         }
     }

@@ -5060,6 +5060,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.comboBoxEditDFX.Size = new System.Drawing.Size(190, 21);
             this.comboBoxEditDFX.TabIndex = 53;
             this.comboBoxEditDFX.TextChanged += new System.EventHandler(this.ComboBoxEditDFX_TextChanged);
+            this.comboBoxEditDFX.SelectedIndexChanged += new System.EventHandler(this.ComboBoxEditDFX_SelectedIndexChanged);
             // 
             // labelEditDialogueReverb
             // 

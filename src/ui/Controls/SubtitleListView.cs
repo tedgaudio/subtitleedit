@@ -2149,6 +2149,31 @@ namespace Nikse.SubtitleEdit.Controls
                     item.SubItems[ColumnIndexRegion].Text = paragraph.Region;
                 }
 
+                if (ColumnIndexOnOffScreen >= 0)
+                {
+                    item.SubItems[ColumnIndexOnOffScreen].Text = paragraph.OnOff_Screen;
+                }
+
+                if (ColumnIndexDiegetic >= 0)
+                {
+                    item.SubItems[ColumnIndexDiegetic].Text = paragraph.Diegetic;
+                }
+
+                if (ColumnIndexDFX >= 0)
+                {
+                    item.SubItems[ColumnIndexDFX].Text = paragraph.DFX;
+                }
+
+                if (ColumnIndexDialogueReverb >= 0)
+                {
+                    item.SubItems[ColumnIndexDialogueReverb].Text = paragraph.DialogueReverb;
+                }
+
+                if (ColumnIndexNotes >= 0)
+                {
+                    item.SubItems[ColumnIndexNotes].Text = paragraph.Notes;
+                }
+
                 if (ColumnIndexText >= 0)
                 {
                     item.SubItems[ColumnIndexText].Text = paragraph.Text.Replace(Environment.NewLine, _lineSeparatorString);
