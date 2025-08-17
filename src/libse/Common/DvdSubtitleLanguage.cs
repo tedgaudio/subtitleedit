@@ -34,6 +34,7 @@ namespace Nikse.SubtitleEdit.Core.Common
                {"cy", "Welsh"              },
                {"da", "Danish"             },
                {"de", "German"             },
+               {"dl", "Dialogue"           },
                {"dz", "Dzongkha"           },
                {"el", "Greek"              },
                {"en", "English"            },

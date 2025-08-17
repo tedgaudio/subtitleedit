@@ -56,6 +56,7 @@ namespace Nikse.SubtitleEdit.Core.Common
             new Iso639Dash2LanguageCode("cym", "cy", "Welsh"),
             new Iso639Dash2LanguageCode("dan", "da", "Danish"),
             new Iso639Dash2LanguageCode("deu", "de", "German"),
+            new Iso639Dash2LanguageCode("dia", "dl", "Dialogue"),
             new Iso639Dash2LanguageCode("div", "dv", "Divehi"),
             new Iso639Dash2LanguageCode("dzo", "dz", "Dzongkha"),
             new Iso639Dash2LanguageCode("ell", "el", "Greek"),
