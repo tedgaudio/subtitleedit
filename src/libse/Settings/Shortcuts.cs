@@ -450,7 +450,7 @@ namespace Nikse.SubtitleEdit.Core.Settings
             GeneralGoToNextSubtitlePlayTranslate = "Alt+Down";
             GeneralGoToPrevSubtitlePlayTranslate = "Alt+Up";
             GeneralToggleBookmarksWithText = "Control+Shift+B";
-            GeneralCycleAudioTrack = "Alt+A"
+            GeneralCycleAudioTrack = "Alt+A";
             OpenDataFolder = "Control+Alt+Shift+D";
             GeneralToggleView = "F2";
             GeneralHelp = "F1";
