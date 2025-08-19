@@ -257,26 +257,10 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public string MainListViewSetActor10 { get; set; }
         public string MainListViewSetNewOnOffScreen { get; set; }
         public string MainListViewSetOnOffScreen1 { get; set; }
-        public string MainListViewSetOnOffScreen2 { get; set; }
-        public string MainListViewSetOnOffScreen3 { get; set; }
-        public string MainListViewSetOnOffScreen4 { get; set; }
-        public string MainListViewSetOnOffScreen5 { get; set; }
-        public string MainListViewSetOnOffScreen6 { get; set; }
-        public string MainListViewSetOnOffScreen7 { get; set; }
-        public string MainListViewSetOnOffScreen8 { get; set; }
-        public string MainListViewSetOnOffScreen9 { get; set; }
-        public string MainListViewSetOnOffScreen10 { get; set; }
         public string MainListViewSetNewDiegetic { get; set; }
         public string MainListViewSetDiegetic1 { get; set; }
-        public string MainListViewSetDiegetic2 { get; set; }
-        public string MainListViewSetDiegetic3 { get; set; }
-        public string MainListViewSetDiegetic4 { get; set; }
-        public string MainListViewSetDiegetic5 { get; set; }
-        public string MainListViewSetDiegetic6 { get; set; }
-        public string MainListViewSetDiegetic7 { get; set; }
-        public string MainListViewSetDiegetic8 { get; set; }
-        public string MainListViewSetDiegetic9 { get; set; }
-        public string MainListViewSetDiegetic10 { get; set; }
+
+        public string MainListViewSetDialogueReverb1 { get; set; }
         public string MainListViewSetNewNotes { get; set; }
         public string MainListViewColorChoose { get; set; }
         public string MainRemoveFormatting { get; set; }

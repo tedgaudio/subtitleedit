@@ -7861,60 +7861,6 @@ namespace Nikse.SubtitleEdit.Core.Settings
                     shortcuts.MainListViewSetOnOffScreen1 = subNode.InnerText;
                 }
 
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen2");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen2 = subNode.InnerText;
-                }
-
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen3");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen3 = subNode.InnerText;
-                }
-
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen4");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen4 = subNode.InnerText;
-                }
-
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen5");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen5 = subNode.InnerText;
-                }
-
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen6");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen6 = subNode.InnerText;
-                }
-
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen7");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen7 = subNode.InnerText;
-                }
-
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen8");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen8 = subNode.InnerText;
-                }
-
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen9");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen9 = subNode.InnerText;
-                }
-
-                subNode = node.SelectSingleNode("MainListViewSetOnOffScreen10");
-                if (subNode != null)
-                {
-                    shortcuts.MainListViewSetOnOffScreen10 = subNode.InnerText;
-                }
-
                 subNode = node.SelectSingleNode("MainListViewSetNewDiegetic");
                 if (subNode != null)
                 {

@@ -10640,6 +10640,24 @@ namespace Nikse.SubtitleEdit.Forms
             SubtitleListview1.Refresh();
         }
 
+        private void SetDialogueReverb(string dialogueReverb)
+        {
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+
+            string action = string.IsNullOrEmpty(dialogueReverb) ? "Clear dialogue reverb" : "Set dialogue reverb: " + dialogueReverb;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].DialogueReverb = dialogueReverb;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+            }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
+        }
+
         private void SetOnOffScreen(object sender, EventArgs e)
         {
             string onOffScreen = (sender as ToolStripItem).Text;
@@ -18335,102 +18353,88 @@ namespace Nikse.SubtitleEdit.Forms
             }
             else if (_shortcuts.MainListViewSetOnOffScreen1 == e.KeyData)
             {
-                SetOnOffScreenVoice(0);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen2 == e.KeyData)
-            {
-                SetOnOffScreenVoice(1);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen3 == e.KeyData)
-            {
-                SetOnOffScreenVoice(2);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen4 == e.KeyData)
-            {
-                SetOnOffScreenVoice(3);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen5 == e.KeyData)
-            {
-                SetOnOffScreenVoice(4);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen6 == e.KeyData)
-            {
-                SetOnOffScreenVoice(5);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen7 == e.KeyData)
-            {
-                SetOnOffScreenVoice(6);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen8 == e.KeyData)
-            {
-                SetOnOffScreenVoice(7);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen9 == e.KeyData)
-            {
-                SetOnOffScreenVoice(8);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetOnOffScreen10 == e.KeyData)
-            {
-                SetOnOffScreenVoice(9);
+                // 토글 방식: On Screen -> Off Screen -> Clear -> On Screen
+                if (SubtitleListview1.SelectedIndices.Count > 0)
+                {
+                    int firstIndex = SubtitleListview1.SelectedIndices[0];
+                    string currentState = _subtitle.Paragraphs[firstIndex].OnOff_Screen ?? "";
+                    
+                    string newState;
+                    if (string.IsNullOrEmpty(currentState) || currentState == "Off Screen")
+                    {
+                        newState = "On Screen";
+                    }
+                    else if (currentState == "On Screen")
+                    {
+                        newState = "Off Screen";
+                    }
+                    else
+                    {
+                        newState = ""; // Clear
+                    }
+                    
+                    SetOnOffScreen(newState);
+                }
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetDiegetic1 == e.KeyData)
             {
-                SetDiegeticVoice(0);
+                // 토글 방식: Diegetic -> Non-diegetic -> Clear -> Diegetic
+                if (SubtitleListview1.SelectedIndices.Count > 0)
+                {
+                    int firstIndex = SubtitleListview1.SelectedIndices[0];
+                    string currentState = _subtitle.Paragraphs[firstIndex].Diegetic ?? "";
+                    
+                    string newState;
+                    if (string.IsNullOrEmpty(currentState) || currentState == "Non-diegetic")
+                    {
+                        newState = "Diegetic";
+                    }
+                    else if (currentState == "Diegetic")
+                    {
+                        newState = "Non-diegetic";
+                    }
+                    else
+                    {
+                        newState = ""; // Clear
+                    }
+                    
+                    SetDiegeticText(newState);
+                }
                 e.SuppressKeyPress = true;
             }
-            else if (_shortcuts.MainListViewSetDiegetic2 == e.KeyData)
+            else if (_shortcuts.MainListViewSetDialogueReverb1 == e.KeyData)
             {
-                SetDiegeticVoice(1);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetDiegetic3 == e.KeyData)
-            {
-                SetDiegeticVoice(2);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetDiegetic4 == e.KeyData)
-            {
-                SetDiegeticVoice(3);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetDiegetic5 == e.KeyData)
-            {
-                SetDiegeticVoice(4);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetDiegetic6 == e.KeyData)
-            {
-                SetDiegeticVoice(5);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetDiegetic7 == e.KeyData)
-            {
-                SetDiegeticVoice(6);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetDiegetic8 == e.KeyData)
-            {
-                SetDiegeticVoice(7);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetDiegetic9 == e.KeyData)
-            {
-                SetDiegeticVoice(8);
-                e.SuppressKeyPress = true;
-            }
-            else if (_shortcuts.MainListViewSetDiegetic10 == e.KeyData)
-            {
-                SetDiegeticVoice(9);
+                // 토글 방식: None -> Low -> Mid -> High -> Clear -> None
+                if (SubtitleListview1.SelectedIndices.Count > 0)
+                {
+                    int firstIndex = SubtitleListview1.SelectedIndices[0];
+                    string currentState = _subtitle.Paragraphs[firstIndex].DialogueReverb ?? "";
+                    
+                    string newState;
+                    if (string.IsNullOrEmpty(currentState) || currentState == "High")
+                    {
+                        newState = "None";
+                    }
+                    else if (currentState == "None")
+                    {
+                        newState = "Low";
+                    }
+                    else if (currentState == "Low")
+                    {
+                        newState = "Mid";
+                    }
+                    else if (currentState == "Mid")
+                    {
+                        newState = "High";
+                    }
+                    else
+                    {
+                        newState = ""; // Clear
+                    }
+                    
+                    SetDialogueReverb(newState);
+                }
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainGeneralToggleMode == e.KeyData && Configuration.Settings.General.ShowVideoControls)
@@ -20237,34 +20241,9 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-        private void SetOnOffScreenVoice(int index)
-        {
-            var emotions = new List<string>();
-            foreach (var p in _subtitle.Paragraphs)
-            {
-                if (!string.IsNullOrEmpty(p.OnOff_Screen) && !emotions.Contains(p.OnOff_Screen))
-                {
-                    emotions.Add(p.OnOff_Screen);
-                }
 
-                emotions.Sort();
-            }
 
-            if (index >= 0 && index < emotions.Count)
-            {
-                SetOnOffScreen(emotions[index]);
-            }
-        }
 
-        private void SetDiegeticVoice(int index)
-        {
-            var diegeticValues = new List<string> { "diegetic", "non-diegetic" };
-
-            if (index >= 0 && index < diegeticValues.Count)
-            {
-                SetDiegeticText(diegeticValues[index]);
-            }
-        }
 
         private void ToggleCasingListView()
         {
