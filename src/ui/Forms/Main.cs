@@ -9925,9 +9925,8 @@ namespace Nikse.SubtitleEdit.Forms
                 // Setup Dialogue Reverb menu
                 setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
                 setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("None", null, SetDialogueReverb);
-                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("Low", null, SetDialogueReverb);
-                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("Mid", null, SetDialogueReverb);
-                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("High", null, SetDialogueReverb);
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("Weak", null, SetDialogueReverb);
+                setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("Strong", null, SetDialogueReverb);
                 setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
                 setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetDialogueReverb);
 

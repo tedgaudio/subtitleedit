@@ -5080,9 +5080,8 @@ namespace Nikse.SubtitleEdit.Forms
             this.comboBoxEditDialogueReverb.FormattingEnabled = true;
             this.comboBoxEditDialogueReverb.Items.AddRange(new object[] {
             "None",
-            "Low",
-            "Mid",
-            "High"});
+            "Weak",
+            "Strong"});
             this.comboBoxEditDialogueReverb.Location = new System.Drawing.Point(645, 70);
             this.comboBoxEditDialogueReverb.Name = "comboBoxEditDialogueReverb";
             this.comboBoxEditDialogueReverb.Size = new System.Drawing.Size(90, 21);

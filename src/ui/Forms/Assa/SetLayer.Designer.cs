@@ -208,9 +208,8 @@
             this.comboBoxDialogueReverb.FormattingEnabled = true;
             this.comboBoxDialogueReverb.Items.AddRange(new object[] {
             "None",
-            "Low",
-            "Mid",
-            "High"});
+            "Weak",
+            "Strong"});
             this.comboBoxDialogueReverb.Location = new System.Drawing.Point(24, 182);
             this.comboBoxDialogueReverb.Name = "comboBoxDialogueReverb";
             this.comboBoxDialogueReverb.Size = new System.Drawing.Size(120, 21);

@@ -45,7 +45,7 @@ namespace Nikse.SubtitleEdit.Core.Common
         public string Notes { get; set; }
 
         /// <summary>
-        /// Dialogue reverb setting (e.g., "None", "Low", "Mid", "High")
+        /// Dialogue reverb setting (e.g., "None", "Weak", "Strong")
         /// </summary>
         public string DialogueReverb { get; set; }
 
