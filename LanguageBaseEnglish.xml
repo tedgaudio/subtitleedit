@@ -44,6 +44,7 @@
     <Notes>Notes</Notes>
     <DialogueReverb>Dialogue Reverb</DialogueReverb>
     <DFX>DFX</DFX>
+    <Character>Character</Character>
     <Layer>Layer</Layer>
     <NumberSymbol>#</NumberSymbol>
     <Number>Number</Number>
@@ -91,7 +92,6 @@
     <Advanced>Advanced</Advanced>
     <Style>Style</Style>
     <StyleLanguage>Style / Language</StyleLanguage>
-    <Character>Character</Character>
     <Class>Class</Class>
     <GeneralText>General</GeneralText>
     <LineNumber>Line#</LineNumber>
@@ -1539,6 +1539,7 @@ We leverage the intrinsic rhythm of the image.</CreateSimpleChainingToolTip>
         <SizeAllColumnsToFit>Size all columns to fit</SizeAllColumnsToFit>
         <SetStyle>Set style</SetStyle>
         <SetActor>Set actor</SetActor>
+        <SetCharacter>Set character</SetCharacter>
         <SetLayer>Set layer</SetLayer>
         <AssaTools>ASSA tools</AssaTools>
         <SubStationAlphaStyles>Sub Station Alpha styles...</SubStationAlphaStyles>
@@ -1625,7 +1626,11 @@ We leverage the intrinsic rhythm of the image.</CreateSimpleChainingToolTip>
         <WebVTTSetNewVoice>Set new voice...</WebVTTSetNewVoice>
         <WebVTTRemoveVoices>Remove voices</WebVTTRemoveVoices>
         <NewActor>New actor...</NewActor>
+        <NewCharacter>New character...</NewCharacter>
+        <NewDFX>New DFX...</NewDFX>
         <RemoveActors>Remove actors</RemoveActors>
+        <RemoveCharacters>Remove characters</RemoveCharacters>
+        <RemoveDFXs>Remove DFXs</RemoveDFXs>
         <EditBookmark>Edit bookmark...</EditBookmark>
         <RemoveBookmark>Remove bookmark</RemoveBookmark>
         <GoToSourceView>Go to source view</GoToSourceView>
@@ -2893,6 +2898,8 @@ Continue?</RestoreDefaultSettingsMsg>
     <ExportAsHtml>Export as HTML...</ExportAsHtml>
     <SetNewActor>Set new actor/voice</SetNewActor>
     <SetActorX>Set actor/voice {0}</SetActorX>
+    <SetNewCharacter>Set new character</SetNewCharacter>
+    <SetNewDFX>Set new DFX</SetNewDFX>
     <Used>Used</Used>
     <Unused>Unused</Unused>
   </Settings>

@@ -7782,7 +7782,6 @@ namespace Nikse.SubtitleEdit.Core.Settings
                     shortcuts.MainListViewColor8 = subNode.InnerText;
                 }
 
-
                 subNode = node.SelectSingleNode("MainListViewSetNewActor");
                 if (subNode != null)
                 {
@@ -7847,6 +7846,138 @@ namespace Nikse.SubtitleEdit.Core.Settings
                 if (subNode != null)
                 {
                     shortcuts.MainListViewSetActor10 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetNewCharacter");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetNewCharacter = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter1");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter1 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter2");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter2 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter3");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter3 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter4");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter4 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter5");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter5 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter6");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter6 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter7");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter7 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter8");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter8 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter9");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter9 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetCharacter10");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetCharacter10 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetNewDFX");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetNewDFX = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX1");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX1 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX2");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX2 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX3");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX3 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX4");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX4 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX5");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX5 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX6");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX6 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX7");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX7 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX8");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX8 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX9");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX9 = subNode.InnerText;
+                }
+
+                subNode = node.SelectSingleNode("MainListViewSetDFX10");
+                if (subNode != null)
+                {
+                    shortcuts.MainListViewSetDFX10 = subNode.InnerText;
                 }
 
                 subNode = node.SelectSingleNode("MainListViewSetNewOnOffScreen");

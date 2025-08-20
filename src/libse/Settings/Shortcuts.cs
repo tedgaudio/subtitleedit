@@ -255,6 +255,28 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public string MainListViewSetActor8 { get; set; }
         public string MainListViewSetActor9 { get; set; }
         public string MainListViewSetActor10 { get; set; }
+        public string MainListViewSetNewCharacter { get; set; }
+        public string MainListViewSetCharacter1 { get; set; }
+        public string MainListViewSetCharacter2 { get; set; }
+        public string MainListViewSetCharacter3 { get; set; }
+        public string MainListViewSetCharacter4 { get; set; }
+        public string MainListViewSetCharacter5 { get; set; }
+        public string MainListViewSetCharacter6 { get; set; }
+        public string MainListViewSetCharacter7 { get; set; }
+        public string MainListViewSetCharacter8 { get; set; }
+        public string MainListViewSetCharacter9 { get; set; }
+        public string MainListViewSetCharacter10 { get; set; }
+        public string MainListViewSetNewDFX { get; set; }
+        public string MainListViewSetDFX1 { get; set; }
+        public string MainListViewSetDFX2 { get; set; }
+        public string MainListViewSetDFX3 { get; set; }
+        public string MainListViewSetDFX4 { get; set; }
+        public string MainListViewSetDFX5 { get; set; }
+        public string MainListViewSetDFX6 { get; set; }
+        public string MainListViewSetDFX7 { get; set; }
+        public string MainListViewSetDFX8 { get; set; }
+        public string MainListViewSetDFX9 { get; set; }
+        public string MainListViewSetDFX10 { get; set; }
         public string MainListViewSetNewOnOffScreen { get; set; }
         public string MainListViewSetOnOffScreen1 { get; set; }
         public string MainListViewSetOnOffScreen2 { get; set; }

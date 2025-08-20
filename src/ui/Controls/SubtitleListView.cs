@@ -27,6 +27,7 @@ namespace Nikse.SubtitleEdit.Controls
             OnOffScreen,
             Diegetic,
             DFX,
+            Character,
             DialogueReverb,
             Notes,
             Text,
@@ -57,6 +58,7 @@ namespace Nikse.SubtitleEdit.Controls
         public int ColumnIndexOnOffScreen { get; private set; }
         public int ColumnIndexDiegetic { get; private set; }
         public int ColumnIndexDFX { get; private set; }
+        public int ColumnIndexCharacter { get; private set; }
         public int ColumnIndexDialogueReverb { get; private set; }
         public int ColumnIndexNotes { get; private set; }
         public int ColumnIndexText { get; private set; }
@@ -186,6 +188,12 @@ namespace Nikse.SubtitleEdit.Controls
                 Columns[idx].Text = general.DFX;
             }
 
+            idx = GetColumnIndex(SubtitleColumn.Character);
+            if (idx >= 0)
+            {
+                Columns[idx].Text = general.Character;
+            }
+
             idx = GetColumnIndex(SubtitleColumn.Text);
             if (idx >= 0)
             {
@@ -296,11 +304,17 @@ namespace Nikse.SubtitleEdit.Controls
                     Columns[idx].Width = _settings.General.ListViewDialogueReverbWidth;
                 }
 
-                idx = GetColumnIndex(SubtitleColumn.DFX);
-                if (idx >= 0 && _settings.General.ListViewDFXWidth > 1)
-                {
-                    Columns[idx].Width = _settings.General.ListViewDFXWidth;
-                }
+                                 idx = GetColumnIndex(SubtitleColumn.DFX);
+                 if (idx >= 0 && _settings.General.ListViewDFXWidth > 1)
+                 {
+                     Columns[idx].Width = _settings.General.ListViewDFXWidth;
+                 }
+
+                 idx = GetColumnIndex(SubtitleColumn.Character);
+                 if (idx >= 0 && _settings.General.ListViewCharacterWidth > 1)
+                 {
+                     Columns[idx].Width = _settings.General.ListViewCharacterWidth;
+                 }
 
                 idx = GetColumnIndex(SubtitleColumn.Text);
                 if (idx >= 0)
@@ -359,7 +373,8 @@ namespace Nikse.SubtitleEdit.Controls
             ColumnIndexRegion = -1;
             ColumnIndexOnOffScreen = -1;
             ColumnIndexDiegetic = -1;
-            ColumnIndexDFX = -1;
+                         ColumnIndexDFX = -1;
+             ColumnIndexCharacter = -1;
             ColumnIndexDialogueReverb = -1;
             ColumnIndexNotes = -1;
             ColumnIndexText = -1;
@@ -414,9 +429,12 @@ namespace Nikse.SubtitleEdit.Controls
                     case SubtitleColumn.Diegetic:
                         Columns.Add(new ColumnHeader { Width = 60 });
                         break;
-                    case SubtitleColumn.DFX:
-                        Columns.Add(new ColumnHeader { Width = 100 });
-                        break;
+                                         case SubtitleColumn.DFX:
+                         Columns.Add(new ColumnHeader { Width = 100 });
+                         break;
+                     case SubtitleColumn.Character:
+                         Columns.Add(new ColumnHeader { Width = 80 });
+                         break;
                     case SubtitleColumn.DialogueReverb:
                         Columns.Add(new ColumnHeader { Width = 80 });
                         break;
@@ -508,7 +526,8 @@ namespace Nikse.SubtitleEdit.Controls
             ColumnIndexRegion = GetColumnIndex(SubtitleColumn.Region);
             ColumnIndexOnOffScreen = GetColumnIndex(SubtitleColumn.OnOffScreen);
             ColumnIndexDiegetic = GetColumnIndex(SubtitleColumn.Diegetic);
-            ColumnIndexDFX = GetColumnIndex(SubtitleColumn.DFX);
+                         ColumnIndexDFX = GetColumnIndex(SubtitleColumn.DFX);
+             ColumnIndexCharacter = GetColumnIndex(SubtitleColumn.Character);
             ColumnIndexDialogueReverb = GetColumnIndex(SubtitleColumn.DialogueReverb);
             ColumnIndexNotes = GetColumnIndex(SubtitleColumn.Notes);
             ColumnIndexText = GetColumnIndex(SubtitleColumn.Text);
@@ -714,10 +733,14 @@ namespace Nikse.SubtitleEdit.Controls
                 {
                     Configuration.Settings.General.ListViewDiegeticWidth = Columns[ColumnIndexDiegetic].Width;
                 }
-                else if (e.ColumnIndex == ColumnIndexNotes)
-                {
-                    Configuration.Settings.General.ListViewNotesWidth = Columns[ColumnIndexNotes].Width;
-                }
+                                 else if (e.ColumnIndex == ColumnIndexNotes)
+                 {
+                     Configuration.Settings.General.ListViewNotesWidth = Columns[ColumnIndexNotes].Width;
+                 }
+                 else if (e.ColumnIndex == ColumnIndexCharacter)
+                 {
+                     Configuration.Settings.General.ListViewCharacterWidth = Columns[ColumnIndexCharacter].Width;
+                 }
                 if (e.ColumnIndex == ColumnIndexText)
                 {
                     Configuration.Settings.General.ListViewTextWidth = Columns[ColumnIndexText].Width;
@@ -780,11 +803,17 @@ namespace Nikse.SubtitleEdit.Controls
                 SetColumnWidthRetry(gapIdx, 60);
             }
 
-            var actorIdx = GetColumnIndex(SubtitleColumn.Actor);
-            if (actorIdx >= 0)
-            {
-                SetColumnWidthRetry(actorIdx, 80);
-            }
+                         var actorIdx = GetColumnIndex(SubtitleColumn.Actor);
+             if (actorIdx >= 0)
+             {
+                 SetColumnWidthRetry(actorIdx, 80);
+             }
+
+             var characterIdx = GetColumnIndex(SubtitleColumn.Character);
+             if (characterIdx >= 0)
+             {
+                 SetColumnWidthRetry(characterIdx, 80);
+             }
 
             var regionIdx = GetColumnIndex(SubtitleColumn.Region);
             if (regionIdx >= 0)
@@ -893,10 +922,14 @@ namespace Nikse.SubtitleEdit.Controls
                     {
                         cw = 60;
                     }
-                    else if (column == SubtitleColumn.Actor)
-                    {
-                        cw = 70;
-                    }
+                                         else if (column == SubtitleColumn.Actor)
+                     {
+                         cw = 70;
+                     }
+                     else if (column == SubtitleColumn.Character)
+                     {
+                         cw = 80;
+                     }
                     else if (column == SubtitleColumn.Region)
                     {
                         cw = 60;
@@ -1417,31 +1450,62 @@ namespace Nikse.SubtitleEdit.Controls
             }
         }
 
-        public void ShowDFXColumn(string title)
-        {
-            if (GetColumnIndex(SubtitleColumn.DFX) == -1)
-            {
-                var ch = new ColumnHeader { Text = title };
-                if (ColumnIndexDialogueReverb >= 0)
-                {
-                    SubtitleColumns.Insert(ColumnIndexDialogueReverb + 1, SubtitleColumn.DFX);
-                    Columns.Insert(ColumnIndexDialogueReverb + 1, ch);
-                }
-                else if (ColumnIndexNotes >= 0)
-                {
-                    SubtitleColumns.Insert(ColumnIndexNotes + 1, SubtitleColumn.DFX);
-                    Columns.Insert(ColumnIndexNotes + 1, ch);
-                }
-                else
-                {
-                    SubtitleColumns.Add(SubtitleColumn.DFX);
-                    Columns.Add(ch);
-                }
-                UpdateColumnIndexes();
-                SetColumnWidthRetry(ColumnIndexDFX, 100);
-                AutoSizeAllColumns(null);
-            }
-        }
+                 public void ShowDFXColumn(string title)
+         {
+             if (GetColumnIndex(SubtitleColumn.DFX) == -1)
+             {
+                 var ch = new ColumnHeader { Text = title };
+                 if (ColumnIndexDialogueReverb >= 0)
+                 {
+                     SubtitleColumns.Insert(ColumnIndexDialogueReverb + 1, SubtitleColumn.DFX);
+                     Columns.Insert(ColumnIndexDialogueReverb + 1, ch);
+                 }
+                 else if (ColumnIndexNotes >= 0)
+                 {
+                     SubtitleColumns.Insert(ColumnIndexNotes + 1, SubtitleColumn.DFX);
+                     Columns.Insert(ColumnIndexNotes + 1, ch);
+                 }
+                 else
+                 {
+                     SubtitleColumns.Add(SubtitleColumn.DFX);
+                     Columns.Add(ch);
+                 }
+                 UpdateColumnIndexes();
+                 SetColumnWidthRetry(ColumnIndexDFX, 100);
+                 AutoSizeAllColumns(null);
+             }
+         }
+
+         public void ShowCharacterColumn(string title)
+         {
+             if (GetColumnIndex(SubtitleColumn.Character) == -1)
+             {
+                 var ch = new ColumnHeader { Text = title };
+                 if (ColumnIndexDFX >= 0)
+                 {
+                     SubtitleColumns.Insert(ColumnIndexDFX + 1, SubtitleColumn.Character);
+                     Columns.Insert(ColumnIndexDFX + 1, ch);
+                 }
+                 else if (ColumnIndexDialogueReverb >= 0)
+                 {
+                     SubtitleColumns.Insert(ColumnIndexDialogueReverb + 1, SubtitleColumn.Character);
+                     Columns.Insert(ColumnIndexDialogueReverb + 1, ch);
+                 }
+                 else if (ColumnIndexNotes >= 0)
+                 {
+                     SubtitleColumns.Insert(ColumnIndexNotes + 1, SubtitleColumn.Character);
+                     Columns.Insert(ColumnIndexNotes + 1, ch);
+                 }
+                 else
+                 {
+                     SubtitleColumns.Add(SubtitleColumn.Character);
+                     Columns.Add(ch);
+                 }
+                 UpdateColumnIndexes();
+                 SetColumnWidthRetry(ColumnIndexCharacter, 80);
+                 AutoSizeAllColumns(null);
+             }
+         }
 
         public void HideColumn(SubtitleColumn column)
         {
@@ -1894,12 +1958,15 @@ namespace Nikse.SubtitleEdit.Controls
                     case SubtitleColumn.Diegetic:
                         item.SubItems.Add(paragraph.Diegetic);
                         break;
-                    case SubtitleColumn.DFX:
-                        item.SubItems.Add(paragraph.DFX);
-                        break;
-                    case SubtitleColumn.DialogueReverb:
-                        item.SubItems.Add(paragraph.DialogueReverb);
-                        break;
+                                         case SubtitleColumn.DFX:
+                         item.SubItems.Add(paragraph.DFX);
+                         break;
+                     case SubtitleColumn.Character:
+                         item.SubItems.Add(paragraph.Character);
+                         break;
+                     case SubtitleColumn.DialogueReverb:
+                         item.SubItems.Add(paragraph.DialogueReverb);
+                         break;
                     case SubtitleColumn.Notes:
                         item.SubItems.Add(paragraph.Notes);
                         break;
@@ -2160,8 +2227,13 @@ namespace Nikse.SubtitleEdit.Controls
                 }
 
                 if (ColumnIndexDFX >= 0)
+                 {
+                     item.SubItems[ColumnIndexDFX].Text = paragraph.DFX;
+                 }
+
+                if (ColumnIndexCharacter >= 0)
                 {
-                    item.SubItems[ColumnIndexDFX].Text = paragraph.DFX;
+                    item.SubItems[ColumnIndexCharacter].Text = paragraph.Character;
                 }
 
                 if (ColumnIndexDialogueReverb >= 0)
@@ -2491,10 +2563,15 @@ namespace Nikse.SubtitleEdit.Controls
                 subItemUpdater(Items[index].SubItems[ColumnIndexWpm]);
             }
 
-            if (ColumnIndexGap >= 0)
-            {
-                subItemUpdater(Items[index].SubItems[ColumnIndexGap]);
-            }
+                         if (ColumnIndexGap >= 0)
+             {
+                 subItemUpdater(Items[index].SubItems[ColumnIndexGap]);
+             }
+
+             if (ColumnIndexCharacter >= 0)
+             {
+                 subItemUpdater(Items[index].SubItems[ColumnIndexCharacter]);
+             }
 
             if (ColumnIndexText >= 0)
             {
@@ -2549,10 +2626,15 @@ namespace Nikse.SubtitleEdit.Controls
                     item.SubItems[ColumnIndexText].Text = string.Empty;
                 }
 
-                if (ColumnIndexGap >= 0)
-                {
-                    item.SubItems[ColumnIndexGap].Text = string.Empty;
-                }
+                                 if (ColumnIndexGap >= 0)
+                 {
+                     item.SubItems[ColumnIndexGap].Text = string.Empty;
+                 }
+
+                 if (ColumnIndexCharacter >= 0)
+                 {
+                     item.SubItems[ColumnIndexCharacter].Text = string.Empty;
+                 }
 
                 SetBackgroundColor(index, color);
             }

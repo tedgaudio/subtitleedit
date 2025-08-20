@@ -61,30 +61,6 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                 
                 // Add new fields as comments
                 var additionalInfo = new List<string>();
-                if (!string.IsNullOrEmpty(p.OnOff_Screen))
-                {
-                    additionalInfo.Add($"onoffscreen:{p.OnOff_Screen}");
-                }
-                if (!string.IsNullOrEmpty(p.Diegetic))
-                {
-                    additionalInfo.Add($"diegetic:{p.Diegetic}");
-                }
-                if (!string.IsNullOrEmpty(p.Notes))
-                {
-                    
-                    additionalInfo.Add($"notes:{p.Notes}");
-                }
-
-                if (!string.IsNullOrEmpty(p.DialogueReverb))
-                {
-                    additionalInfo.Add($"dialoguereverb:{p.DialogueReverb}");
-                }
-
-                if (!string.IsNullOrEmpty(p.DFX))
-                {
-                    additionalInfo.Add($"dfx:{p.DFX}");
-                }
-                
                 if (additionalInfo.Count > 0)
                 {
                     text += Environment.NewLine + "<!-- " + string.Join(" | ", additionalInfo) + " -->";

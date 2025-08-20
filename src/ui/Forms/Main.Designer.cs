@@ -286,6 +286,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.setStylesForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setActorForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setOnOffScreenForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setCharacterForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetDiegeticForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNotesForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setDialogueReverbForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -565,14 +566,14 @@ namespace Nikse.SubtitleEdit.Forms
             this.labelStartTime = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.labelDuration = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.labelAutoDuration = new Nikse.SubtitleEdit.Controls.NikseLabel();
-            this.labelEditActor = new Nikse.SubtitleEdit.Controls.NikseLabel();
-            this.comboBoxEditActor = new System.Windows.Forms.ComboBox();
             this.labelEditOnOffScreen = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.comboBoxEditOnOffScreen = new System.Windows.Forms.ComboBox();
             this.labelEditDiegetic = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.comboBoxEditDiegetic = new System.Windows.Forms.ComboBox();
             this.labelEditDFX = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.comboBoxEditDFX = new System.Windows.Forms.ComboBox();
+            this.labelEditCharacter = new Nikse.SubtitleEdit.Controls.NikseLabel();
+            this.comboBoxEditCharacter = new System.Windows.Forms.ComboBox();
             this.labelEditDialogueReverb = new Nikse.SubtitleEdit.Controls.NikseLabel();
             this.comboBoxEditDialogueReverb = new System.Windows.Forms.ComboBox();
             this.labelEditNotes = new Nikse.SubtitleEdit.Controls.NikseLabel();
@@ -2727,6 +2728,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.contextMenuStripListView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setStylesForSelectedLinesToolStripMenuItem,
             this.setActorForSelectedLinesToolStripMenuItem,
+            this.setCharacterForSelectedLinesToolStripMenuItem,
             this.setOnOffScreenForSelectedLinesToolStripMenuItem,
             this.SetDiegeticForSelectedLinesToolStripMenuItem,
             this.setNotesForSelectedLinesToolStripMenuItem,
@@ -2794,6 +2796,12 @@ namespace Nikse.SubtitleEdit.Forms
             this.setOnOffScreenForSelectedLinesToolStripMenuItem.Name = "setOnOffScreenForSelectedLinesToolStripMenuItem";
             this.setOnOffScreenForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
             this.setOnOffScreenForSelectedLinesToolStripMenuItem.Text = "Set on/off screen";
+            // 
+            // setCharacterForSelectedLinesToolStripMenuItem
+            // 
+            this.setCharacterForSelectedLinesToolStripMenuItem.Name = "setCharacterForSelectedLinesToolStripMenuItem";
+            this.setCharacterForSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.setCharacterForSelectedLinesToolStripMenuItem.Text = "Set character";
             // 
             // SetDiegeticForSelectedLinesToolStripMenuItem
             // 
@@ -4867,14 +4875,14 @@ namespace Nikse.SubtitleEdit.Forms
             // 
             this.groupBoxEdit.Controls.Add(this.numericUpDownLayer);
             this.groupBoxEdit.Controls.Add(this.labelLayer);
-            this.groupBoxEdit.Controls.Add(this.labelEditActor);
-            this.groupBoxEdit.Controls.Add(this.comboBoxEditActor);
             this.groupBoxEdit.Controls.Add(this.labelEditOnOffScreen);
             this.groupBoxEdit.Controls.Add(this.comboBoxEditOnOffScreen);
             this.groupBoxEdit.Controls.Add(this.labelEditDiegetic);
             this.groupBoxEdit.Controls.Add(this.comboBoxEditDiegetic);
             this.groupBoxEdit.Controls.Add(this.labelEditDFX);
             this.groupBoxEdit.Controls.Add(this.comboBoxEditDFX);
+            this.groupBoxEdit.Controls.Add(this.labelEditCharacter);
+            this.groupBoxEdit.Controls.Add(this.comboBoxEditCharacter);
             this.groupBoxEdit.Controls.Add(this.labelEditDialogueReverb);
             this.groupBoxEdit.Controls.Add(this.comboBoxEditDialogueReverb);
             this.groupBoxEdit.Controls.Add(this.labelEditNotes);
@@ -4907,14 +4915,6 @@ namespace Nikse.SubtitleEdit.Forms
             this.groupBoxEdit.Controls.Add(this.labelDuration);
             this.groupBoxEdit.Controls.Add(this.labelAutoDuration);
             this.groupBoxEdit.Controls.Add(this.pictureBoxRecord);
-            this.groupBoxEdit.Controls.Add(this.labelEditActor);
-            this.groupBoxEdit.Controls.Add(this.comboBoxEditActor);
-            this.groupBoxEdit.Controls.Add(this.labelEditOnOffScreen);
-            this.groupBoxEdit.Controls.Add(this.comboBoxEditOnOffScreen);
-            this.groupBoxEdit.Controls.Add(this.labelEditDiegetic);
-            this.groupBoxEdit.Controls.Add(this.comboBoxEditDiegetic);
-            this.groupBoxEdit.Controls.Add(this.labelEditDFX);
-            this.groupBoxEdit.Controls.Add(this.comboBoxEditDFX);
             this.groupBoxEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxEdit.Location = new System.Drawing.Point(0, 0);
             this.groupBoxEdit.Name = "groupBoxEdit";
@@ -4969,27 +4969,28 @@ namespace Nikse.SubtitleEdit.Forms
             this.labelLayer.TabIndex = 45;
             this.labelLayer.Text = "Layer";
             // 
-            // labelEditActor
+            // labelEditCharacter
             // 
-            this.labelEditActor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelEditActor.AutoSize = true;
-            this.labelEditActor.Location = new System.Drawing.Point(645, 11);
-            this.labelEditActor.Name = "labelEditActor";
-            this.labelEditActor.Size = new System.Drawing.Size(32, 13);
-            this.labelEditActor.TabIndex = 46;
-            this.labelEditActor.Text = "Actor";
+            this.labelEditCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelEditCharacter.AutoSize = true;
+            this.labelEditCharacter.Location = new System.Drawing.Point(645, 11);
+            this.labelEditCharacter.Name = "labelEditCharacter";
+            this.labelEditCharacter.Size = new System.Drawing.Size(32, 13);
+            this.labelEditCharacter.TabIndex = 46;
+            this.labelEditCharacter.Text = "Character";
             // 
             // comboBoxEditActor
             // 
-            this.comboBoxEditActor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxEditActor.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxEditActor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            this.comboBoxEditActor.FormattingEnabled = true;
-            this.comboBoxEditActor.Location = new System.Drawing.Point(645, 26);
-            this.comboBoxEditActor.Name = "comboBoxEditActor";
-            this.comboBoxEditActor.Size = new System.Drawing.Size(90, 21);
-            this.comboBoxEditActor.TabIndex = 47;
-            this.comboBoxEditActor.TextChanged += new System.EventHandler(this.ComboBoxEditActor_TextChanged);
+            this.comboBoxEditCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxEditCharacter.BackColor = System.Drawing.SystemColors.Window;
+            this.comboBoxEditCharacter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.comboBoxEditCharacter.FormattingEnabled = true;
+            this.comboBoxEditCharacter.Location = new System.Drawing.Point(645, 26);
+            this.comboBoxEditCharacter.Name = "comboBoxEditCharacter";
+            this.comboBoxEditCharacter.Size = new System.Drawing.Size(90, 21);
+            this.comboBoxEditCharacter.TabIndex = 47;
+            this.comboBoxEditCharacter.TextChanged += new System.EventHandler(this.ComboBoxEditCharacter_TextChanged);
+
             // 
             // labelEditOnOffScreen
             // 
@@ -6645,6 +6646,7 @@ namespace Nikse.SubtitleEdit.Forms
         private System.Windows.Forms.ToolStripButton toolStripButtonNetflixQualityCheck;
         private System.Windows.Forms.ToolStripMenuItem setActorForSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setOnOffScreenForSelectedLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setCharacterForSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SetDiegeticForSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setNotesForSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setDialogueReverbForSelectedLinesToolStripMenuItem;
@@ -6792,14 +6794,14 @@ namespace Nikse.SubtitleEdit.Forms
         private ToolStripMenuItem toolStripMenuItemCombineWaveformAndSpectrogram;
         
         // Custom fields for editing panel
-        private Nikse.SubtitleEdit.Controls.NikseLabel labelEditActor;
-        private System.Windows.Forms.ComboBox comboBoxEditActor;
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditOnOffScreen;
         private System.Windows.Forms.ComboBox comboBoxEditOnOffScreen;
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDiegetic;
         private System.Windows.Forms.ComboBox comboBoxEditDiegetic;
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDFX;
         private System.Windows.Forms.ComboBox comboBoxEditDFX;
+        private Nikse.SubtitleEdit.Controls.NikseLabel labelEditCharacter;
+        private System.Windows.Forms.ComboBox comboBoxEditCharacter;
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditDialogueReverb;
         private System.Windows.Forms.ComboBox comboBoxEditDialogueReverb;
         private Nikse.SubtitleEdit.Controls.NikseLabel labelEditNotes;

@@ -68,6 +68,9 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
         
         [JsonProperty("dfx")]
         public string DFX { get; set; }
+        
+        [JsonProperty("character")]
+        public string Character { get; set; }
     }
 
     public class GaudioJsonRoot
@@ -258,7 +261,8 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                         Diegetic = p.Diegetic,
                         Notes = p.Notes,
                         DialogueReverb = p.DialogueReverb,
-                        DFX = p.DFX
+                        DFX = p.DFX,
+                        Character = p.Character
                     };
                     
                     transcriptions.Add(transcription);
@@ -372,6 +376,11 @@ namespace Nikse.SubtitleEdit.Core.SubtitleFormats
                     if (!string.IsNullOrEmpty(transcription.DFX))
                     {
                         p.DFX = DecodeJsonText(transcription.DFX);
+                    }
+                    
+                    if (!string.IsNullOrEmpty(transcription.Character))
+                    {
+                        p.Character = DecodeJsonText(transcription.Character);
                     }
                     
                     subtitle.Paragraphs.Add(p);

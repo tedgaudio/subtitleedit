@@ -187,6 +187,9 @@ namespace Nikse.SubtitleEdit.Logic
                 case "General/DFX":
                     language.General.DFX = reader.Value;
                     break;
+                case "General/Character":
+                    language.General.Character = reader.Value;
+                    break;
                 case "General/Layer":
                     language.General.Layer = reader.Value;
                     break;
@@ -327,9 +330,6 @@ namespace Nikse.SubtitleEdit.Logic
                     break;
                 case "General/StyleLanguage":
                     language.General.StyleLanguage = reader.Value;
-                    break;
-                case "General/Character":
-                    language.General.Character = reader.Value;
                     break;
                 case "General/Class":
                     language.General.Class = reader.Value;
@@ -4960,6 +4960,9 @@ namespace Nikse.SubtitleEdit.Logic
                 case "Main/Menu/ContextMenu/SetActor":
                     language.Main.Menu.ContextMenu.SetActor = reader.Value;
                     break;
+                case "Main/Menu/ContextMenu/SetCharacter":
+                    language.Main.Menu.ContextMenu.SetCharacter = reader.Value;
+                    break;
                 case "Main/Menu/ContextMenu/SetLayer":
                     language.Main.Menu.ContextMenu.SetLayer = reader.Value;
                     break;
@@ -5218,8 +5221,20 @@ namespace Nikse.SubtitleEdit.Logic
                 case "Main/Menu/ContextMenu/NewActor":
                     language.Main.Menu.ContextMenu.NewActor = reader.Value;
                     break;
+                case "Main/Menu/ContextMenu/NewCharacter":
+                    language.Main.Menu.ContextMenu.NewCharacter = reader.Value;
+                    break;
+                case "Main/Menu/ContextMenu/NewDFX":
+                    language.Main.Menu.ContextMenu.NewDFX = reader.Value;
+                    break;
                 case "Main/Menu/ContextMenu/RemoveActors":
                     language.Main.Menu.ContextMenu.RemoveActors = reader.Value;
+                    break;
+                case "Main/Menu/ContextMenu/RemoveCharacters":
+                    language.Main.Menu.ContextMenu.RemoveCharacters = reader.Value;
+                    break;
+                case "Main/Menu/ContextMenu/RemoveDFXs":
+                    language.Main.Menu.ContextMenu.RemoveDFXs = reader.Value;
                     break;
                 case "Main/Menu/ContextMenu/EditBookmark":
                     language.Main.Menu.ContextMenu.EditBookmark = reader.Value;
@@ -7956,6 +7971,12 @@ namespace Nikse.SubtitleEdit.Logic
                     break;
                 case "Settings/SetActorX":
                     language.Settings.SetActorX = reader.Value;
+                    break;
+                case "Settings/SetNewCharacter":
+                    language.Settings.SetNewCharacter = reader.Value;
+                    break;
+                case "Settings/SetNewDFX":
+                    language.Settings.SetNewDFX = reader.Value;
                     break;
                 case "Settings/Used":
                     language.Settings.Used = reader.Value;

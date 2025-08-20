@@ -250,6 +250,28 @@ namespace Nikse.SubtitleEdit.Logic
         public Keys MainListViewSetActor8 { get; set; }
         public Keys MainListViewSetActor9 { get; set; }
         public Keys MainListViewSetActor10 { get; set; }
+        public Keys MainListViewSetNewCharacter { get; set; }
+        public Keys MainListViewSetCharacter1 { get; set; }
+        public Keys MainListViewSetCharacter2 { get; set; }
+        public Keys MainListViewSetCharacter3 { get; set; }
+        public Keys MainListViewSetCharacter4 { get; set; }
+        public Keys MainListViewSetCharacter5 { get; set; }
+        public Keys MainListViewSetCharacter6 { get; set; }
+        public Keys MainListViewSetCharacter7 { get; set; }
+        public Keys MainListViewSetCharacter8 { get; set; }
+        public Keys MainListViewSetCharacter9 { get; set; }
+        public Keys MainListViewSetCharacter10 { get; set; }
+        public Keys MainListViewSetNewDFX { get; set; }
+        public Keys MainListViewSetDFX1 { get; set; }
+        public Keys MainListViewSetDFX2 { get; set; }
+        public Keys MainListViewSetDFX3 { get; set; }
+        public Keys MainListViewSetDFX4 { get; set; }
+        public Keys MainListViewSetDFX5 { get; set; }
+        public Keys MainListViewSetDFX6 { get; set; }
+        public Keys MainListViewSetDFX7 { get; set; }
+        public Keys MainListViewSetDFX8 { get; set; }
+        public Keys MainListViewSetDFX9 { get; set; }
+        public Keys MainListViewSetDFX10 { get; set; }
         public Keys MainListViewSetNewOnOffScreen { get; set; }
         public Keys MainListViewSetOnOffScreen1 { get; set; }
         public Keys MainListViewSetOnOffScreen2 { get; set; }
@@ -469,6 +491,28 @@ namespace Nikse.SubtitleEdit.Logic
             MainListViewSetActor8 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor8);
             MainListViewSetActor9 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor9);
             MainListViewSetActor10 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor10);
+            MainListViewSetNewCharacter = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewCharacter);
+            MainListViewSetCharacter1 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter1);
+            MainListViewSetCharacter2 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter2);
+            MainListViewSetCharacter3 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter3);
+            MainListViewSetCharacter4 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter4);
+            MainListViewSetCharacter5 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter5);
+            MainListViewSetCharacter6 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter6);
+            MainListViewSetCharacter7 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter7);
+            MainListViewSetCharacter8 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter8);
+            MainListViewSetCharacter9 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter9);
+            MainListViewSetCharacter10 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetCharacter10);
+            MainListViewSetNewDFX = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewDFX);
+            MainListViewSetDFX1 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX1);
+            MainListViewSetDFX2 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX2);
+            MainListViewSetDFX3 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX3);
+            MainListViewSetDFX4 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX4);
+            MainListViewSetDFX5 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX5);
+            MainListViewSetDFX6 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX6);
+            MainListViewSetDFX7 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX7);
+            MainListViewSetDFX8 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX8);
+            MainListViewSetDFX9 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX9);
+            MainListViewSetDFX10 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetDFX10);
             MainListViewSetNewOnOffScreen = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewOnOffScreen);
             MainListViewSetOnOffScreen1 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen1);
             MainListViewSetOnOffScreen2 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetOnOffScreen2);

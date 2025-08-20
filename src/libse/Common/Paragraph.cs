@@ -54,6 +54,11 @@ namespace Nikse.SubtitleEdit.Core.Common
         /// </summary>
         public string DFX { get; set; }
 
+        /// <summary>
+        /// Character information for the subtitle
+        /// </summary>
+        public string Character { get; set; }
+
         public string MarginL { get; set; }
         public string MarginR { get; set; }
         public string MarginV { get; set; }
@@ -107,6 +112,7 @@ namespace Nikse.SubtitleEdit.Core.Common
             Notes = paragraph.Notes;
             DialogueReverb = paragraph.DialogueReverb;
             DFX = paragraph.DFX;
+            Character = paragraph.Character;
             MarginL = paragraph.MarginL;
             MarginR = paragraph.MarginR;
             MarginV = paragraph.MarginV;

@@ -24,6 +24,7 @@ namespace Nikse.SubtitleEdit.Logic
             Configuration.Settings.General.ListViewRegionDisplayIndex = -1;
             Configuration.Settings.General.ListViewOnOffScreenDisplayIndex = -1;
             Configuration.Settings.General.ListViewDiegeticDisplayIndex = -1;
+            Configuration.Settings.General.ListViewCharacterDisplayIndex = -1;
             Configuration.Settings.General.ListViewNotesDisplayIndex = -1;
             Configuration.Settings.General.ListViewTextDisplayIndex = -1;
 
@@ -107,11 +108,17 @@ namespace Nikse.SubtitleEdit.Logic
                 Configuration.Settings.General.ListViewDialogueReverbDisplayIndex = subtitleListView.Columns[subtitleListView.ColumnIndexDialogueReverb].DisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexDFX >= 0)
-            {
-                Configuration.Settings.General.ListViewDFXWidth = subtitleListView.Columns[subtitleListView.ColumnIndexDFX].Width;
-                Configuration.Settings.General.ListViewDFXDisplayIndex = subtitleListView.Columns[subtitleListView.ColumnIndexDFX].DisplayIndex;
-            }
+                         if (subtitleListView.ColumnIndexDFX >= 0)
+             {
+                 Configuration.Settings.General.ListViewDFXWidth = subtitleListView.Columns[subtitleListView.ColumnIndexDFX].Width;
+                 Configuration.Settings.General.ListViewDFXDisplayIndex = subtitleListView.Columns[subtitleListView.ColumnIndexDFX].DisplayIndex;
+             }
+
+                          if (subtitleListView.ColumnIndexCharacter >= 0)
+             {
+                 Configuration.Settings.General.ListViewCharacterWidth = subtitleListView.Columns[subtitleListView.ColumnIndexCharacter].Width;
+                 Configuration.Settings.General.ListViewCharacterDisplayIndex = subtitleListView.Columns[subtitleListView.ColumnIndexCharacter].DisplayIndex;
+             }
 
             if (subtitleListView.ColumnIndexText >= 0)
             {
@@ -220,12 +227,19 @@ namespace Nikse.SubtitleEdit.Logic
                 subtitleListView.Columns[subtitleListView.ColumnIndexDialogueReverb].DisplayIndex = Configuration.Settings.General.ListViewDialogueReverbDisplayIndex;
             }
 
-            if (subtitleListView.ColumnIndexDFX >= 0 && 
-                Configuration.Settings.General.ListViewDFXDisplayIndex >= 0 &&
-                Configuration.Settings.General.ListViewDFXDisplayIndex < columnCount)
-            {
-                subtitleListView.Columns[subtitleListView.ColumnIndexDFX].DisplayIndex = Configuration.Settings.General.ListViewDFXDisplayIndex;
-            }
+                         if (subtitleListView.ColumnIndexDFX >= 0 && 
+                 Configuration.Settings.General.ListViewDFXDisplayIndex >= 0 &&
+                 Configuration.Settings.General.ListViewDFXDisplayIndex < columnCount)
+             {
+                 subtitleListView.Columns[subtitleListView.ColumnIndexDFX].DisplayIndex = Configuration.Settings.General.ListViewDFXDisplayIndex;
+             }
+
+                          if (subtitleListView.ColumnIndexCharacter >= 0 && 
+                 Configuration.Settings.General.ListViewCharacterDisplayIndex >= 0 &&
+                 Configuration.Settings.General.ListViewCharacterDisplayIndex < columnCount)
+             {
+                 subtitleListView.Columns[subtitleListView.ColumnIndexCharacter].DisplayIndex = Configuration.Settings.General.ListViewCharacterDisplayIndex;
+             }
 
             if (subtitleListView.ColumnIndexText >= 0 &&
                 Configuration.Settings.General.ListViewTextDisplayIndex >= 0 &&

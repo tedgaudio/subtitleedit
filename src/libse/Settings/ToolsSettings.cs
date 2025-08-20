@@ -160,6 +160,7 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public bool ListViewShowColumnNotes { get; set; }
         public bool ListViewShowColumnDialogueReverb { get; set; }
         public bool ListViewShowColumnDFX { get; set; }
+        public bool ListViewShowColumnCharacter { get; set; }
         public bool ListViewMultipleReplaceShowColumnRuleInfo { get; set; }
         public bool SplitAdvanced { get; set; }
         public string SplitOutputFolder { get; set; }
@@ -569,6 +570,7 @@ namespace Nikse.SubtitleEdit.Core.Settings
             ListViewShowColumnDiegetic = true;
             ListViewShowColumnDialogueReverb = true;
             ListViewShowColumnDFX = true;
+            ListViewShowColumnCharacter = true;
             SplitAdvanced = false;
             SplitNumberOfParts = 3;
             SplitVia = "Lines";

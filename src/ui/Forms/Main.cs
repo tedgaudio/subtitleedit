@@ -393,14 +393,14 @@ namespace Nikse.SubtitleEdit.Forms
                 labelNextWord.Visible = false;
 
                 // 커스텀 필드들 초기에는 숨김 (포맷에 따라 ShowSource에서 제어됨)
-                labelEditActor.Visible = false;
-                comboBoxEditActor.Visible = false;
                 labelEditOnOffScreen.Visible = false;
                 comboBoxEditOnOffScreen.Visible = false;
                 labelEditDiegetic.Visible = false;
                 comboBoxEditDiegetic.Visible = false;
                 labelEditDFX.Visible = false;
                 comboBoxEditDFX.Visible = false;
+                labelEditCharacter.Visible = false;
+                comboBoxEditCharacter.Visible = false;
                 labelEditDialogueReverb.Visible = false;
                 comboBoxEditDialogueReverb.Visible = false;
                 labelEditNotes.Visible = false;
@@ -1938,6 +1938,7 @@ namespace Nikse.SubtitleEdit.Forms
             toolStripMenuItemAssaStyles.Text = _language.Menu.ContextMenu.SubStationAlphaStyles;
             setStylesForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetStyle;
             setActorForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetActor;
+            setCharacterForSelectedLinesToolStripMenuItem.Text = _language.Menu.ContextMenu.SetCharacter;
             setOnOffScreenForSelectedLinesToolStripMenuItem.Text = "Set on/off screen";
             SetDiegeticForSelectedLinesToolStripMenuItem.Text = "Set diegetic";
             setNotesForSelectedLinesToolStripMenuItem.Text = "Set notes";
@@ -2414,6 +2415,7 @@ namespace Nikse.SubtitleEdit.Forms
                 if (Configuration.Settings.Tools.ListViewShowColumnDFX)
                 {
                     SubtitleListview1.ShowDFXColumn(LanguageSettings.Current.General.DFX);
+                    SubtitleListview1.ShowCharacterColumn(LanguageSettings.Current.General.Character);
                 }
             }
             else
@@ -4308,21 +4310,21 @@ namespace Nikse.SubtitleEdit.Forms
             var currentFormat = GetCurrentSubtitleFormat();
             if (currentFormat?.GetType() == typeof(GaudioJson) && _subtitle?.Paragraphs != null)
             {
-                // Update comboBoxEditActor items
+                // Update comboBoxEditCharacter items
                 var actors = new List<string>();
                 foreach (var paragraph in _subtitle.Paragraphs)
                 {
-                    if (!string.IsNullOrEmpty(paragraph.Actor) && !actors.Contains(paragraph.Actor))
+                    if (!string.IsNullOrEmpty(paragraph.Character) && !actors.Contains(paragraph.Character))
                     {
-                        actors.Add(paragraph.Actor);
+                        actors.Add(paragraph.Character);
                     }
                 }
                 actors.Sort();
                 
-                comboBoxEditActor.Items.Clear();
+                comboBoxEditCharacter.Items.Clear();
                 foreach (var actor in actors)
                 {
-                    comboBoxEditActor.Items.Add(actor);
+                    comboBoxEditCharacter.Items.Add(actor);
                 }
 
                 // Update comboBoxEditDFX items
@@ -9361,6 +9363,7 @@ namespace Nikse.SubtitleEdit.Forms
                         if (Configuration.Settings.Tools.ListViewShowColumnDFX)
                         {
                             SubtitleListview1.ShowDFXColumn(LanguageSettings.Current.General.DFX);
+                    SubtitleListview1.ShowCharacterColumn(LanguageSettings.Current.General.Character);
                         }
                         else
                         {
@@ -9599,98 +9602,16 @@ namespace Nikse.SubtitleEdit.Forms
                     actors.Sort();
                 }
 
-                // Update comboBoxEditActor items only for GaudioJson format
+                // Update comboBoxEditCharacter items only for GaudioJson format
                 if (formatType == typeof(GaudioJson))
                 {
-                    comboBoxEditActor.Items.Clear();
+                    comboBoxEditCharacter.Items.Clear();
                     foreach (var actor in actors)
                     {
-                        comboBoxEditActor.Items.Add(actor);
+                        comboBoxEditCharacter.Items.Add(actor);
                     }                   
                 }
 
-                setActorForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
-                for (var index = 0; index < actors.Count; index++)
-                {
-                    var actor = actors[index];
-                    setActorForSelectedLinesToolStripMenuItem.DropDownItems.Add(actor, null, SetActor);
-                    if (index == 0 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor1))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor1);
-                    }
-                    else if (index == 1 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor2))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor2);
-                    }
-                    else if (index == 2 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor3))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor3);
-                    }
-                    else if (index == 3 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor4))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor4);
-                    }
-                    else if (index == 4 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor5))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor5);
-                    }
-                    else if (index == 5 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor6))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor6);
-                    }
-                    else if (index == 6 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor7))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor7);
-                    }
-                    else if (index == 7 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor8))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor8);
-                    }
-                    else if (index == 8 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor9))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor9);
-                    }
-                    else if (index == 9 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor10))
-                    {
-                        var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor10);
-                    }
-
-                    if (SubtitleListview1.SelectedItems.Count == 1 && _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index)?.Actor == actor)
-                    {
-                        ((ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1]).Checked = true;
-                    }
-                }
-
-                if (actors.Count > 0)
-                {
-                    var tss = new ToolStripSeparator();
-                    UiUtil.FixFonts(tss);
-                    setActorForSelectedLinesToolStripMenuItem.DropDownItems.Add(tss);
-                }
-
-                setActorForSelectedLinesToolStripMenuItem.DropDownItems.Add(_language.Menu.ContextMenu.NewActor, null, SetNewActor);
-                if (!string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetNewActor))
-                {
-                    var item = (ToolStripMenuItem)setActorForSelectedLinesToolStripMenuItem.DropDownItems[setActorForSelectedLinesToolStripMenuItem.DropDownItems.Count - 1];
-                    item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetNewActor);
-                }
-
-                if (actors.Count > 0)
-                {
-                    setActorForSelectedLinesToolStripMenuItem.DropDownItems.Add(_language.Menu.ContextMenu.RemoveActors, null, RemoveActors);
-                }
-
-                UiUtil.FixFonts(setActorForSelectedLinesToolStripMenuItem);
 
                 toolStripMenuItemSetLayer.DropDownItems.Clear();
                 if (SubtitleListview1.SelectedItems.Count > 0)
@@ -9903,63 +9824,7 @@ namespace Nikse.SubtitleEdit.Forms
                 toolStripMenuItemWebVTT.Visible = true;
                 var voices = WebVTT.GetVoices(_subtitle).OrderBy(p => p).ToList();
                 toolStripMenuItemWebVTT.DropDownItems.Clear();
-                for (var index = 0; index < voices.Count; index++)
-                {
-                    var voice = voices[index];
-                    toolStripMenuItemWebVTT.DropDownItems.Add(voice, null, WebVTTSetVoice);
-
-                    if (index == 0 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor1))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor1);
-                    }
-                    else if (index == 1 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor2))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor2);
-                    }
-                    else if (index == 2 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor3))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor3);
-                    }
-                    else if (index == 3 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor4))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor4);
-                    }
-                    else if (index == 4 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor5))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor5);
-                    }
-                    else if (index == 5 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor6))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor6);
-                    }
-                    else if (index == 6 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor7))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor7);
-                    }
-                    else if (index == 7 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor8))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor8);
-                    }
-                    else if (index == 8 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor9))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor9);
-                    }
-                    else if (index == 9 && !string.IsNullOrEmpty(Configuration.Settings.Shortcuts.MainListViewSetActor10))
-                    {
-                        var item = (ToolStripMenuItem)toolStripMenuItemWebVTT.DropDownItems[toolStripMenuItemWebVTT.DropDownItems.Count - 1];
-                        item.ShortcutKeys = UiUtil.GetKeys(Configuration.Settings.Shortcuts.MainListViewSetActor10);
-                    }
-                }
-
+                
                 if (voices.Count > 0)
                 {
                     var tss = new ToolStripSeparator();
@@ -10028,10 +9893,12 @@ namespace Nikse.SubtitleEdit.Forms
             bool showGaudioCustomFields = formatType == typeof(GaudioJson);
             
             setOnOffScreenForSelectedLinesToolStripMenuItem.Visible = showGaudioCustomFields;
+            setCharacterForSelectedLinesToolStripMenuItem.Visible = showGaudioCustomFields;
             SetDiegeticForSelectedLinesToolStripMenuItem.Visible = showGaudioCustomFields;
             setNotesForSelectedLinesToolStripMenuItem.Visible = showGaudioCustomFields;
             setDialogueReverbForSelectedLinesToolStripMenuItem.Visible = showGaudioCustomFields;
             setDFXForSelectedLinesToolStripMenuItem.Visible = showGaudioCustomFields;
+    
 
             if (showGaudioCustomFields)
             {
@@ -10042,18 +9909,18 @@ namespace Nikse.SubtitleEdit.Forms
                 setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
                 setOnOffScreenForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetOnOffScreen);
 
+                // Setup Character menu
+                setCharacterForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                setCharacterForSelectedLinesToolStripMenuItem.DropDownItems.Add("New Character...", null, SetNewCharacter);
+                setCharacterForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+                setCharacterForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetCharacter);
+
                 // Setup Diegetic menu
                 SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
                 SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("Diegetic", null, SetDiegetic);
                 SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("Non-diegetic", null, SetDiegetic);
                 SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
                 SetDiegeticForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetDiegetic);
-
-                // Setup Notes menu
-                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
-                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add("New note...", null, SetNewNotes);
-                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
-                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetNotes);
 
                 // Setup Dialogue Reverb menu
                 setDialogueReverbForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
@@ -10070,7 +9937,14 @@ namespace Nikse.SubtitleEdit.Forms
                 setDFXForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
                 setDFXForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetDFX);
 
+                // Setup Notes menu
+                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Clear();
+                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add("New note...", null, SetNewNotes);
+                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+                setNotesForSelectedLinesToolStripMenuItem.DropDownItems.Add("Clear", null, SetNotes);
+
                 UiUtil.FixFonts(setOnOffScreenForSelectedLinesToolStripMenuItem);
+                UiUtil.FixFonts(setCharacterForSelectedLinesToolStripMenuItem);
                 UiUtil.FixFonts(SetDiegeticForSelectedLinesToolStripMenuItem);
                 UiUtil.FixFonts(setNotesForSelectedLinesToolStripMenuItem);
                 UiUtil.FixFonts(setDialogueReverbForSelectedLinesToolStripMenuItem);
@@ -10518,6 +10392,94 @@ namespace Nikse.SubtitleEdit.Forms
             SubtitleListview1.Refresh();
         }
 
+        private void SetDialogueReverb(object sender, EventArgs e)
+        {
+            var item = sender as ToolStripMenuItem;
+            if (item?.Text == "Clear")
+            {
+                SetDialogueReverbText(string.Empty);
+            }
+            else
+            {
+                SetDialogueReverbText(item?.Text);
+            }
+        }
+
+        private void SetDialogueReverbText(string reverbText)
+        {
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+
+            string action = string.IsNullOrEmpty(reverbText) ? "Clear dialogue reverb" : "Set dialogue reverb: " + reverbText;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].DialogueReverb = reverbText;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+            }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
+        }
+
+        private void SetDFX(object sender, EventArgs e)
+        {
+            string dfxText = (sender as ToolStripMenuItem).Text;
+            SetDFX(dfxText);
+            // var item = sender as ToolStripMenuItem;
+            // if (item?.Text == "Clear")
+            // {
+            //     SetDFXText(string.Empty);
+            // }
+            // else
+            // {
+            //     SetDFXText(item?.Text);
+            // }
+        }
+
+        private void SetDFX(string dfx)
+        {
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+                
+            string action = string.IsNullOrEmpty(dfx) ? "Clear DFX" : "Set DFX: " + dfx;
+            MakeHistoryForUndo(action);
+
+                foreach (int index in SubtitleListview1.SelectedIndices)
+                {
+                    _subtitle.Paragraphs[index].DFX = dfx;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
+        }
+
+        private void SetCharacter(object sender, EventArgs e)
+        {
+            string character = (sender as ToolStripItem).Text;
+            SetCharacter(character);
+        }
+        private void SetCharacter(string character)
+        {
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+
+            string action = string.IsNullOrEmpty(character) ? "Clear character" : "Set character: " + character;
+            MakeHistoryForUndo(action);
+
+                foreach (int index in SubtitleListview1.SelectedIndices)
+                {
+                    _subtitle.Paragraphs[index].Character = character;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
+        }
+
+
         private void SetOnOffScreen(string emotion)
         {
             if (SubtitleListview1.SelectedIndices.Count == 0)
@@ -10787,7 +10749,25 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-        private void SetNewEmotion(object sender, EventArgs e)
+        private void SetCharacterForSelectedLines(string character)
+        {
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+
+            string action = string.IsNullOrEmpty(character) ? "Clear character" : "Set character: " + character;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].Character = character;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+            }
+            
+            // UI 업데이트
+            SubtitleListview1.Refresh();
+        }
+
+        private void SetNewOnOffScreen(object sender, EventArgs e)
         {
             using (var form = new TextPrompt("New on/off screen", "On/Off Screen", string.Empty))
             {
@@ -10797,6 +10777,53 @@ namespace Nikse.SubtitleEdit.Forms
                     if (!string.IsNullOrEmpty(emotion))
                     {
                         SetOnOffScreen(emotion);
+                    }
+                }
+            }
+        }
+
+        private void SetNewCharacter(object sender, EventArgs e)
+        {
+            using (var form = new TextPrompt(LanguageSettings.Current.Main.Menu.ContextMenu.NewCharacter.Replace("...", string.Empty), LanguageSettings.Current.General.Character, string.Empty))
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    string character = form.InputText;
+                    if (!string.IsNullOrEmpty(character))
+                    {
+                        SetCharacterForSelectedLines(character);
+                    }
+                }
+            }
+        }
+
+        private void SetDFXForSelectedLines(string dfx)
+        {
+            if (SubtitleListview1.SelectedIndices.Count == 0)
+                return;
+
+            string action = string.IsNullOrEmpty(dfx) ? "Clear dfx" : "Set dfx: " + dfx;
+            MakeHistoryForUndo(action);
+
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].DFX = dfx;
+                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+            }
+            // UI 업데이트
+            SubtitleListview1.Refresh();
+        }
+
+        private void SetNewDFX(object sender, EventArgs e)
+        {
+            using (var form = new TextPrompt(LanguageSettings.Current.Main.Menu.ContextMenu.NewDFX.Replace("...", string.Empty), LanguageSettings.Current.General.DFX, string.Empty))
+            {
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    string dfx = form.InputText;
+                    if (!string.IsNullOrEmpty(dfx))
+                    {
+                        SetDFXForSelectedLines(dfx);
                     }
                 }
             }
@@ -10844,6 +10871,24 @@ namespace Nikse.SubtitleEdit.Forms
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].Actor = null;
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+            }
+        }
+        
+        private void RemoveCharacters(object sender, EventArgs e)
+        {
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].Character = null;
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
+            }
+        }
+
+        private void RemoveDFXs(object sender, EventArgs e)
+        {
+            foreach (int index in SubtitleListview1.SelectedIndices)
+            {
+                _subtitle.Paragraphs[index].DFX = null;
                 SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
         }
@@ -14269,39 +14314,22 @@ namespace Nikse.SubtitleEdit.Forms
             }
 
             // 커스텀 필드들 visibility 제어
-            labelEditActor.Visible = showCustomFields;
-            comboBoxEditActor.Visible = showCustomFields;
             labelEditOnOffScreen.Visible = showCustomFields;
             comboBoxEditOnOffScreen.Visible = showCustomFields;
             labelEditDiegetic.Visible = showCustomFields;
             comboBoxEditDiegetic.Visible = showCustomFields;
             labelEditDFX.Visible = showCustomFields;
             comboBoxEditDFX.Visible = showCustomFields;
+            labelEditCharacter.Visible = showCustomFields;
+            comboBoxEditCharacter.Visible = showCustomFields;
             labelEditDialogueReverb.Visible = showCustomFields;
             comboBoxEditDialogueReverb.Visible = showCustomFields;
             labelEditNotes.Visible = showCustomFields;
             textBoxEditNotes.Visible = showCustomFields;
 
-            // GaudioJson 포맷일 때 actor 목록만 업데이트
+            // GaudioJson 포맷일 때 필드 목록 업데이트
             if (showCustomFields && _subtitle?.Paragraphs != null)
             {
-                // Update comboBoxEditActor items
-                var actors = new List<string>();
-                foreach (var paragraph in _subtitle.Paragraphs)
-                {
-                    if (!string.IsNullOrEmpty(paragraph.Actor) && !actors.Contains(paragraph.Actor))
-                    {
-                        actors.Add(paragraph.Actor);
-                    }
-                }
-                actors.Sort();
-                
-                comboBoxEditActor.Items.Clear();
-                foreach (var actor in actors)
-                {
-                    comboBoxEditActor.Items.Add(actor);
-                }
-
                 // Update comboBoxEditDFX items
                 var dfxValues = new List<string>();
                 foreach (var paragraph in _subtitle.Paragraphs)
@@ -14317,6 +14345,23 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (var value in dfxValues)
                 {
                     comboBoxEditDFX.Items.Add(value);
+                }
+
+                // Update comboBoxEditCharacter items
+                var characterValues = new List<string>();
+                foreach (var paragraph in _subtitle.Paragraphs)
+                {
+                    if (!string.IsNullOrEmpty(paragraph.Character) && !characterValues.Contains(paragraph.Character))
+                    {
+                        characterValues.Add(paragraph.Character);
+                    }
+                }
+                characterValues.Sort();
+                
+                comboBoxEditCharacter.Items.Clear();
+                foreach (var value in characterValues)
+                {
+                    comboBoxEditCharacter.Items.Add(value);
                 }
             }
 
@@ -18202,7 +18247,7 @@ namespace Nikse.SubtitleEdit.Forms
             }
             else if (_shortcuts.MainListViewSetNewOnOffScreen == e.KeyData)
             {
-                SetNewEmotion(null, null);
+                SetNewOnOffScreen(null, null);
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetNewDiegetic == e.KeyData)
@@ -18261,6 +18306,56 @@ namespace Nikse.SubtitleEdit.Forms
                 e.SuppressKeyPress = true;
             }
             else if (_shortcuts.MainListViewSetActor10 == e.KeyData)
+            {
+                SetActorVoice(9);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter1 == e.KeyData)
+            {
+                SetActorVoice(0);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter2 == e.KeyData)
+            {
+                SetActorVoice(1);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter3 == e.KeyData)
+            {
+                SetActorVoice(2);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter4 == e.KeyData)
+            {
+                SetActorVoice(3);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter5 == e.KeyData)
+            {
+                SetActorVoice(4);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter6 == e.KeyData)
+            {
+                SetActorVoice(5);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter7 == e.KeyData)
+            {
+                SetActorVoice(6);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter8 == e.KeyData)
+            {
+                SetActorVoice(7);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter9 == e.KeyData)
+            {
+                SetActorVoice(8);
+                e.SuppressKeyPress = true;
+            }
+            else if (_shortcuts.MainListViewSetCharacter10 == e.KeyData)
             {
                 SetActorVoice(9);
                 e.SuppressKeyPress = true;
@@ -38057,98 +38152,6 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-
-
-        private void SetDialogueReverb(object sender, EventArgs e)
-        {
-            var item = sender as ToolStripMenuItem;
-            if (item?.Text == "Clear")
-            {
-                SetDialogueReverbText(string.Empty);
-            }
-            else
-            {
-                SetDialogueReverbText(item?.Text);
-            }
-        }
-
-        private void SetDialogueReverbText(string reverbText)
-        {
-            if (SubtitleListview1.SelectedIndices.Count == 0)
-                return;
-
-            string action = string.IsNullOrEmpty(reverbText) ? "Clear dialogue reverb" : "Set dialogue reverb: " + reverbText;
-            MakeHistoryForUndo(action);
-
-            foreach (int index in SubtitleListview1.SelectedIndices)
-            {
-                _subtitle.Paragraphs[index].DialogueReverb = reverbText;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
-            }
-            
-            // UI 업데이트
-            SubtitleListview1.Refresh();
-        }
-
-        private void SetNewDFX(object sender, EventArgs e)
-        {
-            using (var form = new TextPrompt("New DFX", "DFX", string.Empty))
-            {
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    SetDFXText(form.InputText);
-                }
-            }
-        }
-
-        private void SetDFX(object sender, EventArgs e)
-        {
-            var item = sender as ToolStripMenuItem;
-            if (item?.Text == "Clear")
-            {
-                SetDFXText(string.Empty);
-            }
-            else
-            {
-                SetDFXText(item?.Text);
-            }
-        }
-
-        private void SetDFXText(string dfxText)
-        {
-            if (SubtitleListview1.SelectedIndices.Count == 0)
-                return;
-
-            string action = string.IsNullOrEmpty(dfxText) ? "Clear DFX" : "Set DFX: " + dfxText;
-            MakeHistoryForUndo(action);
-
-            foreach (int index in SubtitleListview1.SelectedIndices)
-            {
-                _subtitle.Paragraphs[index].DFX = dfxText;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
-            }
-            
-            // UI 업데이트
-            SubtitleListview1.Refresh();
-        }
-
-        private void ComboBoxEditActor_TextChanged(object sender, EventArgs e)
-        {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
-            {
-                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
-                {
-                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                if (paragraph != null)
-                {
-                    paragraph.Actor = comboBoxEditActor.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
-                }
-                }
-                SubtitleListview1.Refresh();
-            }
-        }
-
         private void ComboBoxEditOnOffScreen_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
@@ -38210,6 +38213,40 @@ namespace Nikse.SubtitleEdit.Forms
                     if (paragraph != null)
                     {
                         paragraph.DFX = comboBoxEditDFX.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
+                }
+                SubtitleListview1.Refresh();
+            }
+        }
+
+        private void ComboBoxEditCharacter_TextChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
+                {
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.Character = comboBoxEditCharacter.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
+                }
+                SubtitleListview1.Refresh();
+            }
+        }
+
+        private void ComboBoxEditCharacter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
+            {
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
+                {
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.Character = comboBoxEditCharacter.Text;
                         UpdateListViewItemColumns(item.Index, paragraph);
                     }
                 }
@@ -38281,6 +38318,12 @@ namespace Nikse.SubtitleEdit.Forms
                     item.SubItems[SubtitleListview1.ColumnIndexDFX].Text = paragraph.DFX ?? string.Empty;
                 }
                 
+                // Character column update
+                if (SubtitleListview1.ColumnIndexCharacter >= 0 && SubtitleListview1.ColumnIndexCharacter < item.SubItems.Count)
+                {
+                    item.SubItems[SubtitleListview1.ColumnIndexCharacter].Text = paragraph.Character ?? string.Empty;
+                }
+                
                 // DialogueReverb column update
                 if (SubtitleListview1.ColumnIndexDialogueReverb >= 0 && SubtitleListview1.ColumnIndexDialogueReverb < item.SubItems.Count)
                 {
@@ -38306,14 +38349,6 @@ namespace Nikse.SubtitleEdit.Forms
                     if (paragraph != null)
                     {
                         // 기존 패턴과 동일하게 이벤트 핸들러 제거 → 값 설정 → 이벤트 핸들러 재등록
-                        
-                        // Update Actor - 조건부 업데이트 적용
-                        comboBoxEditActor.TextChanged -= ComboBoxEditActor_TextChanged;
-                        if (comboBoxEditActor.Text != (paragraph.Actor ?? string.Empty))
-                        {
-                            comboBoxEditActor.Text = paragraph.Actor ?? string.Empty;
-                        }
-                        comboBoxEditActor.TextChanged += ComboBoxEditActor_TextChanged;
                         
                         // Update OnOffScreen - 조건부 업데이트 적용
                         comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
@@ -38344,6 +38379,16 @@ namespace Nikse.SubtitleEdit.Forms
                             comboBoxEditDFX.SelectedIndex = dfxIndex >= 0 ? dfxIndex : -1;
                         }
                         comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
+                        
+                        // Update Character - 조건부 업데이트 적용
+                        comboBoxEditCharacter.SelectedIndexChanged -= ComboBoxEditCharacter_SelectedIndexChanged;
+                        var characterIndex = string.IsNullOrEmpty(paragraph.Character) ? -1 : 
+                            comboBoxEditCharacter.Items.IndexOf(paragraph.Character);
+                        if (comboBoxEditCharacter.SelectedIndex != characterIndex)
+                        {
+                            comboBoxEditCharacter.SelectedIndex = characterIndex >= 0 ? characterIndex : -1;
+                        }
+                        comboBoxEditCharacter.SelectedIndexChanged += ComboBoxEditCharacter_SelectedIndexChanged;
                         
                         // Update DialogueReverb - 조건부 업데이트 적용
                         comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
@@ -38380,28 +38425,20 @@ namespace Nikse.SubtitleEdit.Forms
                     if (selectedParagraphs.Count > 0)
                     {
                         // 공통 값 계산
-                        var actors = selectedParagraphs.Select(p => p.Actor ?? string.Empty).Distinct().ToList();
                         var onOffScreens = selectedParagraphs.Select(p => p.OnOff_Screen ?? string.Empty).Distinct().ToList();
                         var diegetics = selectedParagraphs.Select(p => p.Diegetic ?? string.Empty).Distinct().ToList();
                         var dfxs = selectedParagraphs.Select(p => p.DFX ?? string.Empty).Distinct().ToList();
+                        var characters = selectedParagraphs.Select(p => p.Character ?? string.Empty).Distinct().ToList();
                         var dialogueReverbs = selectedParagraphs.Select(p => p.DialogueReverb ?? string.Empty).Distinct().ToList();
                         var notes = selectedParagraphs.Select(p => p.Notes ?? string.Empty).Distinct().ToList();
 
-                        var commonActor = actors.Count == 1 ? actors[0] : string.Empty;
                         var commonOnOffScreen = onOffScreens.Count == 1 ? onOffScreens[0] : string.Empty;
                         var commonDiegetic = diegetics.Count == 1 ? diegetics[0] : string.Empty;
                         var commonDFX = dfxs.Count == 1 ? dfxs[0] : string.Empty;
+                        var commonCharacter = characters.Count == 1 ? characters[0] : string.Empty;
                         var commonDialogueReverb = dialogueReverbs.Count == 1 ? dialogueReverbs[0] : string.Empty;
                         var commonNotes = notes.Count == 1 ? notes[0] : string.Empty;
 
-                        // Actor - 조건부 업데이트 적용
-                        comboBoxEditActor.TextChanged -= ComboBoxEditActor_TextChanged;
-                        if (comboBoxEditActor.Text != commonActor)
-                        {
-                            comboBoxEditActor.Text = commonActor;
-                        }
-                        comboBoxEditActor.TextChanged += ComboBoxEditActor_TextChanged;
-                        
                         // OnOffScreen - 조건부 업데이트 적용
                         comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
                         var onOffScreenIndex = string.IsNullOrEmpty(commonOnOffScreen) ? -1 : 
@@ -38432,6 +38469,16 @@ namespace Nikse.SubtitleEdit.Forms
                         }
                         comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
                         
+                        // Character - 조건부 업데이트 적용
+                        comboBoxEditCharacter.SelectedIndexChanged -= ComboBoxEditCharacter_SelectedIndexChanged;
+                        var characterIndex = string.IsNullOrEmpty(commonCharacter) ? -1 : 
+                            comboBoxEditCharacter.Items.IndexOf(commonCharacter);
+                        if (comboBoxEditCharacter.SelectedIndex != characterIndex)
+                        {
+                            comboBoxEditCharacter.SelectedIndex = characterIndex >= 0 ? characterIndex : -1;
+                        }
+                        comboBoxEditCharacter.SelectedIndexChanged += ComboBoxEditCharacter_SelectedIndexChanged;
+                        
                         // Dialogue Reverb - 조건부 업데이트 적용
                         comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
                         var dialogueReverbIndex = string.IsNullOrEmpty(commonDialogueReverb) ? -1 : 
@@ -38455,10 +38502,6 @@ namespace Nikse.SubtitleEdit.Forms
             else
             {
                 // Clear controls when no selection - 기존 패턴과 동일하게 이벤트 핸들러 관리
-                comboBoxEditActor.TextChanged -= ComboBoxEditActor_TextChanged;
-                comboBoxEditActor.Text = string.Empty;
-                comboBoxEditActor.TextChanged += ComboBoxEditActor_TextChanged;
-
                 comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
                 comboBoxEditOnOffScreen.SelectedIndex = -1;
                 comboBoxEditOnOffScreen.SelectedIndexChanged += ComboBoxEditOnOffScreen_SelectedIndexChanged;
@@ -38470,6 +38513,10 @@ namespace Nikse.SubtitleEdit.Forms
                 comboBoxEditDFX.SelectedIndexChanged -= ComboBoxEditDFX_SelectedIndexChanged;
                 comboBoxEditDFX.SelectedIndex = -1;
                 comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
+
+                comboBoxEditCharacter.SelectedIndexChanged -= ComboBoxEditCharacter_SelectedIndexChanged;
+                comboBoxEditCharacter.SelectedIndex = -1;
+                comboBoxEditCharacter.SelectedIndexChanged += ComboBoxEditCharacter_SelectedIndexChanged;
 
                 comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
                 comboBoxEditDialogueReverb.SelectedIndex = -1;

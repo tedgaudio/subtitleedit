@@ -48,6 +48,7 @@ namespace Nikse.SubtitleEdit.Logic
             public string Notes { get; set; }
             public string DialogueReverb { get; set; }
             public string DFX { get; set; }
+            public string Character { get; set; }
             public string Layer { get; set; }
             public string NumberSymbol { get; set; }
             public string Number { get; set; }
@@ -95,7 +96,6 @@ namespace Nikse.SubtitleEdit.Logic
             public string Advanced { get; set; }
             public string Style { get; set; }
             public string StyleLanguage { get; set; }
-            public string Character { get; set; }
             public string Class { get; set; }
             public string GeneralText { get; set; }
             public string LineNumber { get; set; }
@@ -1949,6 +1949,7 @@ namespace Nikse.SubtitleEdit.Logic
                     public string SizeAllColumnsToFit { get; set; }
                     public string SetStyle { get; set; }
                     public string SetActor { get; set; }
+                    public string SetCharacter { get; set; }
                     public string SetLayer { get; set; }
                     public string AssaTools { get; set; }
                     public string SubStationAlphaStyles { get; set; }
@@ -2035,7 +2036,11 @@ namespace Nikse.SubtitleEdit.Logic
                     public string WebVTTSetNewVoice { get; set; }
                     public string WebVTTRemoveVoices { get; set; }
                     public string NewActor { get; set; }
+                    public string NewCharacter { get; set; }
+                    public string NewDFX { get; set; }
                     public string RemoveActors { get; set; }
+                    public string RemoveCharacters { get; set; }
+                    public string RemoveDFXs { get; set; }
                     public string EditBookmark { get; set; }
                     public string RemoveBookmark { get; set; }
                     public string GoToSourceView { get; set; }
@@ -3070,6 +3075,8 @@ namespace Nikse.SubtitleEdit.Logic
             public string ExportAsHtml { get; set; }
             public string SetNewActor { get; set; }
             public string SetActorX { get; set; }
+            public string SetNewCharacter { get; set; }
+            public string SetNewDFX { get; set; }
             public string Used { get; set; }
             public string Unused { get; set; }
         }

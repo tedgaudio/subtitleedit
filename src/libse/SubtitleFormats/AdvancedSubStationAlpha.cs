@@ -263,12 +263,15 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
                 {
                     additionalInfo.Add($"dialoguereverb:{p.DialogueReverb}");
                 }
-
                 if (!string.IsNullOrEmpty(p.DFX))
                 {
                     additionalInfo.Add($"dfx:{p.DFX}");
                 }
-                
+                if (!string.IsNullOrEmpty(p.Character))
+                {
+                    additionalInfo.Add($"character:{p.Character}");
+                }
+
                 if (additionalInfo.Count > 0)
                 {
                     text += "\\N{\\an8\\fs10\\c&H808080&}" + string.Join(" | ", additionalInfo);
@@ -1793,9 +1796,6 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
                             p.Layer = layer;
                             p.IsComment = s.StartsWith("comment:", StringComparison.Ordinal);
                             
-                            // Parse new fields from text
-                            ParseNewFieldsFromText(p, text);
-                            
                             subtitle.Paragraphs.Add(p);
                         }
                         catch
@@ -2831,51 +2831,6 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
             var styles = GetSsaStylesFromHeader(header).Where(p => p.Name != style.Name).ToList();
             styles.Add(style);
             return GetHeaderAndStylesFromAdvancedSubStationAlpha(header, styles);
-        }
-
-        private static void ParseNewFieldsFromText(Paragraph p, string text)
-        {
-            // Look for new fields in the text
-            var lines = text.Split(new[] { "\\N" }, StringSplitOptions.None);
-            if (lines.Length > 1)
-            {
-                var lastLine = lines[lines.Length - 1];
-                if (lastLine.Contains("onoffscreen:") || lastLine.Contains("priority:") || lastLine.Contains("notes:") || lastLine.Contains("dialoguereverb:") || lastLine.Contains("dfx:"))
-                {
-                    // Extract new fields from the last line
-                    var parts = lastLine.Split(new[] { " | " }, StringSplitOptions.None);
-                    foreach (var part in parts)
-                    {
-                        if (part.StartsWith("onoffscreen:"))
-                        {
-                            p.OnOff_Screen = part.Substring("onoffscreen:".Length);
-                        }
-                        else if (part.StartsWith("diegetic:"))
-                        {
-                            p.Diegetic = part.Substring("diegetic:".Length);
-                        }
-                        else if (part.StartsWith("notes:"))
-                        {
-                            p.Notes = part.Substring("notes:".Length);
-                        }
-                        else if (part.StartsWith("dialoguereverb:"))
-                        {
-                            p.DialogueReverb = part.Substring("dialoguereverb:".Length);
-                        }
-                        else if (part.StartsWith("dfx:"))
-                        {
-                            p.DFX = part.Substring("dfx:".Length);
-                        }
-                    }
-                    
-                    // Remove the last line from text since it contains metadata
-                    var textLines = text.Split(new[] { "\\N" }, StringSplitOptions.None);
-                    if (textLines.Length > 1)
-                    {
-                        p.Text = string.Join("\\N", textLines.Take(textLines.Length - 1));
-                    }
-                }
-            }
         }
     }
 }
