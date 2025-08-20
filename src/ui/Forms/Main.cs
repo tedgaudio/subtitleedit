@@ -10384,9 +10384,8 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (int index in SubtitleListview1.SelectedIndices)
                 {
                     _subtitle.Paragraphs[index].Actor = actor;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                    SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
                 }
-            
             // UI 업데이트
             SubtitleListview1.Refresh();
         }
@@ -10415,7 +10414,7 @@ namespace Nikse.SubtitleEdit.Forms
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].DialogueReverb = reverbText;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
             
             // UI 업데이트
@@ -10448,7 +10447,7 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (int index in SubtitleListview1.SelectedIndices)
                 {
                     _subtitle.Paragraphs[index].DFX = dfx;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                    SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
                 }
             
             // UI 업데이트
@@ -10471,7 +10470,7 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (int index in SubtitleListview1.SelectedIndices)
                 {
                     _subtitle.Paragraphs[index].Character = character;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                    SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
                 }
             
             // UI 업데이트
@@ -10490,7 +10489,7 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (int index in SubtitleListview1.SelectedIndices)
                 {
                     _subtitle.Paragraphs[index].OnOff_Screen = emotion;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                    SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
                 }
             
             // UI 업데이트
@@ -10508,7 +10507,7 @@ namespace Nikse.SubtitleEdit.Forms
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].Diegetic = diegeticText;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
             
             // UI 업데이트
@@ -10526,7 +10525,7 @@ namespace Nikse.SubtitleEdit.Forms
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].Notes = notes;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
             
             // UI 업데이트
@@ -10610,13 +10609,10 @@ namespace Nikse.SubtitleEdit.Forms
                         _subtitle.Paragraphs[index].Notes = form.Notes;
                         
                         // ListView 업데이트
-                        UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                        SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
                     }
 
                     numericUpDownLayer.Value = form.Layer;
-                    
-                    // 현재 선택된 항목의 편집 컨트롤들도 업데이트
-                    //UpdateEditingControlsFromSelection();
                 }
             }
         }
@@ -10726,7 +10722,7 @@ namespace Nikse.SubtitleEdit.Forms
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].Actor = actor;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
             
             // UI 업데이트
@@ -10759,7 +10755,7 @@ namespace Nikse.SubtitleEdit.Forms
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].Character = character;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
             
             // UI 업데이트
@@ -10807,7 +10803,7 @@ namespace Nikse.SubtitleEdit.Forms
             foreach (int index in SubtitleListview1.SelectedIndices)
             {
                 _subtitle.Paragraphs[index].DFX = dfx;
-                UpdateListViewItemColumns(index, _subtitle.Paragraphs[index]);
+                SubtitleListview1.SetTimeAndText(index, _subtitle.Paragraphs[index], _subtitle.GetParagraphOrDefault(index + 1));
             }
             // UI 업데이트
             SubtitleListview1.Refresh();
@@ -11669,7 +11665,6 @@ namespace Nikse.SubtitleEdit.Forms
 
             _listViewTextUndoIndex = -1;
             SubtitleListView1SelectedIndexChange();
-            UpdateEditingControlsFromSelection();
             if (_findHelper != null && !_findHelper.InProgress)
             {
                 _findHelper.StartLineIndex = _subtitleListViewIndex;
@@ -38158,13 +38153,13 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                if (paragraph != null)
-                {
-                    paragraph.OnOff_Screen = comboBoxEditOnOffScreen.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                    if (paragraph != null)
+                    {
+                        paragraph.OnOff_Screen = comboBoxEditOnOffScreen.Text;
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
+                    }
+                    SubtitleListview1.Refresh();
                 }
-                }
-                SubtitleListview1.Refresh();
             }
         }
 
@@ -38175,13 +38170,13 @@ namespace Nikse.SubtitleEdit.Forms
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                if (paragraph != null)
-                {
-                    paragraph.Diegetic = comboBoxEditDiegetic.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                    if (paragraph != null)
+                    {
+                        paragraph.Diegetic = comboBoxEditDiegetic.Text;
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
+                    }
+                    SubtitleListview1.Refresh();
                 }
-                }
-                SubtitleListview1.Refresh();
             }
         }
 
@@ -38197,7 +38192,7 @@ namespace Nikse.SubtitleEdit.Forms
                     if (paragraph != null)
                     {
                         paragraph.DFX = comboBoxEditDFX.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
                     }
                 }
                 
@@ -38217,7 +38212,7 @@ namespace Nikse.SubtitleEdit.Forms
                     if (paragraph != null)
                     {
                         paragraph.DFX = comboBoxEditDFX.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
                     }
                 }
                 
@@ -38237,7 +38232,7 @@ namespace Nikse.SubtitleEdit.Forms
                     if (paragraph != null)
                     {
                         paragraph.Character = comboBoxEditCharacter.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
                     }
                 }
                 
@@ -38257,7 +38252,7 @@ namespace Nikse.SubtitleEdit.Forms
                     if (paragraph != null)
                     {
                         paragraph.Character = comboBoxEditCharacter.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
                     }
                 }
                 
@@ -38277,7 +38272,7 @@ namespace Nikse.SubtitleEdit.Forms
                 if (paragraph != null)
                 {
                     paragraph.DialogueReverb = comboBoxEditDialogueReverb.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                    SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
                 }
                 }
                 
@@ -38297,7 +38292,7 @@ namespace Nikse.SubtitleEdit.Forms
                     if (paragraph != null)
                     {
                         paragraph.DialogueReverb = comboBoxEditDialogueReverb.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
                     }
                 }
                 
@@ -38317,250 +38312,10 @@ namespace Nikse.SubtitleEdit.Forms
                     if (paragraph != null)
                     {
                         paragraph.Notes = textBoxEditNotes.Text;
-                        UpdateListViewItemColumns(item.Index, paragraph);
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
                     }
                 }
                 
-                textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
-            }
-        }
-
-        private void UpdateListViewItemColumns(int index, Paragraph paragraph)
-        {
-            if (index >= 0 && index < SubtitleListview1.Items.Count)
-            {
-                var item = SubtitleListview1.Items[index];
-                
-                // Actor column update
-                if (SubtitleListview1.ColumnIndexActor >= 0 && SubtitleListview1.ColumnIndexActor < item.SubItems.Count)
-                {
-                    item.SubItems[SubtitleListview1.ColumnIndexActor].Text = paragraph.Actor ?? string.Empty;
-                }
-                
-                // OnOffScreen column update
-                if (SubtitleListview1.ColumnIndexOnOffScreen >= 0 && SubtitleListview1.ColumnIndexOnOffScreen < item.SubItems.Count)
-                {
-                    item.SubItems[SubtitleListview1.ColumnIndexOnOffScreen].Text = paragraph.OnOff_Screen ?? string.Empty;
-                }
-                
-                // Diegetic column update
-                if (SubtitleListview1.ColumnIndexDiegetic >= 0 && SubtitleListview1.ColumnIndexDiegetic < item.SubItems.Count)
-                {
-                    item.SubItems[SubtitleListview1.ColumnIndexDiegetic].Text = paragraph.Diegetic ?? string.Empty;
-                }
-                
-                // DFX column update
-                if (SubtitleListview1.ColumnIndexDFX >= 0 && SubtitleListview1.ColumnIndexDFX < item.SubItems.Count)
-                {
-                    item.SubItems[SubtitleListview1.ColumnIndexDFX].Text = paragraph.DFX ?? string.Empty;
-                }
-                
-                // Character column update
-                if (SubtitleListview1.ColumnIndexCharacter >= 0 && SubtitleListview1.ColumnIndexCharacter < item.SubItems.Count)
-                {
-                    item.SubItems[SubtitleListview1.ColumnIndexCharacter].Text = paragraph.Character ?? string.Empty;
-                }
-                
-                // DialogueReverb column update
-                if (SubtitleListview1.ColumnIndexDialogueReverb >= 0 && SubtitleListview1.ColumnIndexDialogueReverb < item.SubItems.Count)
-                {
-                    item.SubItems[SubtitleListview1.ColumnIndexDialogueReverb].Text = paragraph.DialogueReverb ?? string.Empty;
-                }
-                
-                // Notes column update
-                if (SubtitleListview1.ColumnIndexNotes >= 0 && SubtitleListview1.ColumnIndexNotes < item.SubItems.Count)
-                {
-                    item.SubItems[SubtitleListview1.ColumnIndexNotes].Text = paragraph.Notes ?? string.Empty;
-                }
-            }
-        }
-
-        private void UpdateEditingControlsFromSelection()
-        {
-            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
-            {
-                if (SubtitleListview1.SelectedItems.Count == 1)
-                {
-                    // 단일 선택일 때는 해당 항목의 값으로 설정
-                    var paragraph = _subtitle.GetParagraphOrDefault(SubtitleListview1.SelectedItems[0].Index);
-                    if (paragraph != null)
-                    {
-                        // 기존 패턴과 동일하게 이벤트 핸들러 제거 → 값 설정 → 이벤트 핸들러 재등록
-                        
-                        // Update OnOffScreen - 조건부 업데이트 적용
-                        comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
-                        var onOffScreenIndex = string.IsNullOrEmpty(paragraph.OnOff_Screen) ? -1 : 
-                            comboBoxEditOnOffScreen.Items.IndexOf(paragraph.OnOff_Screen);
-                        if (comboBoxEditOnOffScreen.SelectedIndex != onOffScreenIndex)
-                        {
-                            comboBoxEditOnOffScreen.SelectedIndex = onOffScreenIndex >= 0 ? onOffScreenIndex : -1;
-                        }
-                        comboBoxEditOnOffScreen.SelectedIndexChanged += ComboBoxEditOnOffScreen_SelectedIndexChanged;
-                        
-                        // Update Diegetic - 조건부 업데이트 적용
-                        comboBoxEditDiegetic.SelectedIndexChanged -= ComboBoxEditDiegetic_SelectedIndexChanged;
-                        var diegeticIndex = string.IsNullOrEmpty(paragraph.Diegetic) ? -1 : 
-                            comboBoxEditDiegetic.Items.IndexOf(paragraph.Diegetic);
-                        if (comboBoxEditDiegetic.SelectedIndex != diegeticIndex)
-                        {
-                            comboBoxEditDiegetic.SelectedIndex = diegeticIndex >= 0 ? diegeticIndex : -1;
-                        }
-                        comboBoxEditDiegetic.SelectedIndexChanged += ComboBoxEditDiegetic_SelectedIndexChanged;
-                        
-                        // Update DFX - 조건부 업데이트 적용
-                        comboBoxEditDFX.SelectedIndexChanged -= ComboBoxEditDFX_SelectedIndexChanged;
-                        var dfxIndex = string.IsNullOrEmpty(paragraph.DFX) ? -1 : 
-                            comboBoxEditDFX.Items.IndexOf(paragraph.DFX);
-                        if (comboBoxEditDFX.SelectedIndex != dfxIndex)
-                        {
-                            comboBoxEditDFX.SelectedIndex = dfxIndex >= 0 ? dfxIndex : -1;
-                        }
-                        comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
-                        
-                        // Update Character - 조건부 업데이트 적용
-                        comboBoxEditCharacter.SelectedIndexChanged -= ComboBoxEditCharacter_SelectedIndexChanged;
-                        var characterIndex = string.IsNullOrEmpty(paragraph.Character) ? -1 : 
-                            comboBoxEditCharacter.Items.IndexOf(paragraph.Character);
-                        if (comboBoxEditCharacter.SelectedIndex != characterIndex)
-                        {
-                            comboBoxEditCharacter.SelectedIndex = characterIndex >= 0 ? characterIndex : -1;
-                        }
-                        comboBoxEditCharacter.SelectedIndexChanged += ComboBoxEditCharacter_SelectedIndexChanged;
-                        
-                        // Update DialogueReverb - 조건부 업데이트 적용
-                        comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
-                        var dialogueReverbIndex = string.IsNullOrEmpty(paragraph.DialogueReverb) ? -1 : 
-                            comboBoxEditDialogueReverb.Items.IndexOf(paragraph.DialogueReverb);
-                        if (comboBoxEditDialogueReverb.SelectedIndex != dialogueReverbIndex)
-                        {
-                            comboBoxEditDialogueReverb.SelectedIndex = dialogueReverbIndex >= 0 ? dialogueReverbIndex : -1;
-                        }
-                        comboBoxEditDialogueReverb.SelectedIndexChanged += ComboBoxEditDialogueReverb_SelectedIndexChanged;
-                        
-                        // Update Notes - 조건부 업데이트 적용
-                        textBoxEditNotes.TextChanged -= TextBoxEditNotes_TextChanged;
-                        if (textBoxEditNotes.Text != (paragraph.Notes ?? string.Empty))
-                        {
-                            textBoxEditNotes.Text = paragraph.Notes ?? string.Empty;
-                        }
-                        textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
-                    }
-                }
-                else
-                {
-                    // 복수 선택일 때는 공통 값이 있으면 표시하고, 없으면 빈 값으로 설정
-                    var selectedParagraphs = new List<Paragraph>();
-                    foreach (ListViewItem item in SubtitleListview1.SelectedItems)
-                    {
-                        var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                        if (paragraph != null)
-                        {
-                            selectedParagraphs.Add(paragraph);
-                        }
-                    }
-                    
-                    if (selectedParagraphs.Count > 0)
-                    {
-                        // 공통 값 계산
-                        var onOffScreens = selectedParagraphs.Select(p => p.OnOff_Screen ?? string.Empty).Distinct().ToList();
-                        var diegetics = selectedParagraphs.Select(p => p.Diegetic ?? string.Empty).Distinct().ToList();
-                        var dfxs = selectedParagraphs.Select(p => p.DFX ?? string.Empty).Distinct().ToList();
-                        var characters = selectedParagraphs.Select(p => p.Character ?? string.Empty).Distinct().ToList();
-                        var dialogueReverbs = selectedParagraphs.Select(p => p.DialogueReverb ?? string.Empty).Distinct().ToList();
-                        var notes = selectedParagraphs.Select(p => p.Notes ?? string.Empty).Distinct().ToList();
-
-                        var commonOnOffScreen = onOffScreens.Count == 1 ? onOffScreens[0] : string.Empty;
-                        var commonDiegetic = diegetics.Count == 1 ? diegetics[0] : string.Empty;
-                        var commonDFX = dfxs.Count == 1 ? dfxs[0] : string.Empty;
-                        var commonCharacter = characters.Count == 1 ? characters[0] : string.Empty;
-                        var commonDialogueReverb = dialogueReverbs.Count == 1 ? dialogueReverbs[0] : string.Empty;
-                        var commonNotes = notes.Count == 1 ? notes[0] : string.Empty;
-
-                        // OnOffScreen - 조건부 업데이트 적용
-                        comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
-                        var onOffScreenIndex = string.IsNullOrEmpty(commonOnOffScreen) ? -1 : 
-                            comboBoxEditOnOffScreen.Items.IndexOf(commonOnOffScreen);
-                        if (comboBoxEditOnOffScreen.SelectedIndex != onOffScreenIndex)
-                        {
-                            comboBoxEditOnOffScreen.SelectedIndex = onOffScreenIndex >= 0 ? onOffScreenIndex : -1;
-                        }
-                        comboBoxEditOnOffScreen.SelectedIndexChanged += ComboBoxEditOnOffScreen_SelectedIndexChanged;
-                        
-                        // Diegetic - 조건부 업데이트 적용
-                        comboBoxEditDiegetic.SelectedIndexChanged -= ComboBoxEditDiegetic_SelectedIndexChanged;
-                        var diegeticIndex = string.IsNullOrEmpty(commonDiegetic) ? -1 : 
-                            comboBoxEditDiegetic.Items.IndexOf(commonDiegetic);
-                        if (comboBoxEditDiegetic.SelectedIndex != diegeticIndex)
-                        {
-                            comboBoxEditDiegetic.SelectedIndex = diegeticIndex >= 0 ? diegeticIndex : -1;
-                        }
-                        comboBoxEditDiegetic.SelectedIndexChanged += ComboBoxEditDiegetic_SelectedIndexChanged;
-                        
-                        // DFX - 조건부 업데이트 적용
-                        comboBoxEditDFX.SelectedIndexChanged -= ComboBoxEditDFX_SelectedIndexChanged;
-                        var dfxIndex = string.IsNullOrEmpty(commonDFX) ? -1 : 
-                            comboBoxEditDFX.Items.IndexOf(commonDFX);
-                        if (comboBoxEditDFX.SelectedIndex != dfxIndex)
-                        {
-                            comboBoxEditDFX.SelectedIndex = dfxIndex >= 0 ? dfxIndex : -1;
-                        }
-                        comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
-                        
-                        // Character - 조건부 업데이트 적용
-                        comboBoxEditCharacter.SelectedIndexChanged -= ComboBoxEditCharacter_SelectedIndexChanged;
-                        var characterIndex = string.IsNullOrEmpty(commonCharacter) ? -1 : 
-                            comboBoxEditCharacter.Items.IndexOf(commonCharacter);
-                        if (comboBoxEditCharacter.SelectedIndex != characterIndex)
-                        {
-                            comboBoxEditCharacter.SelectedIndex = characterIndex >= 0 ? characterIndex : -1;
-                        }
-                        comboBoxEditCharacter.SelectedIndexChanged += ComboBoxEditCharacter_SelectedIndexChanged;
-                        
-                        // Dialogue Reverb - 조건부 업데이트 적용
-                        comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
-                        var dialogueReverbIndex = string.IsNullOrEmpty(commonDialogueReverb) ? -1 : 
-                            comboBoxEditDialogueReverb.Items.IndexOf(commonDialogueReverb);
-                        if (comboBoxEditDialogueReverb.SelectedIndex != dialogueReverbIndex)
-                        {
-                            comboBoxEditDialogueReverb.SelectedIndex = dialogueReverbIndex >= 0 ? dialogueReverbIndex : -1;
-                        }
-                        comboBoxEditDialogueReverb.SelectedIndexChanged += ComboBoxEditDialogueReverb_SelectedIndexChanged;
-                        
-                        // Notes - 조건부 업데이트 적용
-                        textBoxEditNotes.TextChanged -= TextBoxEditNotes_TextChanged;
-                        if (textBoxEditNotes.Text != commonNotes)
-                        {
-                            textBoxEditNotes.Text = commonNotes;
-                        }
-                        textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
-                    }
-                }
-            }
-            else
-            {
-                // Clear controls when no selection - 기존 패턴과 동일하게 이벤트 핸들러 관리
-                comboBoxEditOnOffScreen.SelectedIndexChanged -= ComboBoxEditOnOffScreen_SelectedIndexChanged;
-                comboBoxEditOnOffScreen.SelectedIndex = -1;
-                comboBoxEditOnOffScreen.SelectedIndexChanged += ComboBoxEditOnOffScreen_SelectedIndexChanged;
-
-                comboBoxEditDiegetic.SelectedIndexChanged -= ComboBoxEditDiegetic_SelectedIndexChanged;
-                comboBoxEditDiegetic.SelectedIndex = -1;
-                comboBoxEditDiegetic.SelectedIndexChanged += ComboBoxEditDiegetic_SelectedIndexChanged;
-
-                comboBoxEditDFX.SelectedIndexChanged -= ComboBoxEditDFX_SelectedIndexChanged;
-                comboBoxEditDFX.SelectedIndex = -1;
-                comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
-
-                comboBoxEditCharacter.SelectedIndexChanged -= ComboBoxEditCharacter_SelectedIndexChanged;
-                comboBoxEditCharacter.SelectedIndex = -1;
-                comboBoxEditCharacter.SelectedIndexChanged += ComboBoxEditCharacter_SelectedIndexChanged;
-
-                comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
-                comboBoxEditDialogueReverb.SelectedIndex = -1;
-                comboBoxEditDialogueReverb.SelectedIndexChanged += ComboBoxEditDialogueReverb_SelectedIndexChanged;
-
-                textBoxEditNotes.TextChanged -= TextBoxEditNotes_TextChanged;
-                textBoxEditNotes.Text = string.Empty;
                 textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
             }
         }
