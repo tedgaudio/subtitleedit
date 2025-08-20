@@ -5087,6 +5087,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.comboBoxEditDialogueReverb.Size = new System.Drawing.Size(90, 21);
             this.comboBoxEditDialogueReverb.TabIndex = 55;
             this.comboBoxEditDialogueReverb.SelectedIndexChanged += new System.EventHandler(this.ComboBoxEditDialogueReverb_SelectedIndexChanged);
+            this.comboBoxEditDialogueReverb.TextChanged += new System.EventHandler(this.ComboBoxEditDialogueReverb_TextChanged);
             // 
             // labelEditNotes
             // 

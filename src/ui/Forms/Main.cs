@@ -38189,6 +38189,8 @@ namespace Nikse.SubtitleEdit.Forms
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
+                comboBoxEditDFX.TextChanged -= ComboBoxEditDFX_TextChanged;
+                
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
@@ -38198,7 +38200,8 @@ namespace Nikse.SubtitleEdit.Forms
                         UpdateListViewItemColumns(item.Index, paragraph);
                     }
                 }
-                SubtitleListview1.Refresh();
+                
+                comboBoxEditDFX.TextChanged += ComboBoxEditDFX_TextChanged;
             }
         }
 
@@ -38206,6 +38209,8 @@ namespace Nikse.SubtitleEdit.Forms
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
+                comboBoxEditDFX.SelectedIndexChanged -= ComboBoxEditDFX_SelectedIndexChanged;
+                
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
@@ -38215,7 +38220,8 @@ namespace Nikse.SubtitleEdit.Forms
                         UpdateListViewItemColumns(item.Index, paragraph);
                     }
                 }
-                SubtitleListview1.Refresh();
+                
+                comboBoxEditDFX.SelectedIndexChanged += ComboBoxEditDFX_SelectedIndexChanged;
             }
         }
 
@@ -38223,6 +38229,8 @@ namespace Nikse.SubtitleEdit.Forms
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
+                comboBoxEditCharacter.TextChanged -= ComboBoxEditCharacter_TextChanged;
+                
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
@@ -38232,7 +38240,8 @@ namespace Nikse.SubtitleEdit.Forms
                         UpdateListViewItemColumns(item.Index, paragraph);
                     }
                 }
-                SubtitleListview1.Refresh();
+                
+                comboBoxEditCharacter.TextChanged += ComboBoxEditCharacter_TextChanged;
             }
         }
 
@@ -38240,6 +38249,8 @@ namespace Nikse.SubtitleEdit.Forms
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
+                comboBoxEditCharacter.SelectedIndexChanged -= ComboBoxEditCharacter_SelectedIndexChanged;
+                
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
@@ -38249,7 +38260,8 @@ namespace Nikse.SubtitleEdit.Forms
                         UpdateListViewItemColumns(item.Index, paragraph);
                     }
                 }
-                SubtitleListview1.Refresh();
+                
+                comboBoxEditCharacter.SelectedIndexChanged += ComboBoxEditCharacter_SelectedIndexChanged;
             }
         }
 
@@ -38257,6 +38269,8 @@ namespace Nikse.SubtitleEdit.Forms
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
+                comboBoxEditDialogueReverb.SelectedIndexChanged -= ComboBoxEditDialogueReverb_SelectedIndexChanged;
+                
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
@@ -38266,7 +38280,28 @@ namespace Nikse.SubtitleEdit.Forms
                         UpdateListViewItemColumns(item.Index, paragraph);
                 }
                 }
-                SubtitleListview1.Refresh();
+                
+                comboBoxEditDialogueReverb.SelectedIndexChanged += ComboBoxEditDialogueReverb_SelectedIndexChanged;
+            }
+        }
+
+        private void ComboBoxEditDialogueReverb_TextChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
+            {
+                comboBoxEditDialogueReverb.TextChanged -= ComboBoxEditDialogueReverb_TextChanged;
+                
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
+                {
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.DialogueReverb = comboBoxEditDialogueReverb.Text;
+                        UpdateListViewItemColumns(item.Index, paragraph);
+                    }
+                }
+                
+                comboBoxEditDialogueReverb.TextChanged += ComboBoxEditDialogueReverb_TextChanged;
             }
         }
 
@@ -38274,16 +38309,19 @@ namespace Nikse.SubtitleEdit.Forms
         {
             if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
             {
+                textBoxEditNotes.TextChanged -= TextBoxEditNotes_TextChanged;
+                
                 foreach (ListViewItem item in SubtitleListview1.SelectedItems)
                 {
                     var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
-                if (paragraph != null)
-                {
-                    paragraph.Notes = textBoxEditNotes.Text;
+                    if (paragraph != null)
+                    {
+                        paragraph.Notes = textBoxEditNotes.Text;
                         UpdateListViewItemColumns(item.Index, paragraph);
+                    }
                 }
-                }
-                SubtitleListview1.Refresh();
+                
+                textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
             }
         }
 
