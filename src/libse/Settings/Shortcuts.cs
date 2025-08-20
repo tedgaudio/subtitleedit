@@ -474,8 +474,6 @@ namespace Nikse.SubtitleEdit.Core.Settings
             GeneralToggleBookmarksWithText = "Control+Shift+B";
             GeneralCycleAudioTrack = "Alt+A";
             OpenDataFolder = "Control+Alt+Shift+D";
-            GeneralToggleView = "F2";
-            GeneralHelp = "F1";
             MainFileNew = "Control+N";
             MainFileOpen = "Control+O";
             MainFileSave = "Control+S";
@@ -514,14 +512,14 @@ namespace Nikse.SubtitleEdit.Core.Settings
             MainTextBoxSelectionToggleCasing = "Control+Shift+F3";
             MainCreateInsertSubAtVideoPos = "Shift+F9";
             MainVideoGoToStartCurrent = "Shift+F11";
-            MainVideoToggleStartEndCurrent = "F4";
+            GeneralGoToPrevSubtitle = "F4";
             MainVideoPlaySelectedLines = "F5";
-            MainVideoGoToStartCurrent = "F6";
+            GeneralGoToNextSubtitle = "F6";
             MainVideo3000MsLeft = "F7";
             MainListViewGoToNextError = "F8";
             MainListViewListErrors = "Control+F8";
-            MainCreateSetStart = "F11";
-            MainCreateSetEnd = "F12";
+            MainCreateSetStart = "F1";
+            MainCreateSetEnd = "F2";
             MainAdjustSetStartAndOffsetTheRest = "Control+Space";
             MainAdjustSetStartAndOffsetTheRest2 = "F9";
             MainAdjustSetEndAndGotoNext = "F10";
