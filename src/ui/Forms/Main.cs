@@ -14357,6 +14357,31 @@ namespace Nikse.SubtitleEdit.Forms
                 {
                     comboBoxEditCharacter.Items.Add(value);
                 }
+
+                // Set selected values for ComboBoxes
+                comboBoxEditOnOffScreen.TextChanged -= ComboBoxEditOnOffScreen_TextChanged;
+                comboBoxEditOnOffScreen.Text = p.OnOff_Screen ?? string.Empty;
+                comboBoxEditOnOffScreen.TextChanged += ComboBoxEditOnOffScreen_TextChanged;
+
+                comboBoxEditDiegetic.TextChanged -= ComboBoxEditDiegetic_TextChanged;
+                comboBoxEditDiegetic.Text = p.Diegetic ?? string.Empty;
+                comboBoxEditDiegetic.TextChanged += ComboBoxEditDiegetic_TextChanged;
+
+                comboBoxEditDFX.TextChanged -= ComboBoxEditDFX_TextChanged;
+                comboBoxEditDFX.Text = p.DFX ?? string.Empty;
+                comboBoxEditDFX.TextChanged += ComboBoxEditDFX_TextChanged;
+
+                comboBoxEditCharacter.TextChanged -= ComboBoxEditCharacter_TextChanged;
+                comboBoxEditCharacter.Text = p.Character ?? string.Empty;
+                comboBoxEditCharacter.TextChanged += ComboBoxEditCharacter_TextChanged;
+
+                comboBoxEditDialogueReverb.TextChanged -= ComboBoxEditDialogueReverb_TextChanged;
+                comboBoxEditDialogueReverb.Text = p.DialogueReverb ?? string.Empty;
+                comboBoxEditDialogueReverb.TextChanged += ComboBoxEditDialogueReverb_TextChanged;
+
+                textBoxEditNotes.TextChanged -= TextBoxEditNotes_TextChanged;
+                textBoxEditNotes.Text = p.Notes ?? string.Empty;
+                textBoxEditNotes.TextChanged += TextBoxEditNotes_TextChanged;
             }
 
             timeUpDownStartTime.MaskedTextBox.TextChanged -= MaskedTextBoxTextChanged;
@@ -38177,6 +38202,46 @@ namespace Nikse.SubtitleEdit.Forms
                     }
                     SubtitleListview1.Refresh();
                 }
+            }
+        }
+
+        private void ComboBoxEditOnOffScreen_TextChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
+            {
+                comboBoxEditOnOffScreen.TextChanged -= ComboBoxEditOnOffScreen_TextChanged;
+                
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
+                {
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.OnOff_Screen = comboBoxEditOnOffScreen.Text;
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
+                    }
+                }
+                
+                comboBoxEditOnOffScreen.TextChanged += ComboBoxEditOnOffScreen_TextChanged;
+            }
+        }
+
+        private void ComboBoxEditDiegetic_TextChanged(object sender, EventArgs e)
+        {
+            if (_subtitle?.Paragraphs != null && SubtitleListview1.SelectedItems.Count > 0)
+            {
+                comboBoxEditDiegetic.TextChanged -= ComboBoxEditDiegetic_TextChanged;
+                
+                foreach (ListViewItem item in SubtitleListview1.SelectedItems)
+                {
+                    var paragraph = _subtitle.GetParagraphOrDefault(item.Index);
+                    if (paragraph != null)
+                    {
+                        paragraph.Diegetic = comboBoxEditDiegetic.Text;
+                        SubtitleListview1.SetTimeAndText(item.Index, paragraph, _subtitle.GetParagraphOrDefault(item.Index + 1));
+                    }
+                }
+                
+                comboBoxEditDiegetic.TextChanged += ComboBoxEditDiegetic_TextChanged;
             }
         }
 

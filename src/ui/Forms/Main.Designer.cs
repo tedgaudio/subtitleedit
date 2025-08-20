@@ -5016,6 +5016,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.comboBoxEditOnOffScreen.Size = new System.Drawing.Size(90, 21);
             this.comboBoxEditOnOffScreen.TabIndex = 49;
             this.comboBoxEditOnOffScreen.SelectedIndexChanged += new System.EventHandler(this.ComboBoxEditOnOffScreen_SelectedIndexChanged);
+            this.comboBoxEditOnOffScreen.TextChanged += new System.EventHandler(this.ComboBoxEditOnOffScreen_TextChanged);
             // 
             // labelEditDiegetic
             // 
@@ -5040,6 +5041,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.comboBoxEditDiegetic.Size = new System.Drawing.Size(90, 21);
             this.comboBoxEditDiegetic.TabIndex = 51;
             this.comboBoxEditDiegetic.SelectedIndexChanged += new System.EventHandler(this.ComboBoxEditDiegetic_SelectedIndexChanged);
+            this.comboBoxEditDiegetic.TextChanged += new System.EventHandler(this.ComboBoxEditDiegetic_TextChanged);
             // 
             // labelEditDFX
             // 
